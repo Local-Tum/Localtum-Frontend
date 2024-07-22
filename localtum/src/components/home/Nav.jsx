@@ -87,7 +87,7 @@ const NavItem = styled.div`
     &::after {
         content: '';
         display: ${({ active }) => (active ? 'block' : 'none')};
-        width: 200%;
+        width: 150%;
         height: 0.15rem;
         background: #467048;
         position: absolute;

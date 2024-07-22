@@ -3,14 +3,14 @@ import Header from '../../components/home/Header';
 import Banner from '../../components/home/Banner';
 import Nav from '../../components/home/Nav';
 
-const Search = () => {
+const MyPage = () => {
     return (
         <div>
             <Header />
             <Banner />
-            <Nav activeIndex={1} />
+            <Nav activeIndex={3} />
         </div>
     );
 };
 
-export default Search;
+export default MyPage;

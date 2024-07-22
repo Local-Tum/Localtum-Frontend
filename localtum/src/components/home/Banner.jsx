@@ -1,32 +1,54 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useTransition, animated } from "@react-spring/web";
+import { useNavigate } from "react-router-dom";
 import banner1 from "../../assets/banners/banner1.png";
-// import banner2 from "../../assets/images/banner2.svg";
-// import banner3 from "../../assets/images/banner3.svg";
+import banner2 from "../../assets/banners/banner2.png";
+import banner3 from "../../assets/banners/banner3.png";
 
 export default function Banner() {
-  const [currentBanner, setCurrentBanner] = useState(banner1);
+  const banners = [banner1, banner2, banner3];
+  const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const banners = [banner1]; // const banners = [banner1, banner2, banner3];
-
-    let index = 0;
-
     const interval = setInterval(() => {
-      index = (index + 1) % banners.length;
-      setCurrentBanner(banners[index]);
+      setIndex((prevIndex) => (prevIndex + 1) % banners.length);
     }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
+  const transitions = useTransition(banners[index], {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { duration: 1000 },
+  });
+
+  const handleBannerClick = () => {
+    if (index === 0) {
+      navigate("/recommend"); // 여기에 원하는 URL을 입력하세요
+    }
+  };
+
   return (
-    <BannerContainer>
-      <BannerBox background={currentBanner} />
+    <BannerContainer onClick={handleBannerClick}>
+      {transitions((style, item) => (
+        <AnimatedBannerBox key={item} style={{ ...style, backgroundImage: `url(${item})` }} />
+      ))}
+      <NavDots>
+        {banners.map((_, dotIndex) => (
+          <NavDot
+            key={dotIndex}
+            active={index === dotIndex}
+            onClick={() => setIndex(dotIndex)}
+          />
+        ))}
+      </NavDots>
     </BannerContainer>
   );
 }
-
 
 const BannerContainer = styled.div`
   margin: 0 auto;
@@ -34,13 +56,45 @@ const BannerContainer = styled.div`
   margin-top: 2vh;
   z-index: 10;
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  cursor: pointer;
 `;
 
-const BannerBox = styled.div`
-  border: 1px solid #a8a8a8;
+const AnimatedBannerBox = styled(animated.div)`
+  position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.background});
   background-size: cover;
   background-position: center;
+  will-change: opacity;
+
+  @media (max-width: 768px) {
+    background-size: 300% 100%;
+    background-position: center center;
+  }
+`;
+
+const NavDots = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const NavDot = styled.button`
+  width: 10px;
+  height: 10px;
+  background-color: ${({ active }) => (active ? "#fff" : "#888")};
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+
+  &:hover {
+    background-color: #fff;
+  }
 `;

@@ -1,25 +1,81 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import mainlogo from '../../assets/logos/mainlogo.png';
 import bar from '../../assets/icons/bar.png';
+import membershipIcon from '../../assets/icons/membershipIcon.png';
+import mycouponIcon from '../../assets/icons/mycouponIcon.png';
+import alarmIcon from '../../assets/icons/alarmIcon.png';
+import alarmIconCircle from '../../assets/icons/alarmIconCircle.png'; //알림 갯수 있을때
+import MembershipModal from './MembershipModal';
 
 const Header = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loginStatus = localStorage.getItem('isLoggedIn');
+        if (loginStatus !== null) {
+            try {
+                setIsLoggedIn(JSON.parse(loginStatus));
+            } catch (e) {
+                console.error('Error parsing login status from localStorage', e);
+            }
+        }
+    }, []);
+
+    const handleMembershipClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCouponClick = () => {
+        window.location.href = '/mycoupon';
+    };
+
+    const handleAlarmClick = () => {
+        window.location.href = '/alarm';
+    };
+
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
+
+    const handleSignUpClick = () => {
+        navigate('/signup');
+    };
+
     return (
         <StyledHeader>
             <LogoDiv>
                 <Logo src={mainlogo} alt="Logo" />
             </LogoDiv>
             <ButtonBox>
-                <Button>로그인</Button>
-                <Bar src={bar} alt="|" />
-                <Button>회원가입</Button>
+                {isLoggedIn ? (
+                    <>
+                        <IconButton src={membershipIcon} alt="멤버십" onClick={handleMembershipClick} />
+                        <IconButton src={mycouponIcon} alt="내 쿠폰" onClick={handleCouponClick} />
+                        <AlarmIconButton src={alarmIcon} alt="알람" onClick={handleAlarmClick} />
+                    </>
+                ) : (
+                    <>
+                        <Button onClick={handleLoginClick}>로그인</Button>
+                        <Bar src={bar} alt="|" />
+                        <Button onClick={handleSignUpClick}>회원가입</Button>
+                    </>
+                )}
             </ButtonBox>
+            <MembershipModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </StyledHeader>
     );
 };
 
 const StyledHeader = styled.header`
-    padding: 2rem;
+    padding: 3rem 2rem 0 2rem;
     justify-content: center;
     align-items: center;
 `;
@@ -40,9 +96,17 @@ const Logo = styled.img`
 const ButtonBox = styled.div`
   display: flex;
   justify-content: right;
-  align-items: center;
+  align-items: end;
   margin-right: 15%;
   color: #808180;
+
+  @media (max-width: 768px) {
+    margin-right: 5%;
+  }
+
+  @media (max-width: 480px) {
+    margin-right: 0%;
+  }
 `;
 
 const Bar = styled.img`
@@ -62,6 +126,17 @@ const Button = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+`;
+
+const IconButton = styled.img`
+  height: 2rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+`;
+
+const AlarmIconButton = styled(IconButton)`
+  margin-left: 0.1rem;
+  height: 2.1rem;
 `;
 
 export default Header;

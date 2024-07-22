@@ -23,6 +23,8 @@ const Item = ({ name, description, status }) => {
         setIsFavorite(!isFavorite);
     };
 
+    const hasImage = false; // 이미지 여부를 여기서 설정 (나중에 실제 이미지 여부로 대체)
+
     return (
         <StyledItem>
             <ImageContainer>
@@ -32,7 +34,11 @@ const Item = ({ name, description, status }) => {
                     alt="★"
                     onClick={toggleFavorite}
                 />
-                <BackgroundImage src="/path-to-cafe-image.png" alt="카페 사진" />
+                {hasImage ? (
+                    <BackgroundImage src="/path-to-cafe-image.png" alt="카페 사진" />
+                ) : (
+                    <Placeholder>카페 사진</Placeholder>
+                )}
             </ImageContainer>
             <ItemDetails>
                 <CafeNameIcon src={cafeName} alt="*" />
@@ -57,12 +63,28 @@ const ImageContainer = styled.div`
     position: relative;
     height: 150px;
     background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const BackgroundImage = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 30px;
+`;
+
+const Placeholder = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #b5b6b5;
+    background-color: #f3f3f3;
     border-radius: 30px;
 `;
 
