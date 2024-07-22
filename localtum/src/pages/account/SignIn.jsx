@@ -5,7 +5,7 @@ import LocalTumLogo from "../../assets/LocalTumLogo.png";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const [loginVal, setLoginVal] = useState({ phoneNumber: "", code: "" });
+  const [loginVal, setLoginVal] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,18 +13,25 @@ const SignIn = () => {
   };
 
   const handleSignIn = () => {
-    if (!loginVal.phoneNumber || !loginVal.code) {
-      alert("입력하지 않은 값이 있습니다.");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (
+      !storedUser ||
+      storedUser.username !== loginVal.username ||
+      storedUser.password !== loginVal.password
+    ) {
+      alert(
+        "아이디/비밀번호 오류\n등록된 회원정보가 없습니다.\n올바르게 입력해 주세요."
+      );
       return;
     }
 
-    console.log("로그인 시도:", loginVal);
     alert("로그인 성공!");
-    navigate("/home");
+    navigate("/Home");
   };
 
   const handleSignUp = () => {
-    navigate("/phoneverification");
+    navigate("/SignUp");
   };
 
   return (
@@ -32,39 +39,31 @@ const SignIn = () => {
       <Logo src={LocalTumLogo} alt="LocalTum Logo" />
       <Title>로그인/회원가입</Title>
       <Form>
-        <SubTitle>휴대전화번호 등록</SubTitle>
         <InputContainer>
           <Input
             type="text"
-            name="phoneNumber"
-            placeholder="전화번호를 입력해 주세요."
-            value={loginVal.phoneNumber}
+            name="username"
+            placeholder="아이디를 입력해 주세요."
+            value={loginVal.username}
             onChange={handleChange}
           />
-          <Button color="#A9B782">인증번호 발송</Button>
         </InputContainer>
         <InputContainer>
           <Input
-            type="text"
-            name="code"
-            placeholder="인증번호를 입력해 주세요."
-            value={loginVal.code}
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력해 주세요."
+            value={loginVal.password}
             onChange={handleChange}
           />
-          <Button color="#B5B6B5">인증번호 확인</Button>
         </InputContainer>
       </Form>
-      <Notice>
-        * 기존 가입 고객은 별도의 회원가입 없이 로그인 화면으로 전환됩니다.
-      </Notice>
-      <ActionButtonContainer>
-        <ActionButton onClick={handleSignUp} variant="outlined">
-          회원가입
-        </ActionButton>
-        <ActionButton onClick={handleSignIn} variant="filled">
-          로그인
-        </ActionButton>
-      </ActionButtonContainer>
+      <ActionButton onClick={handleSignIn} variant="filled">
+        로그인
+      </ActionButton>
+      <ActionButton onClick={handleSignUp} variant="outlined">
+        회원가입
+      </ActionButton>
     </Frame>
   );
 };
@@ -92,15 +91,6 @@ const Title = styled.h2`
   font-size: 1.5rem;
 `;
 
-const SubTitle = styled.div`
-  font-size: 0.8rem;
-  color: #595b59;
-  margin-bottom: 0.5rem;
-  width: 100%;
-  max-width: 600px;
-  text-align: left;
-`;
-
 const Form = styled.div`
   display: flex;
   flex-direction: column;
@@ -110,15 +100,13 @@ const Form = styled.div`
 
 const InputContainer = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
   width: 100%;
   max-width: 600px;
-  gap: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const Input = styled.input`
-  flex: 1;
   padding: 0.75rem;
   background-color: #f6f3f3;
   border: none;
@@ -127,35 +115,9 @@ const Input = styled.input`
   color: #b5b6b5;
 `;
 
-const Button = styled.button`
-  padding: 0.75rem 1rem;
-  background-color: ${(props) => props.color};
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  flex-shrink: 0;
-`;
-
-const Notice = styled.p`
-  font-size: 0.875rem;
-  color: #888;
-  margin-bottom: 1rem;
-  width: 100%;
-  max-width: 600px;
-  text-align: left;
-`;
-
-const ActionButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const ActionButton = styled.button`
   width: 80%;
   max-width: 464px;
-`;
-
-const ActionButton = styled.button`
-  width: 100%;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   padding: 0.75rem;

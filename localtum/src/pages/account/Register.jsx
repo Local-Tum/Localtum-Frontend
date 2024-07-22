@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import LocalTumLogo from "../../assets/LocalTumLogo.png";
-import Modal from "../../components/account/Modal";
 
 const Register = () => {
   const navigate = useNavigate();
   const [registerVal, setRegisterVal] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
     nickname: "",
-    agreements: [],
   });
   const [nicknameError, setNicknameError] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,60 +25,71 @@ const Register = () => {
         setNicknameError("");
       }
     }
-  };
 
-  const handleAgreementChange = (e) => {
-    const { name, checked } = e.target;
-
-    if (name === "all") {
-      if (checked) {
-        setRegisterVal((prev) => ({
-          ...prev,
-          agreements: ["all", "service", "privacy", "thirdParty", "marketing"],
-        }));
+    if (name === "confirmPassword") {
+      if (value !== registerVal.password) {
+        setPasswordError("비밀번호가 일치하지 않습니다.");
       } else {
-        setRegisterVal((prev) => ({
-          ...prev,
-          agreements: [],
-        }));
-      }
-    } else {
-      if (checked) {
-        setRegisterVal((prev) => ({
-          ...prev,
-          agreements: [...prev.agreements, name],
-        }));
-      } else {
-        setRegisterVal((prev) => ({
-          ...prev,
-          agreements: prev.agreements.filter((item) => item !== name),
-        }));
+        setPasswordError("");
       }
     }
   };
 
   const handleSubmit = () => {
-    if (!registerVal.nickname || nicknameError) {
-      alert("닉네임을 올바르게 입력해주세요.");
+    if (
+      !registerVal.username ||
+      !registerVal.password ||
+      !registerVal.confirmPassword ||
+      !registerVal.nickname
+    ) {
+      alert("모든 필드를 입력해주세요.");
       return;
     }
 
+    if (nicknameError || passwordError) {
+      alert("입력한 정보를 다시 확인해주세요.");
+      return;
+    }
+
+    localStorage.setItem("user", JSON.stringify(registerVal));
     console.log("회원가입 시도:", registerVal);
-    setShowModal(true);
+    alert("회원가입이 완료되었습니다.");
+    navigate("/");
   };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate("/Home");
-  };
-
-  const isChecked = (name) => registerVal.agreements.includes(name);
 
   return (
     <Frame>
       <Logo src={LocalTumLogo} alt="LocalTum Logo" />
       <Title>회원가입</Title>
       <Form>
+        <InputContainer>
+          <Input
+            type="text"
+            name="username"
+            placeholder="아이디를 입력해 주세요."
+            value={registerVal.username}
+            onChange={handleChange}
+          />
+        </InputContainer>
+        <InputContainer>
+          <Input
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력해 주세요."
+            value={registerVal.password}
+            onChange={handleChange}
+          />
+        </InputContainer>
+        <InputContainer>
+          <Input
+            type="password"
+            name="confirmPassword"
+            placeholder="비밀번호를 확인해 주세요."
+            value={registerVal.confirmPassword}
+            onChange={handleChange}
+          />
+          {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+        </InputContainer>
         <InputContainer>
           <Input
             type="text"
@@ -88,60 +100,10 @@ const Register = () => {
           />
           {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
         </InputContainer>
-        <AgreementContainer>
-          <Agreement>
-            <input
-              type="checkbox"
-              name="all"
-              checked={isChecked("all")}
-              onChange={handleAgreementChange}
-            />
-            전체 동의
-          </Agreement>
-          <Agreement>
-            <input
-              type="checkbox"
-              name="service"
-              checked={isChecked("service")}
-              onChange={handleAgreementChange}
-            />
-            서비스 이용약관 (필수)
-          </Agreement>
-          <Agreement>
-            <input
-              type="checkbox"
-              name="privacy"
-              checked={isChecked("privacy")}
-              onChange={handleAgreementChange}
-            />
-            개인정보 처리방침 (필수)
-          </Agreement>
-          <Agreement>
-            <input
-              type="checkbox"
-              name="thirdParty"
-              checked={isChecked("thirdParty")}
-              onChange={handleAgreementChange}
-            />
-            제 3자 개인정보 활용 동의 (필수)
-          </Agreement>
-          <Agreement>
-            <input
-              type="checkbox"
-              name="marketing"
-              checked={isChecked("marketing")}
-              onChange={handleAgreementChange}
-            />
-            마케팅 활용 동의 (선택)
-          </Agreement>
-        </AgreementContainer>
         <ActionButton onClick={handleSubmit} variant="filled">
-          회원가입
+          가입하기
         </ActionButton>
       </Form>
-      <Modal show={showModal} onClose={handleCloseModal} title="가입 완료">
-        <p>아기사자님 환영합니다!</p>
-      </Modal>
     </Frame>
   );
 };
@@ -197,24 +159,6 @@ const ErrorMessage = styled.div`
   font-size: 0.75rem;
   color: red;
   margin-top: 0.5rem;
-`;
-
-const AgreementContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 600px;
-  margin-top: 1rem;
-`;
-
-const Agreement = styled.label`
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  font-weight: bold;
-  color: #444444;
-  margin-bottom: 0.5rem;
 `;
 
 const ActionButton = styled.button`

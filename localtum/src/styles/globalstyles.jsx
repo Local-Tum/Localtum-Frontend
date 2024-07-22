@@ -1,15 +1,19 @@
 import { createGlobalStyle } from "styled-components";
 
-const GlobalStyle = createGlobalStyle`
-  * {
+const GlobalStyles = createGlobalStyle`
+  body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    font-family: Pretendard, sans-serif;
+    background-color: white;
   }
 
-  body {
-    font-family: 'Pretendard', sans-serif;
+  #root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 `;
 
-export default GlobalStyle;
+export default GlobalStyles;
