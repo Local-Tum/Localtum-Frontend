@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import openIcon from '../../assets/icons/openIcon.png';
+import closedIcon from '../../assets/icons/closedIcon.png';
 import cafeName from '../../assets/icons/cafeName.png';
 import favoriteButton from '../../assets/icons/favoriteButton.png';
 import favoriteButtonOff from '../../assets/icons/favoriteButtonOff.png';
 
 const Item = ({ name, description, status }) => {
-    const [isFavorite, setIsFavorite] = useState(false);
-
-    useEffect(() => {
+    const [isFavorite, setIsFavorite] = useState(() => {
         const favoriteStatus = localStorage.getItem(`favorite-${name}`);
-        if (favoriteStatus) {
-            setIsFavorite(JSON.parse(favoriteStatus));
-        }
-    }, [name]);
+        return favoriteStatus ? JSON.parse(favoriteStatus) : false;
+    });
 
     useEffect(() => {
         localStorage.setItem(`favorite-${name}`, JSON.stringify(isFavorite));
@@ -28,7 +25,8 @@ const Item = ({ name, description, status }) => {
     return (
         <StyledItem>
             <ImageContainer>
-                <ItemStatus src={openIcon} alt="영업중" />
+                <ItemStatus 
+                    src={status === 'closed' ? closedIcon : openIcon} alt={status === 'closed' ? '영업종료' : '영업중'} />
                 <FavoriteButton
                     src={isFavorite ? favoriteButton : favoriteButtonOff}
                     alt="★"

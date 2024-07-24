@@ -8,16 +8,28 @@ const SubContent = ({ type }) => {
     const navigate = useNavigate();
 
     const feelingOptions = [
-        "우울해요", "기분이 좋아요", "스트레스 받아요", 
-        "피곤해요", "편안하고 싶어요", "집중하고 싶어요"
+        { name: "우울해요", data: "depressed" },
+        { name: "기분이 좋아요", data: "happy" },
+        { name: "스트레스 받아요", data: "stressed" },
+        { name: "피곤해요", data: "tired" },
+        { name: "편안하고 싶어요", data: "relaxed" },
+        { name: "집중하고 싶어요", data: "focused" }
     ];
 
     const flavorOptions = [
-        "달콤한 맛", "쓴 맛", "상큼한 맛", 
-        "고소한 맛", "시원한 맛", "따뜻한 맛"
+        { name: "달콤한 맛", data: "sweet" },
+        { name: "쓴 맛", data: "bitter" },
+        { name: "상큼한 맛", data: "refreshing" },
+        { name: "고소한 맛", data: "nutty" },
+        { name: "시원한 맛", data: "cool" },
+        { name: "따뜻한 맛", data: "warm" }
     ];
 
     const options = type === 'feeling' ? feelingOptions : flavorOptions;
+
+    const handleOptionClick = (option) => {
+        navigate('/recommend/detail', { state: { option: option.data } });
+    };
 
     return (
         <Container>
@@ -27,7 +39,7 @@ const SubContent = ({ type }) => {
             </Header>
             <OptionsContainer>
                 {options.map((option, index) => (
-                    <Option key={index}>{option}</Option>
+                    <Option key={index} onClick={() => handleOptionClick(option)}>{option.name}</Option>
                 ))}
             </OptionsContainer>
         </Container>

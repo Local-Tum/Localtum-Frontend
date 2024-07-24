@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ItemList from './ItemList';
 import locationIcon from "../../assets/icons/locationIcon.png";
 
 const MainContent = () => {
+    const [visibleCount, setVisibleCount] = useState(2);
+
+    const loadMoreItems = () => {
+        setVisibleCount(prevCount => prevCount + 2);
+    };
+
+    const items = [
+        { id: 1, name: '멋쟁이 사자처럼', description: '서울시 성북구 삼선교로 16길', status: 'open' },
+        { id: 2, name: '디저트 맛있다', description: '서울시 성북구 삼선교로 12길', status: 'closed' },
+        { id: 3, name: '초코나라', description: '서울시 성북구 삼선교로 55길', status: 'open' },
+        { id: 4, name: '아몬드 나라', description: '서울시 성북구 삼선교로 99길', status: 'closed' }
+    ];
+
     return (
         <StyledMain>
             <Title>내 주변 카페</Title>
@@ -13,8 +26,10 @@ const MainContent = () => {
                     성북구
                 </ToggleButton>
             </RightContainer>
-            <ItemList />
-            <LoadMoreButton>더보기</LoadMoreButton>
+            <ItemList items={items} visibleCount={visibleCount} />
+            {visibleCount < items.length && (
+                <LoadMoreButton onClick={loadMoreItems}>더보기</LoadMoreButton>
+            )}
         </StyledMain>
     );
 };
@@ -38,7 +53,7 @@ const RightContainer = styled.div`
     justify-content: flex-end;
     width: 100%;
     margin-bottom: 1rem;
-    margin-right: 46vw;
+    margin-right: 50vw;
     padding-right: 1rem;
 
     @media (max-width: 768px) {
