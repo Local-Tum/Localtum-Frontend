@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import LocalTumLogo from "../../assets/LocalTumLogo.png";
+import mainlogo from "../../assets/logos/mainlogo.png";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Register = () => {
 
   return (
     <Frame>
-      <Logo src={LocalTumLogo} alt="LocalTum Logo" />
+      <Logo src={mainlogo} alt="LocalTum Logo" />
       <Title>회원가입</Title>
       <Form>
         <InputContainer>

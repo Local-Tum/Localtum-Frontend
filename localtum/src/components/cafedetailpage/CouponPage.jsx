@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
-import GlobalStyles from "../../styles/globalstyles";
 
 const coupons = [
   {
@@ -24,7 +23,6 @@ const coupons = [
 const CouponPage = () => {
   return (
     <>
-      <GlobalStyles />
       <Container>
         <Header />
         <Main>

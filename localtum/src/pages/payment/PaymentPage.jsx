@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/cafedetailpage/Header";
-import GlobalStyles from "../../styles/globalstyles";
 
 const PaymentPage = () => {
   const [quantity, setQuantity] = useState(1);
@@ -31,7 +30,6 @@ const PaymentPage = () => {
 
   return (
     <>
-      <GlobalStyles />
       <Container>
         <Header />
         <Main>

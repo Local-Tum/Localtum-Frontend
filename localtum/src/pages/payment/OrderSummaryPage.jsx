@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/cafedetailpage/Header";
-import GlobalStyles from "../../styles/globalstyles";
 
 const OrderSummaryPage = () => {
   const [expandedItem, setExpandedItem] = useState(null);
@@ -18,7 +17,6 @@ const OrderSummaryPage = () => {
 
   return (
     <>
-      <GlobalStyles />
       <Container>
         <Header />
         <Main>

@@ -6,7 +6,6 @@ import StoreInfo from "../../components/cafedetailpage/StoreInfo";
 import StampStatus from "../../components/cafedetailpage/StampStatus";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
-import GlobalStyles from "../../styles/globalstyles";
 import { useNavigate } from "react-router-dom";
 
 const CafeDetailPage = () => {
@@ -14,7 +13,6 @@ const CafeDetailPage = () => {
 
   return (
     <>
-      <GlobalStyles />
       <Container>
         <Header />
         <Main>

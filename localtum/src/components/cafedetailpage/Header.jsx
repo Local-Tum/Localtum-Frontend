@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import LocalTumLogo from "../../assets/LocalTumLogo.png";
+import mainlogo from "../../assets/logos/mainlogo.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Header = () => {
         <ArrowIcon>&lt;</ArrowIcon> 뒤로가기
       </BackButton>
       <LogoContainer>
-        <Logo src={LocalTumLogo} alt="LocalTum Logo" />
+        <Logo src={mainlogo} alt="LocalTum Logo" />
       </LogoContainer>
       <DummyButton />
     </HeaderContainer>

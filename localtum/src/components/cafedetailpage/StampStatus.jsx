@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Stamp1 from "../../assets/Stamp1.png";
 
 const StampStatus = () => {
   return (
@@ -11,7 +10,7 @@ const StampStatus = () => {
           .fill()
           .map((_, idx) => (
             <Stamp key={idx}>
-              <StampImage src={Stamp1} alt="Stamp" />
+              <StampImage />
             </Stamp>
           ))}
         <StampFree>한 잔 무료!</StampFree>
