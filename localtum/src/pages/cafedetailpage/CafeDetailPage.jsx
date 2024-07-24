@@ -7,8 +7,11 @@ import StampStatus from "../../components/cafedetailpage/StampStatus";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
 import GlobalStyles from "../../styles/globalstyles";
+import { useNavigate } from "react-router-dom";
 
 const CafeDetailPage = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <GlobalStyles />
@@ -21,7 +24,9 @@ const CafeDetailPage = () => {
           <CategoryFilter />
           <ProductList />
         </Main>
-        <CartButton>할인쿠폰 받기</CartButton>
+        <CartButton onClick={() => navigate("/coupons")}>
+          할인쿠폰 받기
+        </CartButton>
       </Container>
     </>
   );
@@ -29,11 +34,11 @@ const CafeDetailPage = () => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px; // 최대 너비 설정
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   background-color: white;
-  margin: 0 auto; // 가운데 정렬
+  margin: 0 auto;
 
   @media (max-width: 480px) {
     width: 100%;
@@ -52,7 +57,7 @@ const CartButton = styled.button`
   background-color: #467048;
   color: white;
   border: none;
-  border-radius: 30px 30px 0 0;
+  border-radius: 0 0 30px 30px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
