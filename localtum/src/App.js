@@ -9,6 +9,8 @@ import MyPage from './pages/MyPage/MyPage';
 import Recommend from './pages/recommend/Recommend.jsx';
 import RecommendFeeling from './pages/recommend/RecommendFeeling.jsx';
 import RecommendFlavor from './pages/recommend/RecommendFlavor.jsx';
+import RecommendDetail from './pages/recommend/RecommendDetail.jsx';
+import RecommendCafe from './pages/recommend/RecommendCafe.jsx';
 
 const App = () => {
     return (
@@ -23,6 +25,8 @@ const App = () => {
                 <Route path="/recommend" element={<Recommend />} />
                 <Route path="/recommend/feeling" element={<RecommendFeeling />} />
                 <Route path="/recommend/flavor" element={<RecommendFlavor />} />
+                <Route path="/recommend/detail" element={<RecommendDetail />} />
+                <Route path="/recommend/cafe" element={<RecommendCafe />} />
 
                 <Route path="/search" element={<Search />} />
                 <Route path="/order" element={<Order />} />
