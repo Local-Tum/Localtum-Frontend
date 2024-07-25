@@ -27,7 +27,7 @@ const SignIn = () => {
     }
 
     alert("로그인 성공!");
-    navigate("/Home");
+    navigate("/");
   };
 
   const handleSignUp = () => {

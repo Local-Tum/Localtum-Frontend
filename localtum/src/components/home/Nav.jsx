@@ -17,7 +17,7 @@ const NavBar = ({ activeIndex }) => {
         } else if (index === 1) {
             navigate("/search");
         } else if (index === 2) {
-            navigate("/order");
+            navigate("/order/history");
         } else if (index === 3) {
             navigate("/mypage");
         }

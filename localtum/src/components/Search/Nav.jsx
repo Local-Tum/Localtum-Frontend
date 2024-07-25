@@ -103,6 +103,14 @@ const HorizontalLine = styled.hr`
     height: 0.15rem;
     background: #f3f3f3;
     margin-top: 0.5rem;
+
+    @media (max-width: 768px) {
+        width: 85%;
+    }
+
+    @media (max-width: 480px) {
+        width: 90%;
+    }
 `;
 
 export default NavBar;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import mainlogo from '../../assets/logos/mainlogo.png';
 import backIcon from '../../assets/icons/backIcon.png';
@@ -7,10 +7,19 @@ import { useNavigate } from 'react-router-dom';
 
 const Alarm = () => {
     const navigate = useNavigate();
-    const notifications = [
-        { cafeName: "멋쟁이 사자처럼", message: "주문하신 음료가 준비되었어요!" },
-        { cafeName: "멋쟁이 사자처럼", message: "주문하신 음료가 준비되었어요!" }
-    ];
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        setNotifications(storedNotifications);
+    }, []);
+
+    const handleBackClick = () => {
+        setNotifications([]);
+        localStorage.setItem('notifications', JSON.stringify([]));
+        localStorage.setItem('notificationCount', JSON.stringify(0));
+        navigate(-1);
+    };
 
     return (
         <StyledContainer>
@@ -18,7 +27,7 @@ const Alarm = () => {
                 <Logo src={mainlogo} alt="Logo" />
             </StyledHeader>
             <BackButtonContainer>
-                <BackButton onClick={() => navigate(-1)}>
+                <BackButton onClick={handleBackClick}>
                     <BackIcon src={backIcon} alt="<" />
                     <BackText>뒤로가기</BackText>
                 </BackButton>
@@ -164,9 +173,9 @@ const Title = styled.h1`
 
 const AlarmCircle = styled.div`
     position: absolute;
-    top: 3px; /* Adjust based on your design */
-    left: 51%; /* Center horizontally */
-    transform: translateX(50%); /* Center horizontally */
+    top: 3px;
+    left: 51%;
+    transform: translateX(50%);
     width: 1.5rem;
     height: 1.5rem;
     background: url(${alarmCircle}) no-repeat center center;
