@@ -6,12 +6,12 @@ import bar from '../../assets/icons/bar.png';
 import membershipIcon from '../../assets/icons/membershipIcon.png';
 import mycouponIcon from '../../assets/icons/mycouponIcon.png';
 import alarmIcon from '../../assets/icons/alarmIcon.png';
-import alarmIconCircle from '../../assets/icons/alarmIconCircle.png'; //알림 갯수 있을때
 import MembershipModal from './MembershipModal';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [notificationCount, setNotificationCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,6 +23,9 @@ const Header = () => {
                 console.error('Error parsing login status from localStorage', e);
             }
         }
+
+        const storedNotificationCount = JSON.parse(localStorage.getItem('notificationCount')) || 0;
+        setNotificationCount(storedNotificationCount);
     }, []);
 
     const handleMembershipClick = () => {
@@ -42,7 +45,7 @@ const Header = () => {
     };
 
     const handleLoginClick = () => {
-        navigate('/login');
+        navigate('/signin');
     };
 
     const handleSignUpClick = () => {
@@ -59,7 +62,12 @@ const Header = () => {
                     <>
                         <IconButton src={membershipIcon} alt="멤버십" onClick={handleMembershipClick} />
                         <IconButton src={mycouponIcon} alt="내 쿠폰" onClick={handleCouponClick} />
-                        <AlarmIconButton src={alarmIcon} alt="알람" onClick={handleAlarmClick} />
+                        <AlarmContainer onClick={handleAlarmClick}>
+                            <AlarmIconButton src={alarmIcon} alt="알람" />
+                            {notificationCount > 0 && (
+                                <NotificationBadge>{notificationCount}</NotificationBadge>
+                            )}
+                        </AlarmContainer>
                     </>
                 ) : (
                     <>
@@ -134,9 +142,33 @@ const IconButton = styled.img`
   margin-right: 0.5rem;
 `;
 
+const AlarmContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 0.2rem;
+`;
+
 const AlarmIconButton = styled(IconButton)`
-  margin-left: 0.1rem;
-  height: 2.1rem;
+  height: 2.2rem;
+`;
+
+const NotificationBadge = styled.div`
+  position: absolute;
+  top: -8px;
+  right: 2px;
+  background-color: #e7e7e7;
+  color: #808180;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
 `;
 
 export default Header;

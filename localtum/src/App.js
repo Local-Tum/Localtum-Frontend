@@ -35,7 +35,7 @@ const App = () => {
         <Route path="/recommend/detail" element={<RecommendDetail />} />
         <Route path="/recommend/cafe" element={<RecommendCafe />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/order" element={<Order />} />
+        <Route path="/order/history" element={<Order />} />
         <Route path="/mypage" element={<MyPage />} />
         {/* 회원가입 */}
         <Route path="/SignIn" element={<SignIn />} />
