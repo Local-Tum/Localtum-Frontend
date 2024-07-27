@@ -43,55 +43,70 @@ const TermsAgreement = () => {
     <Frame>
       <Logo src={mainlogo} alt="LocalTum Logo" />
       <Title>회원가입</Title>
+      <Subtitle>약관 동의</Subtitle>
       <Form>
         <AgreementContainer>
-          <Agreement>
-            <input
+          <Agreement style={{ marginBottom: "1.25rem" }}>
+            <Checkbox
               type="checkbox"
               name="all"
               checked={isChecked("all")}
               onChange={handleAgreementChange}
             />
-            전체 동의
+            <Label>전체 동의</Label>
           </Agreement>
           <Agreement>
-            <input
+            <Checkbox
               type="checkbox"
               name="service"
               checked={isChecked("service")}
               onChange={handleAgreementChange}
             />
-            서비스 이용약관 (필수)
+            <Label>서비스 이용약관 (필수)</Label>
+            <ViewDetailsButton>전문보기</ViewDetailsButton>
           </Agreement>
           <Agreement>
-            <input
+            <Checkbox
               type="checkbox"
               name="privacy"
               checked={isChecked("privacy")}
               onChange={handleAgreementChange}
             />
-            개인정보 처리방침 (필수)
+            <Label>개인정보 처리방침 (필수)</Label>
+            <ViewDetailsButton>전문보기</ViewDetailsButton>
           </Agreement>
           <Agreement>
-            <input
+            <Checkbox
               type="checkbox"
               name="thirdParty"
               checked={isChecked("thirdParty")}
               onChange={handleAgreementChange}
             />
-            제 3자 개인정보 활용 동의 (필수)
+            <Label>제 3자 개인정보 활용 동의 (필수)</Label>
+            <ViewDetailsButton>전문보기</ViewDetailsButton>
           </Agreement>
           <Agreement>
-            <input
+            <Checkbox
               type="checkbox"
               name="marketing"
               checked={isChecked("marketing")}
               onChange={handleAgreementChange}
             />
-            마케팅 활용 동의 (선택)
+            <Label>마케팅 활용 동의 (선택)</Label>
+            <ViewDetailsButton>전문보기</ViewDetailsButton>
           </Agreement>
         </AgreementContainer>
-        <ActionButton onClick={handleSubmit} variant="filled">
+        <ActionButton
+          onClick={handleSubmit}
+          disabled={
+            !agreements.service || !agreements.privacy || !agreements.thirdParty
+          }
+          variant={
+            agreements.service && agreements.privacy && agreements.thirdParty
+              ? "filled"
+              : "outlined"
+          }
+        >
           다음으로
         </ActionButton>
       </Form>
@@ -117,9 +132,18 @@ const Logo = styled.img`
 `;
 
 const Title = styled.h2`
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   color: #444444;
   font-size: 1.5rem;
+`;
+
+const Subtitle = styled.h3`
+  margin-bottom: 2rem;
+  color: #444444;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-align: center;
 `;
 
 const Form = styled.div`
@@ -138,13 +162,35 @@ const AgreementContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const Agreement = styled.label`
+const Agreement = styled.div`
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
-  font-weight: bold;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.75rem;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 10px;
+  cursor: pointer;
+`;
+
+const Label = styled.label`
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
   color: #444444;
-  margin-bottom: 0.5rem;
+  flex: 1;
+`;
+
+const ViewDetailsButton = styled.button`
+  background: #f3f3f3;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  color: #444444;
+  cursor: pointer;
 `;
 
 const ActionButton = styled.button`
@@ -165,6 +211,8 @@ const ActionButton = styled.button`
     props.variant === "filled"
       ? "0px 4px 6px rgba(0, 0, 0, 0.1)"
       : "0px 4px 6px rgba(0, 0, 0, 0.05)"};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 export default TermsAgreement;
