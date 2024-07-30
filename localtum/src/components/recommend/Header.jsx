@@ -7,10 +7,14 @@ import backIcon from '../../assets/icons/backIcon.png';
 const Header = () => {
     const navigate = useNavigate();
 
+    const handleLogoClick = () => {
+        navigate('/');
+    };
+
     return (
         <StyledHeader>
             <LogoDiv>
-                <Logo src={mainlogo} alt="Logo" />
+                <Logo src={mainlogo} alt="Logo" onClick={handleLogoClick} />
             </LogoDiv>
             <BackButtonContainer>
                 <BackButton onClick={() => navigate(-1)}>

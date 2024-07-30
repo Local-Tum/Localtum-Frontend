@@ -126,10 +126,10 @@ const ItemName = styled.h2`
     display: flex;
     align-items: center;
     @media (max-width: 768px) {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
     @media (max-width: 480px) {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 `;
 
