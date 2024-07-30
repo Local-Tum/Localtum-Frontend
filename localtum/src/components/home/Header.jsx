@@ -52,10 +52,14 @@ const Header = () => {
         navigate('/signup');
     };
 
+    const handleLogoClick = () => {
+        navigate('/');
+    };
+
     return (
         <StyledHeader>
             <LogoDiv>
-                <Logo src={mainlogo} alt="Logo" />
+                <Logo src={mainlogo} alt="Logo" onClick={handleLogoClick}/>
             </LogoDiv>
             <ButtonBox>
                 {isLoggedIn ? (

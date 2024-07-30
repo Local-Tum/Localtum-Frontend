@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import banner1 from "../../assets/banners/banner1.png";
+import banner from "../../assets/banners/banner.png";
 import underIcon from "../../assets/icons/underIcon.png";
 
 export default function Banner() {
   return (
     <BannerContainer>
-      <BannerBox style={{ backgroundImage: `url(${banner1})` }} />
+      <BannerBox style={{ backgroundImage: `url(${banner})` }} />
       <NavDots>
         <NavDot src={underIcon} alt="▽" />
       </NavDots>

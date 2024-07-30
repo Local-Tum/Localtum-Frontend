@@ -6,7 +6,13 @@ const ItemList = ({ items, visibleCount }) => {
     return (
         <StyledList>
             {items.slice(0, visibleCount).map(item => (
-                <Item key={item.id} name={item.name} description={item.description} status={item.status} />
+                <Item
+                    key={item.id}
+                    name={item.name}
+                    address={item.address}
+                    status={item.status}
+                    image={item.image}
+                />
             ))}
         </StyledList>
     );

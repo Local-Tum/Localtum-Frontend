@@ -6,7 +6,7 @@ import cafeName from '../../assets/icons/cafeName.png';
 import favoriteButton from '../../assets/icons/favoriteButton.png';
 import favoriteButtonOff from '../../assets/icons/favoriteButtonOff.png';
 
-const Item = ({ name, description, status }) => {
+const Item = ({ name, address, status, image }) => {
     const [isFavorite, setIsFavorite] = useState(() => {
         const favoriteStatus = localStorage.getItem(`favorite-${name}`);
         return favoriteStatus ? JSON.parse(favoriteStatus) : false;
@@ -20,20 +20,20 @@ const Item = ({ name, description, status }) => {
         setIsFavorite(!isFavorite);
     };
 
-    const hasImage = false; // 이미지 여부를 여기서 설정 (나중에 실제 이미지 여부로 대체)
-
     return (
         <StyledItem>
             <ImageContainer>
-                <ItemStatus 
-                    src={status === 'closed' ? closedIcon : openIcon} alt={status === 'closed' ? '영업종료' : '영업중'} />
+                <ItemStatus
+                    src={status === 'closed' ? closedIcon : openIcon}
+                    alt={status === 'closed' ? '영업종료' : '영업중'}
+                />
                 <FavoriteButton
                     src={isFavorite ? favoriteButton : favoriteButtonOff}
                     alt="★"
                     onClick={toggleFavorite}
                 />
-                {hasImage ? (
-                    <BackgroundImage src="/path-to-cafe-image.png" alt="카페 사진" />
+                {image ? (
+                    <BackgroundImage src={image} alt="카페 사진" />
                 ) : (
                     <Placeholder>카페 사진</Placeholder>
                 )}
@@ -41,7 +41,7 @@ const Item = ({ name, description, status }) => {
             <ItemDetails>
                 <CafeNameIcon src={cafeName} alt="*" />
                 <ItemName>{name}</ItemName>
-                <ItemDescription>{description}</ItemDescription>
+                <ItemDescription>{address}</ItemDescription>
             </ItemDetails>
         </StyledItem>
     );

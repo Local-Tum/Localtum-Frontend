@@ -8,6 +8,7 @@ import line from '../../assets/icons/line2.png';
 
 const CafeItem = ({ cafe }) => {
     const [isFavorite, setIsFavorite] = useState(false);
+    const [distance, setDistance] = useState('거리 계산 중');
 
     useEffect(() => {
         const favoriteStatus = localStorage.getItem(`favorite-${cafe.name}`);
@@ -20,6 +21,13 @@ const CafeItem = ({ cafe }) => {
         localStorage.setItem(`favorite-${cafe.name}`, JSON.stringify(isFavorite));
     }, [isFavorite, cafe.name]);
 
+    useEffect(() => {
+        const storedDistance = localStorage.getItem(`distance-${cafe.id}`);
+        if (storedDistance) {
+            setDistance(storedDistance + ' m');
+        }
+    }, [cafe.id]);
+
     const toggleFavorite = () => {
         setIsFavorite(!isFavorite);
     };
@@ -27,7 +35,7 @@ const CafeItem = ({ cafe }) => {
     return (
         <CafeItemContainer>
             <ImageContainer>
-                <Placeholder />
+                <Placeholder src={cafe.image} />
                 {cafe.status === 'open' && <StatusIcon src={openIcon} alt="open" />}
                 {cafe.status === 'closed' && <StatusIcon src={closedIcon} alt="closed" />}
             </ImageContainer>
@@ -37,7 +45,7 @@ const CafeItem = ({ cafe }) => {
                 <Distance>
                     여기서부터
                     <Line src={line} />
-                    <span className={"distance"}>{cafe.distance}</span>
+                    <span className="distance">{distance}</span>
                 </Distance>
             </CafeDetails>
             <FavoriteButton
@@ -56,7 +64,7 @@ const CafeItemContainer = styled.div`
     border-radius: 30px;
     padding: 1rem 1rem 1rem 2rem;
     box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
-    position: relative; /* Add position relative to the container */
+    position: relative;
 
     @media (max-width: 768px) {
         flex-direction: column;
@@ -81,7 +89,7 @@ const ImageContainer = styled.div`
     }
 `;
 
-const Placeholder = styled.div`
+const Placeholder = styled.img`
     width: 100%;
     height: 100%;
     display: flex;
@@ -165,12 +173,12 @@ const Distance = styled.span`
 const Line = styled.img`
     margin-left: 0.3rem;
     width: 2rem;
-`
+`;
 
 const FavoriteButton = styled.img`
     position: absolute;
     top: 1rem;
-    right: 1rem; /* Position the button in the top-right corner */
+    right: 1rem;
     cursor: pointer;
     width: 30px;
     height: 30px;
