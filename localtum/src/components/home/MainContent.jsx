@@ -7,6 +7,7 @@ import cafes from '../Cafes/Cafes';
 const MainContent = () => {
     const [visibleCount, setVisibleCount] = useState(2);
     const [district, setDistrict] = useState('위치 찾는 중');
+    const [sortedCafes, setSortedCafes] = useState([]);
 
     useEffect(() => {
         const apiKey = process.env.REACT_APP_KAKAO_API_KEY;
@@ -74,14 +75,15 @@ const MainContent = () => {
     };
 
     const calculateDistancesAndStore = (latitude, longitude) => {
-        const updatedCafes = cafes.map(cafe => {
+        const updatedCafesList = cafes.map(cafe => {
             const distance = getDistanceFromLatLonInKm(latitude, longitude, cafe.latitude, cafe.longitude) * 1000;
-            return { ...cafe, distance: Math.round(distance) };
+            const updatedCafe = { ...cafe, distance: Math.round(distance) };
+            localStorage.setItem(`distance-${cafe.id}`, updatedCafe.distance);
+            return updatedCafe;
         });
 
-        updatedCafes.forEach(cafe => {
-            localStorage.setItem(`distance-${cafe.id}`, cafe.distance);
-        });
+        const sorted = updatedCafesList.sort((a, b) => a.distance - b.distance);
+        setSortedCafes(sorted);
     };
 
     const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
@@ -114,8 +116,8 @@ const MainContent = () => {
                     {district}
                 </ToggleButton>
             </RightContainer>
-            <ItemList items={cafes.slice(0, visibleCount)} />
-            {visibleCount < cafes.length && (
+            <ItemList items={sortedCafes} visibleCount={visibleCount} />
+            {visibleCount < sortedCafes.length && (
                 <LoadMoreButton onClick={loadMoreItems}>더보기</LoadMoreButton>
             )}
         </StyledMain>

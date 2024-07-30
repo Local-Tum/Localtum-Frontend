@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Item from './Item';
 
 const ItemList = ({ items, visibleCount }) => {
     return (
         <StyledList>
-            {items.slice(0, visibleCount).map(item => (
-                <Item
-                    key={item.id}
-                    name={item.name}
-                    address={item.address}
-                    status={item.status}
-                    image={item.image}
-                />
-            ))}
+            {items.slice(0, visibleCount).map(item => {
+                const status = localStorage.getItem(`cafe-${item.id}-status`) || 'closed';
+                
+                return (
+                    <Item
+                        key={item.id}
+                        name={item.name}
+                        address={item.address}
+                        status={status}
+                        image={item.image}
+                    />
+                );
+            })}
         </StyledList>
     );
 };

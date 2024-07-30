@@ -8,25 +8,29 @@ import line from '../../assets/icons/line2.png';
 
 const CafeItem = ({ cafe }) => {
     const [isFavorite, setIsFavorite] = useState(false);
-    const [distance, setDistance] = useState('거리 계산 중');
+    const [status, setStatus] = useState('closed');
+    const [distance, setDistance] = useState('N/A');
 
     useEffect(() => {
         const favoriteStatus = localStorage.getItem(`favorite-${cafe.name}`);
         if (favoriteStatus) {
             setIsFavorite(JSON.parse(favoriteStatus));
         }
-    }, [cafe.name]);
+
+        const cafeStatus = localStorage.getItem(`cafe-${cafe.id}-status`);
+        if (cafeStatus) {
+            setStatus(cafeStatus);
+        }
+
+        const storedDistance = localStorage.getItem(`distance-${cafe.id}`);
+        if (storedDistance) {
+            setDistance(storedDistance);
+        }
+    }, [cafe.name, cafe.id]);
 
     useEffect(() => {
         localStorage.setItem(`favorite-${cafe.name}`, JSON.stringify(isFavorite));
     }, [isFavorite, cafe.name]);
-
-    useEffect(() => {
-        const storedDistance = localStorage.getItem(`distance-${cafe.id}`);
-        if (storedDistance) {
-            setDistance(storedDistance + ' m');
-        }
-    }, [cafe.id]);
 
     const toggleFavorite = () => {
         setIsFavorite(!isFavorite);
@@ -36,8 +40,8 @@ const CafeItem = ({ cafe }) => {
         <CafeItemContainer>
             <ImageContainer>
                 <Placeholder src={cafe.image} />
-                {cafe.status === 'open' && <StatusIcon src={openIcon} alt="open" />}
-                {cafe.status === 'closed' && <StatusIcon src={closedIcon} alt="closed" />}
+                {status === 'open' && <StatusIcon src={openIcon} alt="open" />}
+                {status === 'closed' && <StatusIcon src={closedIcon} alt="closed" />}
             </ImageContainer>
             <CafeDetails>
                 <CafeName>{cafe.name}</CafeName>
@@ -45,7 +49,7 @@ const CafeItem = ({ cafe }) => {
                 <Distance>
                     여기서부터
                     <Line src={line} />
-                    <span className="distance">{distance}</span>
+                    <span className={"distance"}>{distance !== 'N/A' ? `${distance} m` : '거리 측정 불가'}</span>
                 </Distance>
             </CafeDetails>
             <FavoriteButton

@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../../components/recommend/Header';
 import CafeList from '../../components/recommend/CafeList';
+import cafes from '../../components/Cafes/Cafes';
 
 const RecommendCafe = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [visibleCount, setVisibleCount] = useState(2);
     const { item } = location.state;
 
-    const cafes = [
-        { name: "멋쟁이 사자처럼", address: "서울시 성북구 삼선교로 16길", distance: "145m", status: "open" },
-        { name: "디저트 맛있다", address: "서울시 성북구 삼선교로 12길", distance: "721m", status: "open" },
-        { name: "초코나라", address: "서울시 성북구 삼선교로 55길", distance: "1.2km", status: "closed" },
-        { name: "아몬드 나라", address: "서울시 성북구 삼선교로 99길", distance: "2.1km", status: "open" },
-    ];
 
+    const loadMoreItems = () => {
+        setVisibleCount(prevCount => prevCount + 2);
+    };
     return (
         <Container>
             <Header />
@@ -23,8 +22,10 @@ const RecommendCafe = () => {
                 <Title>
                     <span><strong>'{item}'</strong> 판매하는 카페</span>
                 </Title>
-                <CafeList cafes={cafes} />
-                <LoadMoreButton>더보기</LoadMoreButton>
+                <CafeList cafes={cafes.slice(0, visibleCount)} />
+                {visibleCount < cafes.length && (
+                <LoadMoreButton onClick={loadMoreItems}>더보기</LoadMoreButton>
+            )}            
             </Content>
         </Container>
     );
