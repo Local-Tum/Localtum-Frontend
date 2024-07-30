@@ -14,7 +14,7 @@ export default function Banner() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % banners.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -28,7 +28,7 @@ export default function Banner() {
 
   const handleBannerClick = () => {
     if (index === 0) {
-      navigate("/recommend"); // 여기에 원하는 URL을 입력하세요
+      navigate("/recommend");
     }
   };
 

@@ -7,20 +7,12 @@ import NavBar from '../../components/Search/Nav';
 import CafeList from '../../components/recommend/CafeList';
 import CafeMap from '../../components/Search/CafeMap';
 import SearchKeyword from '../../components/Search/SearchKeyword';
+import cafes from '../../components/Cafes/Cafes';
 
 const Search = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [visibleCount0, setVisibleCount0] = useState(2);
     const [visibleCount2, setVisibleCount2] = useState(2);
-
-    const cafes = [
-        { name: "멋쟁이 사자처럼", address: "서울시 성북구 삼선교로 16길", distance: "145m", status: "open" },
-        { name: "디저트 맛있다", address: "서울시 성북구 삼선교로 12길", distance: "721m", status: "open" },
-        { name: "초코나라", address: "서울시 성북구 삼선교로 55길", distance: "1.2km", status: "closed" },
-        { name: "아몬드 나라", address: "서울시 성북구 삼선교로 99길", distance: "2.1km", status: "open" },
-        { name: "초코", address: "서울시 성북구 삼선교로 55길", distance: "1.2km", status: "closed" },
-        { name: "아몬드", address: "서울시 성북구 삼선교로 99길", distance: "2.1km", status: "open" },
-    ];
 
     const getFavoriteCafes = () => {
         return cafes.filter(cafe => {

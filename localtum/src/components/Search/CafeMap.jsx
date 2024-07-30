@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import markerImage from '../../assets/icons/mapIcon.png';
 import styled from 'styled-components';
+import markerImage from '../../assets/icons/mapIcon.png';
+import Cafes from '../../components/Cafes/Cafes';
 
 const CafeMap = () => {
     useEffect(() => {
@@ -48,18 +49,12 @@ const CafeMap = () => {
             }
 
             // 여러 개의 주소 마커
-            const addresses = [
-                { name: "멋쟁이 사자처럼", lat: 37.5665, lon: 126.9780 },
-                { name: "라떼는", lat: 37.5651, lon: 126.9895 },
-                { name: "초코나라", lat: 37.5510, lon: 126.9882 }
-            ];
-
             const imageSize = new window.kakao.maps.Size(25, 30);
             const imageOption = { offset: new window.kakao.maps.Point(16, 34) };
             const addressMarkerImage = new window.kakao.maps.MarkerImage(markerImage, imageSize, imageOption);
 
-            addresses.forEach((address) => {
-                const addressPosition = new window.kakao.maps.LatLng(address.lat, address.lon);
+            Cafes.forEach((cafe) => {
+                const addressPosition = new window.kakao.maps.LatLng(cafe.latitude, cafe.longitude);
                 const addressMarker = new window.kakao.maps.Marker({
                     position: addressPosition,
                     image: addressMarkerImage,
@@ -78,7 +73,7 @@ const CafeMap = () => {
                         font-weight: 700;
                         letter-spacing: -0.64px;
                     ">
-                        <div>${address.name}</div>
+                        <div>${cafe.name}</div>
                     </div>
                 `;
                 const customOverlay = new window.kakao.maps.CustomOverlay({
