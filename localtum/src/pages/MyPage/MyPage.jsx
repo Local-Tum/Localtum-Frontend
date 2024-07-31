@@ -42,10 +42,12 @@ const MainContent = styled.div`
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
 `;
 
 export default MyPage;

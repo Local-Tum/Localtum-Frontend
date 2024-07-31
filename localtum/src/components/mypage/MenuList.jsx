@@ -12,12 +12,13 @@ const MenuList = ({ onLogoutClick }) => {
           <UserName>아기사자</UserName>
           <UserNameSuffix>님</UserNameSuffix>
         </UserInfoContainer>
-        <Divider />
-        <MenuItem onClick={() => navigate('/mypageedit')}>회원 정보 수정</MenuItem>
-        <MenuItem onClick={() => navigate('/mypagecoupon')}>쿠폰</MenuItem>
-        <MenuItem onClick={() => navigate('/stamplist')}>스탬프</MenuItem>
-        <MenuItem onClick={() => navigate('/favoritecafe')}>카페 즐겨찾기</MenuItem>
-        <MenuItem onClick={() => navigate('/policy')}>약관 및 정책</MenuItem>
+        <MenuItem onClick={() => navigate("/mypageedit")}>
+          회원 정보 수정
+        </MenuItem>
+        <MenuItem onClick={() => navigate("/mypagecoupon")}>쿠폰</MenuItem>
+        <MenuItem onClick={() => navigate("/stamplist")}>스탬프</MenuItem>
+        <MenuItem onClick={() => navigate("/favorite")}>카페 즐겨찾기</MenuItem>
+        <MenuItem onClick={() => navigate("/policy")}>약관 및 정책</MenuItem>
         <MenuItem onClick={onLogoutClick} style={{ color: "red" }}>
           로그아웃
         </MenuItem>
@@ -30,15 +31,19 @@ const Container = styled.div`
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  overflow: hidden;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
 `;
 
 const UserInfoContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 15px 20px;
   border-bottom: 0.5px solid #b5b6b5;
+  box-sizing: border-box;
 `;
 
 const UserName = styled.span`
@@ -55,19 +60,21 @@ const UserNameSuffix = styled.span`
   font-weight: 500;
 `;
 
-const Divider = styled.div`
-  height: 1px;
-  background-color: #b5b6b5;
-`;
-
 const MenuItem = styled.div`
+  width: calc(100% - 2rem);
+  margin: 0 auto;
   padding: 15px 20px;
   font-size: 14px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 0.5px solid #ccc;
   cursor: pointer;
 
   &:hover {
     background-color: #f9f9f9;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 15px;
+    font-size: 12px;
   }
 `;
 

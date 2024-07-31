@@ -37,20 +37,11 @@ const PolicyPage = () => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Hide scrollbars */
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.5rem;
-  }
+  box-sizing: border-box;
 `;
 
 const MainContent = styled.div`
@@ -58,7 +49,6 @@ const MainContent = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  overflow: hidden; /* Hide scrollbars */
 
   @media (max-width: 768px) {
     margin-top: 1.5rem;
@@ -70,7 +60,7 @@ const MainContent = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: -1px;
   margin-bottom: 2rem;
@@ -96,7 +86,7 @@ const PolicyList = styled.ul`
 
 const PolicyItem = styled.li`
   padding: 1rem;
-  font-size: 12px;
+  font-size: 0.8rem;
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
