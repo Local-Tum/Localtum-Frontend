@@ -17,7 +17,9 @@ const MenuList = ({ onLogoutClick }) => {
         </MenuItem>
         <MenuItem onClick={() => navigate("/mypagecoupon")}>쿠폰</MenuItem>
         <MenuItem onClick={() => navigate("/stamplist")}>스탬프</MenuItem>
-        <MenuItem onClick={() => navigate("/favorite")}>카페 즐겨찾기</MenuItem>
+        <MenuItem onClick={() => navigate("/favoritecafe")}>
+          카페 즐겨찾기
+        </MenuItem>
         <MenuItem onClick={() => navigate("/policy")}>약관 및 정책</MenuItem>
         <MenuItem onClick={onLogoutClick} style={{ color: "red" }}>
           로그아웃
