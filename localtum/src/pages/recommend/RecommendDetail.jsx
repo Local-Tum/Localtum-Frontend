@@ -7,7 +7,7 @@ import dot from '../../assets/icons/dot.png';
 import chocolateLatte from '../../assets/images/chocolateLatte.png';
 import caramelMacchiato from '../../assets/images/caramelMacchiato.png';
 import strawberryMilkShake from '../../assets/images/strawberryMilkShake.png';
-import HazelnutLatte from '../../assets/images/HazelnutLatte.png';
+import Hazelnut from '../../assets/images/Hazelnut.png';
 import IcedGreenTeaLatte from '../../assets/images/IcedGreenTeaLatte.png';
 import PassionfruitSmoothie from '../../assets/images/PassionfruitSmoothie.png';
 import MintMojito from '../../assets/images/MintMojito.png';
@@ -145,7 +145,7 @@ const RecommendDetail = () => {
                 {
                     name: "헤이즐넛 라떼",
                     description: "고소한 헤이즐넛과 부드러운 라떼의 조화로 편안한 느낌을 더해줍니다.",
-                    image: HazelnutLatte,
+                    image: Hazelnut,
                 }
             ]
         },
@@ -240,7 +240,7 @@ const RecommendDetail = () => {
                 {
                     name: "헤이즐넛 라떼",
                     description: "고소한 헤이즐넛 시럽과 부드러운 라떼의 조화.",
-                    image: HazelnutLatte,
+                    image: Hazelnut,
                 },
                 {
                     name: "토피넛 오트 라떼",
