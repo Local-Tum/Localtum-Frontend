@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Item from './Item';
 
@@ -6,7 +6,7 @@ const ItemList = ({ items, visibleCount }) => {
     return (
         <StyledList>
             {items.slice(0, visibleCount).map(item => {
-                const status = localStorage.getItem(`cafe-${item.id}-status`) || 'closed';
+                const status = localStorage.getItem(`status-${item.id}`) || 'closed';
                 
                 return (
                     <Item
