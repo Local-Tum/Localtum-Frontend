@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../../assets/logos/mainlogo.png";
+import SignInModal from "./SignInModal";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [loginVal, setLoginVal] = useState({ username: "", password: "" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,9 +30,7 @@ const SignIn = () => {
       storedUser.username !== loginVal.username ||
       storedUser.password !== loginVal.password
     ) {
-      alert(
-        "아이디/비밀번호 오류\n등록된 회원정보가 없습니다.\n올바르게 입력해 주세요."
-      );
+      handleModalOpen();
       return;
     }
 
@@ -68,6 +76,7 @@ const SignIn = () => {
           회원가입
         </ActionButton>
       </ButtonContainer>
+      <SignInModal isOpen={isModalOpen} onClose={handleModalClose} />
     </Frame>
   );
 };
@@ -104,11 +113,11 @@ const Form = styled.div`
   width: 100%;
   max-width: 600px;
   @media (max-width: 768px) {
-      width: 80%;
+    width: 80%;
   }
 
   @media (max-width: 480px) {
-      width: 80%;
+    width: 80%;
   }
 `;
 

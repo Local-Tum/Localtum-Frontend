@@ -2,9 +2,21 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../../assets/logos/mainlogo.png";
+import RegisterModal from './RegisterModal';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    navigate("/");
+  };
+
   const [registerVal, setRegisterVal] = useState({
     username: "",
     password: "",
@@ -52,8 +64,7 @@ const Register = () => {
     }
 
     localStorage.setItem("user", JSON.stringify(registerVal));
-    alert("회원가입이 완료되었습니다.");
-    navigate("/");
+    handleModalOpen();
   };
 
   return (
@@ -117,6 +128,7 @@ const Register = () => {
           가입하기
         </ActionButton>
       </Form>
+      <RegisterModal isOpen={isModalOpen} onClose={handleModalClose} />
     </Frame>
   );
 };
@@ -149,6 +161,13 @@ const Form = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+    @media (max-width: 768px) {
+      width: 80%;
+  }
+
+  @media (max-width: 480px) {
+      width: 80%;
+  }
 `;
 
 const InputContainer = styled.div`
