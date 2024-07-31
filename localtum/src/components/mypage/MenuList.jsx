@@ -1,25 +1,30 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-const MenuList = ({ onLogoutClick }) => (
-  <>
-    <Container>
-      <UserInfoContainer>
-        <UserName>아기사자</UserName>
-        <UserNameSuffix>님</UserNameSuffix>
-      </UserInfoContainer>
-      <Divider />
-      <MenuItem>회원 정보 수정</MenuItem>
-      <MenuItem>쿠폰</MenuItem>
-      <MenuItem>스탬프</MenuItem>
-      <MenuItem>카페 즐겨찾기</MenuItem>
-      <MenuItem>약관 및 정책</MenuItem>
-      <MenuItem onClick={onLogoutClick} style={{ color: "red" }}>
-        로그아웃
-      </MenuItem>
-    </Container>
-  </>
-);
+const MenuList = ({ onLogoutClick }) => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Container>
+        <UserInfoContainer>
+          <UserName>아기사자</UserName>
+          <UserNameSuffix>님</UserNameSuffix>
+        </UserInfoContainer>
+        <Divider />
+        <MenuItem onClick={() => navigate('/mypageedit')}>회원 정보 수정</MenuItem>
+        <MenuItem onClick={() => navigate('/mypagecoupon')}>쿠폰</MenuItem>
+        <MenuItem onClick={() => navigate('/stamplist')}>스탬프</MenuItem>
+        <MenuItem onClick={() => navigate('/favoritecafe')}>카페 즐겨찾기</MenuItem>
+        <MenuItem onClick={() => navigate('/policy')}>약관 및 정책</MenuItem>
+        <MenuItem onClick={onLogoutClick} style={{ color: "red" }}>
+          로그아웃
+        </MenuItem>
+      </Container>
+    </>
+  );
+};
 
 const Container = styled.div`
   width: 100%;
