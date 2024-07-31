@@ -52,13 +52,14 @@ const ProductImage = styled.div`
 
 const ProductName = styled.p`
   font-size: 0.9rem;
+  font-weight: bold;
   color: #444;
   margin: 0;
 `;
 
 const ProductPrice = styled.p`
-  font-size: 0.9rem;
-  color: #888;
+  font-size: 0.7rem;
+  color: #444;
   margin: 0;
 `;
 

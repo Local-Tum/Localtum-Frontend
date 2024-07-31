@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "../../components/cafedetailpage/Header";
 
-const OrderConfirmationPage = () => {
+const OrderConfirmationPage = ({ status = "accepted" }) => {
   return (
     <>
       <Container>
@@ -10,8 +10,8 @@ const OrderConfirmationPage = () => {
         <Main>
           <CafeName>멋쟁이 사자처럼</CafeName>
           <OrderInfo>
-            <OrderTime>2024.07.17 15:00</OrderTime>
             <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
+            <OrderTime>2024.07.17 15:00</OrderTime>
             <OrderNumber>주문번호 282</OrderNumber>
           </OrderInfo>
           <Divider />
@@ -28,7 +28,7 @@ const OrderConfirmationPage = () => {
           <Divider />
           <OrderProgress>
             <ProgressBar>
-              <Progress active="complete" />
+              <Progress active={status} />
               <ProgressText>
                 <span>결제 완료</span>
                 <span>주문 접수</span>
@@ -57,24 +57,26 @@ const Main = styled.main`
 `;
 
 const CafeName = styled.h1`
-  text-align: center;
   font-size: 1.25rem;
   color: #467048;
+  margin-bottom: 0.5rem;
+  text-align: left;
 `;
 
 const OrderInfo = styled.div`
-  text-align: center;
   margin: 1rem 0;
 `;
 
 const OrderTime = styled.p`
   font-size: 0.875rem;
   color: #888;
+  text-align: left;
 `;
 
 const OrderCompleteMessage = styled.h2`
   font-size: 1rem;
   color: #444;
+  text-align: left;
 `;
 
 const OrderNumber = styled.p`
@@ -84,6 +86,7 @@ const OrderNumber = styled.p`
   display: inline-block;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
+  text-align: left;
 `;
 
 const Divider = styled.div`
@@ -126,10 +129,10 @@ const ProgressBar = styled.div`
 
 const Progress = styled.div`
   display: flex;
-  width: 80%;
-  height: 5px;
+  width: 100%;
+  height: 20px;
   background-color: #e7e7e7;
-  border-radius: 2.5px;
+  border-radius: 5px;
   margin: 1rem 0;
 
   &::before {
@@ -139,11 +142,11 @@ const Progress = styled.div`
       props.active === "complete"
         ? "100%"
         : props.active === "accepted"
-        ? "50%"
+        ? "66%"
         : "33%"};
     height: 100%;
     background-color: #467048;
-    border-radius: 2.5px;
+    border-radius: 5px;
   }
 `;
 

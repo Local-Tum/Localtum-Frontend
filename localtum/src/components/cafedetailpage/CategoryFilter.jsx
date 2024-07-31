@@ -17,14 +17,15 @@ const CategoryFilter = () => {
 
 const CategoryContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
   border-bottom: 1px solid #e0e0e0;
+  padding: 0 3px;
 `;
 
 const CategoryButton = styled.button`
-  padding: 0.5rem 0.5rem;
+  flex: 1;
   background: none;
   border: none;
   cursor: pointer;
@@ -32,6 +33,8 @@ const CategoryButton = styled.button`
   font-weight: ${(props) => (props.active ? "bold" : "normal")};
   color: ${(props) => (props.active ? "#467048" : "#b0b0b0")};
   position: relative;
+  padding: 0.5rem 0;
+  text-align: center;
 
   &:after {
     content: "";
@@ -42,10 +45,6 @@ const CategoryButton = styled.button`
     position: absolute;
     bottom: -1px;
     left: 0;
-  }
-
-  &:not(:last-child) {
-    margin-right: 0.5rem;
   }
 `;
 

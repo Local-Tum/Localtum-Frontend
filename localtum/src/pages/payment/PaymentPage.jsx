@@ -37,8 +37,8 @@ const PaymentPage = () => {
             <ImagePlaceholder>상품 이미지</ImagePlaceholder>
             <ProductTitle>아메리카노</ProductTitle>
             <ProductDesc>
-              에스프레소의 은은한 커피 부드럽고 풍부한 바디감을 느낄 수 있는
-              아메리카노
+              에스프레소의 물을 혼합한 커피 <br />
+              부드럽고 풍부한 바디감을 느낄 수 있는 아메리카노
             </ProductDesc>
           </ProductInfo>
           <Divider />
@@ -184,16 +184,16 @@ const PaymentPage = () => {
             <QuantityButton onClick={() => handleQuantityChange("increment")}>
               +
             </QuantityButton>
-            <Price>{totalPrice}원</Price>
+            <Price>{totalPrice.toLocaleString()}원</Price>
           </QuantityControl>
           <Summary>
             <SummaryItem>
               <SummaryLabel>할인 금액</SummaryLabel>
-              <SummaryValue>-{discount}원</SummaryValue>
+              <SummaryValue>-{discount.toLocaleString()}원</SummaryValue>
             </SummaryItem>
             <SummaryItem>
               <SummaryLabel>상품 금액</SummaryLabel>
-              <SummaryValue>{finalPrice}원</SummaryValue>
+              <SummaryValue>{finalPrice.toLocaleString()}원</SummaryValue>
             </SummaryItem>
           </Summary>
           <Actions>
@@ -241,13 +241,14 @@ const ImagePlaceholder = styled.div`
 `;
 
 const ProductTitle = styled.h2`
-  font-size: 1.5rem;
+  font-size: 20px;
   color: #444;
   margin: 0;
 `;
 
 const ProductDesc = styled.p`
-  font-size: 0.9rem;
+  font-size: 12px;
+  line-height: 20px;
   color: #888;
   text-align: center;
   margin: 0.5rem 0;
@@ -262,7 +263,7 @@ const OptionGroup = styled.div`
 `;
 
 const OptionTitle = styled.h3`
-  font-size: 1rem;
+  font-size: 18px;
   color: #444;
   margin-bottom: 0.5rem;
   span {
@@ -281,9 +282,10 @@ const OptionSubTitle = styled.h4`
 const Option = styled.label`
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #444;
   margin-bottom: 0.5rem;
+  letter-spacing: -1px;
 `;
 
 const RadioButton = styled.input`
@@ -303,13 +305,13 @@ const Divider = styled.div`
 const QuantityControl = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
 `;
 
 const QuantityButton = styled.button`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background-color: #f6f3f3;
   border: none;
   border-radius: 50%;
@@ -318,37 +320,33 @@ const QuantityButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: #595b59;
 `;
 
 const Quantity = styled.div`
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #444;
+  margin: 0 1rem;
 `;
 
 const Price = styled.div`
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #444;
-  margin-left: 0.5rem;
 `;
 
 const Summary = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   margin-bottom: 1rem;
-  width: 100%;
 `;
 
 const SummaryItem = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 45%;
+  width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 const SummaryLabel = styled.div`
@@ -359,21 +357,21 @@ const SummaryLabel = styled.div`
 const SummaryValue = styled.div`
   font-size: 0.875rem;
   font-weight: bold;
-  color: red;
+  color: ${({ negative }) => (negative ? "red" : "#444")};
   text-align: right;
 `;
 
 const Actions = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const CartButton = styled.button`
-  width: 45%;
+  width: 48%;
   padding: 0.75rem;
   background-color: white;
   color: #467048;
-  border: 2px solid #467048;
+  border: 2px solid #a9b782;
   border-radius: 30px;
   font-size: 1rem;
   font-weight: bold;
@@ -381,7 +379,7 @@ const CartButton = styled.button`
 `;
 
 const OrderButton = styled.button`
-  width: 45%;
+  width: 48%;
   padding: 0.75rem;
   background-color: #467048;
   color: white;

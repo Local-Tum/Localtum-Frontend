@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import cupGreen from "../../assets/icons/cupGreen.png";
+import cupDone from "../../assets/icons/cupDone.png";
 
-const StampStatus = ({ title, stamps }) => {
+const StampCard = ({ title, stamps }) => {
   return (
     <CardWrapper>
       <CardTitle>{title}</CardTitle>
@@ -13,7 +14,10 @@ const StampStatus = ({ title, stamps }) => {
               {index === 9 ? (
                 <FreeText>한 잔 무료!</FreeText>
               ) : (
-                <StampImage src={cupGreen} alt="stamp" />
+                <StampImage
+                  src={index < stamps ? cupDone : cupGreen}
+                  alt="stamp"
+                />
               )}
             </Stamp>
           ))}
@@ -85,4 +89,4 @@ const FreeText = styled.div`
   text-align: center;
 `;
 
-export default StampStatus;
+export default StampCard;

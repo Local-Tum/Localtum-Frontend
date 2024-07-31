@@ -40,6 +40,7 @@ const SignIn = () => {
       <Title>로그인/회원가입</Title>
       <Form>
         <InputContainer>
+          <Label>아이디</Label>
           <Input
             type="text"
             name="username"
@@ -49,6 +50,7 @@ const SignIn = () => {
           />
         </InputContainer>
         <InputContainer>
+          <Label>비밀번호</Label>
           <Input
             type="password"
             name="password"
@@ -58,12 +60,14 @@ const SignIn = () => {
           />
         </InputContainer>
       </Form>
-      <ActionButton onClick={handleSignIn} variant="filled">
-        로그인
-      </ActionButton>
-      <ActionButton onClick={handleSignUp} variant="outlined">
-        회원가입
-      </ActionButton>
+      <ButtonContainer>
+        <ActionButton onClick={handleSignIn} variant="filled">
+          로그인
+        </ActionButton>
+        <ActionButton onClick={handleSignUp} variant="outlined">
+          회원가입
+        </ActionButton>
+      </ButtonContainer>
     </Frame>
   );
 };
@@ -88,7 +92,9 @@ const Logo = styled.img`
 const Title = styled.h2`
   margin-bottom: 2rem;
   color: #444444;
-  font-size: 1.5rem;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -2px;
 `;
 
 const Form = styled.div`
@@ -96,14 +102,21 @@ const Form = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 600px;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 600px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  font-size: 13px;
+  font-weight: 500;
+  color: #595b59;
+  margin-bottom: 0.3rem;
 `;
 
 const Input = styled.input`
@@ -111,15 +124,27 @@ const Input = styled.input`
   background-color: #f6f3f3;
   border: none;
   border-radius: 15px;
-  font-size: 0.7rem;
-  color: #b5b6b5;
+  font-size: 13px;
+  font-weight: 400;
+  color: #595b59;
+  &::placeholder {
+    color: #b5b6b5;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
 `;
 
 const ActionButton = styled.button`
   width: 80%;
   max-width: 464px;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0.5rem 0;
   padding: 0.75rem;
   background-color: ${(props) =>
     props.variant === "filled" ? "#467048" : "white"};
