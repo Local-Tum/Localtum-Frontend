@@ -28,6 +28,27 @@ const TermsAgreement = () => {
     }
   };
 
+  const handleCustomCheckboxClick = (name) => {
+    setAgreements((prev) => {
+      const newAgreements = { ...prev, [name]: !prev[name] };
+      if (name === "all") {
+        return {
+          all: !prev.all,
+          service: !prev.all,
+          privacy: !prev.all,
+          thirdParty: !prev.all,
+          marketing: !prev.all,
+        };
+      }
+      if (!newAgreements.service || !newAgreements.privacy || !newAgreements.thirdParty) {
+        newAgreements.all = false;
+      } else if (newAgreements.service && newAgreements.privacy && newAgreements.thirdParty && newAgreements.marketing) {
+        newAgreements.all = true;
+      }
+      return newAgreements;
+    });
+  };
+
   const handleSubmit = () => {
     if (!agreements.service || !agreements.privacy || !agreements.thirdParty) {
       alert("필수 약관에 동의해주세요.");
@@ -47,53 +68,72 @@ const TermsAgreement = () => {
       <Form>
         <AgreementContainer>
           <Agreement style={{ marginBottom: "1.25rem" }}>
-            <Checkbox
-              type="checkbox"
-              name="all"
-              checked={isChecked("all")}
-              onChange={handleAgreementChange}
-            />
-            <Label>전체 동의</Label>
+            <CheckboxWrapper onClick={() => handleCustomCheckboxClick("all")}>
+              <Checkbox
+                type="checkbox"
+                name="all"
+                checked={isChecked("all")}
+                onChange={handleAgreementChange}
+              />
+              <CustomCheckbox checked={isChecked("all")} />
+              <Label>전체 동의</Label>
+            </CheckboxWrapper>
           </Agreement>
           <Agreement>
-            <Checkbox
-              type="checkbox"
-              name="service"
-              checked={isChecked("service")}
-              onChange={handleAgreementChange}
-            />
-            <Label>서비스 이용약관 (필수)</Label>
-            <ViewDetailsButton>전문보기</ViewDetailsButton>
+            <CheckboxWrapper onClick={() => handleCustomCheckboxClick("service")}>
+              <Checkbox
+                type="checkbox"
+                name="service"
+                checked={isChecked("service")}
+                onChange={handleAgreementChange}
+              />
+              <CustomCheckbox checked={isChecked("service")} />
+              <Label>서비스 이용약관 (필수)</Label>
+              <Spacer />
+              <ViewDetailsButton>전문보기</ViewDetailsButton>
+            </CheckboxWrapper>
           </Agreement>
           <Agreement>
-            <Checkbox
-              type="checkbox"
-              name="privacy"
-              checked={isChecked("privacy")}
-              onChange={handleAgreementChange}
-            />
-            <Label>개인정보 처리방침 (필수)</Label>
-            <ViewDetailsButton>전문보기</ViewDetailsButton>
+            <CheckboxWrapper onClick={() => handleCustomCheckboxClick("privacy")}>
+              <Checkbox
+                type="checkbox"
+                name="privacy"
+                checked={isChecked("privacy")}
+                onChange={handleAgreementChange}
+              />
+              <CustomCheckbox checked={isChecked("privacy")} />
+              <Label>개인정보 처리방침 (필수)</Label>
+              <Spacer />
+              <ViewDetailsButton>전문보기</ViewDetailsButton>
+            </CheckboxWrapper>
           </Agreement>
           <Agreement>
-            <Checkbox
-              type="checkbox"
-              name="thirdParty"
-              checked={isChecked("thirdParty")}
-              onChange={handleAgreementChange}
-            />
-            <Label>제 3자 개인정보 활용 동의 (필수)</Label>
-            <ViewDetailsButton>전문보기</ViewDetailsButton>
+            <CheckboxWrapper onClick={() => handleCustomCheckboxClick("thirdParty")}>
+              <Checkbox
+                type="checkbox"
+                name="thirdParty"
+                checked={isChecked("thirdParty")}
+                onChange={handleAgreementChange}
+              />
+              <CustomCheckbox checked={isChecked("thirdParty")} />
+              <Label>제 3자 개인정보 활용 동의 (필수)</Label>
+              <Spacer />
+              <ViewDetailsButton>전문보기</ViewDetailsButton>
+            </CheckboxWrapper>
           </Agreement>
           <Agreement>
-            <Checkbox
-              type="checkbox"
-              name="marketing"
-              checked={isChecked("marketing")}
-              onChange={handleAgreementChange}
-            />
-            <Label>마케팅 활용 동의 (선택)</Label>
-            <ViewDetailsButton>전문보기</ViewDetailsButton>
+            <CheckboxWrapper onClick={() => handleCustomCheckboxClick("marketing")}>
+              <Checkbox
+                type="checkbox"
+                name="marketing"
+                checked={isChecked("marketing")}
+                onChange={handleAgreementChange}
+              />
+              <CustomCheckbox checked={isChecked("marketing")} />
+              <Label>마케팅 활용 동의 (선택)</Label>
+              <Spacer />
+              <ViewDetailsButton>전문보기</ViewDetailsButton>
+            </CheckboxWrapper>
           </Agreement>
         </AgreementContainer>
         <ActionButton
@@ -151,6 +191,13 @@ const Form = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  @media (max-width: 768px) {
+        width: 80%;
+    }
+
+    @media (max-width: 480px) {
+        width: 80%;
+    }
 `;
 
 const AgreementContainer = styled.div`
@@ -168,9 +215,26 @@ const Agreement = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 0.75rem;
+  padding: 0.2rem;
+`;
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
 `;
 
 const Checkbox = styled.input`
+  display: none;
+`;
+
+const CustomCheckbox = styled.div`
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background-color: ${(props) => (props.checked ? "#a9b782" : "#fff")};
+  border: 2px solid #e7e7e7;
   margin-right: 10px;
   cursor: pointer;
 `;
@@ -180,6 +244,9 @@ const Label = styled.label`
   font-weight: 500;
   letter-spacing: -0.04em;
   color: #444444;
+`;
+
+const Spacer = styled.div`
   flex: 1;
 `;
 
@@ -187,8 +254,8 @@ const ViewDetailsButton = styled.button`
   background: #f3f3f3;
   border: none;
   border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-size: 14px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
   color: #444444;
   cursor: pointer;
 `;
@@ -199,10 +266,9 @@ const ActionButton = styled.button`
   margin-top: 1rem;
   padding: 0.75rem;
   background-color: ${(props) =>
-    props.variant === "filled" ? "#467048" : "white"};
-  color: ${(props) => (props.variant === "filled" ? "white" : "#808180")};
-  border: 2px solid
-    ${(props) => (props.variant === "filled" ? "#467048" : "#A9B782")};
+    props.variant === "filled" ? "#467048" : "#b5b6b5"};
+  color: white;
+  border: none;
   border-radius: 30px;
   font-size: 1rem;
   font-weight: bold;
