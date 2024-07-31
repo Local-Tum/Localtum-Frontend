@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/home/Header";
 import Banner from "../../components/home/Banner";
 import Nav from "../../components/home/Nav";
@@ -7,6 +8,7 @@ import LogoutModal from "../../components/mypage/LogoutModal";
 import styled from "styled-components";
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const handleLogout = () => {
@@ -15,8 +17,7 @@ const MyPage = () => {
 
   const confirmLogout = () => {
     setLogoutModalOpen(false);
-    alert("로그아웃되었습니다.");
-    // 로그아웃
+    navigate("/");
   };
 
   const cancelLogout = () => {

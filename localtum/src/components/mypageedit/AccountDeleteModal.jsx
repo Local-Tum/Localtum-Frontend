@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const LogoutModal = ({ onConfirm, onCancel }) => (
+const AccountDeleteModal = ({ onConfirm, onCancel }) => (
   <Overlay>
     <ModalContent>
-      <Text>로그아웃 하시겠습니까?</Text>
+      <Text>회원탈퇴 하시겠습니까?</Text>
       <ButtonContainer>
         <CancelButton onClick={onCancel}>취소</CancelButton>
         <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
@@ -37,7 +37,6 @@ const ModalContent = styled.div`
   @media (max-width: 768px) {
     width: 80%;
   }
-
 `;
 
 const Text = styled.div`
@@ -46,7 +45,6 @@ const Text = styled.div`
   color: #ca7070;
   font-weight: 600;
   letter-spacing: -0.96px;
-  
 `;
 
 const ButtonContainer = styled.div`
@@ -79,4 +77,4 @@ const ConfirmButton = styled.button`
   font-weight: 600;
 `;
 
-export default LogoutModal;
+export default AccountDeleteModal;

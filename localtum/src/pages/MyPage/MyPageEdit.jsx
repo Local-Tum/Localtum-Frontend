@@ -1,42 +1,61 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Add import for useNavigate
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
-import Alert from "../../components/mypageedit/Alert";
+import EditModal from "../../components/mypageedit/EditModal";
+import AccountDeleteModal from "../../components/mypageedit/AccountDeleteModal";
+import DeleteModal from "../../components/mypageedit/DeleteModal";
 
 const MyPageEdit = () => {
   const [nickname, setNickname] = useState("");
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
-    useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleNicknameChange = (e) => {
-    setNickname(e.target.value);
+    const value = e.target.value;
+    setNickname(value);
+
+    // Validate nickname length
+    if (value.length > 8) {
+      setErrorMessage("닉네임은 8자 이내이어야 합니다.");
+    } else {
+      setErrorMessage("");
+    }
   };
 
   const handleNicknameSubmit = () => {
     if (nickname.length > 8) {
-      setAlertMessage("닉네임은 8자 이내이어야 합니다.");
-      setIsAlertVisible(true);
+      setErrorMessage("닉네임은 8자 이내이어야 합니다.");
     } else {
-      setAlertMessage(`'${nickname}'로 변경되었습니다.`);
-      setIsAlertVisible(true);
+      setIsModalOpen(true);
     }
   };
 
   const handleAccountDelete = () => {
-    setIsDeleteConfirmationVisible(true);
+    setDeleteModalOpen(true);
   };
 
   const confirmAccountDelete = () => {
-    setAlertMessage("회원 탈퇴 완료되었습니다.");
-    setIsDeleteConfirmationVisible(false);
-    setIsAlertVisible(true);
+    setDeleteModalOpen(false);
+    setDeleteSuccessModalOpen(true);
   };
 
-  const handleAlertClose = () => {
-    setIsAlertVisible(false);
-    setAlertMessage("");
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteModalClose = () => {
+    setDeleteSuccessModalOpen(false);
+    navigate("/"); // Navigate to home page when modal is closed
+  };
+
+  const handleDeleteSuccessModalClose = () => {
+    setDeleteSuccessModalOpen(false);
+    navigate("/"); // Navigate to home page when modal is closed
   };
 
   return (
@@ -55,23 +74,33 @@ const MyPageEdit = () => {
                 maxLength={8}
               />
             </InputContainer>
-            <ErrorMessage>* 8자 이내로 입력해주세요.</ErrorMessage>
+            <ErrorMessage>{errorMessage || "* 8자 이내로 입력해주세요."}</ErrorMessage>
           </FormField>
           <ButtonGroup>
             <DeleteButton onClick={handleAccountDelete}>회원 탈퇴</DeleteButton>
-            <SubmitButton onClick={handleNicknameSubmit}>수정하기</SubmitButton>
+            <SubmitButton
+              onClick={handleNicknameSubmit}
+              disabled={nickname.length > 8} // Disable if nickname length is more than 8
+            >
+              수정하기
+            </SubmitButton>
           </ButtonGroup>
         </Form>
       </Main>
-      {isAlertVisible && (
-        <Alert message={alertMessage} onClose={handleAlertClose} />
+      {deleteSuccessModalOpen && (
+        <DeleteModal isOpen={deleteSuccessModalOpen} onClose={handleDeleteSuccessModalClose} />
       )}
-      {isDeleteConfirmationVisible && (
-        <Alert
-          message="회원 탈퇴 하시겠습니까?"
-          onClose={() => setIsDeleteConfirmationVisible(false)}
+      {isModalOpen && (
+        <EditModal 
+          isOpen={isModalOpen} 
+          onClose={handleModalClose} 
+          nickname={nickname} 
+        />
+      )}
+      {deleteModalOpen && (
+        <AccountDeleteModal
+          onCancel={handleDeleteModalClose}
           onConfirm={confirmAccountDelete}
-          showConfirmButtons
         />
       )}
     </Container>
@@ -137,22 +166,25 @@ const InputContainer = styled.div`
 
 const LabelTag = styled.div`
   background-color: #ffffff;
+  color: #282828;
   padding: 1rem 1.5rem;
   border-radius: 20px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: -0.8px;
   margin-right: 15px;
   white-space: nowrap;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
 `;
 
 const NicknameInput = styled.input`
   flex: 1;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
+  color: #595b59;
   border: none;
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
   outline: none;
   background-color: #fff;
 `;
@@ -181,12 +213,12 @@ const DeleteButton = styled.button`
   padding: 0.75rem;
   background-color: white;
   color: #a9b782;
-  border: 1px solid #a9b782;
+  border: 2px solid #a9b782;
   border-radius: 30px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: -0.8px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const SubmitButton = styled.button`
@@ -197,9 +229,12 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 30px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
 export default MyPageEdit;
