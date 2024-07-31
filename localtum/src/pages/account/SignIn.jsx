@@ -103,6 +103,13 @@ const Form = styled.div`
   align-items: center;
   width: 100%;
   max-width: 600px;
+  @media (max-width: 768px) {
+      width: 80%;
+  }
+
+  @media (max-width: 480px) {
+      width: 80%;
+  }
 `;
 
 const InputContainer = styled.div`
