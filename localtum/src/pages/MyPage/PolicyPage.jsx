@@ -42,6 +42,7 @@ const Container = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Hide scrollbars */
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -57,6 +58,7 @@ const MainContent = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
+  overflow: hidden; /* Hide scrollbars */
 
   @media (max-width: 768px) {
     margin-top: 1.5rem;
@@ -68,8 +70,9 @@ const MainContent = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
+  letter-spacing: -1px;
   margin-bottom: 2rem;
 
   @media (max-width: 768px) {
@@ -93,11 +96,16 @@ const PolicyList = styled.ul`
 
 const PolicyItem = styled.li`
   padding: 1rem;
+  font-size: 12px;
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+
+  &:first-child {
+    border-top: 1.5px solid #ccc;
+  }
 
   &:hover {
     background-color: #f9f9f9;

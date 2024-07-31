@@ -7,7 +7,8 @@ const MyPageEdit = () => {
   const [nickname, setNickname] = useState("");
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] = useState(false);
+  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
+    useState(false);
 
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
@@ -46,12 +47,15 @@ const MyPageEdit = () => {
           <Title>회원 정보 수정</Title>
           <Form>
             <FormField>
-              <Label>닉네임</Label>
-              <NicknameInput
-                type="text"
-                value={nickname}
-                onChange={handleNicknameChange}
-              />
+              <InputContainer>
+                <LabelTag>닉네임</LabelTag>
+                <NicknameInput
+                  type="text"
+                  value={nickname}
+                  onChange={handleNicknameChange}
+                  maxLength={8}
+                />
+              </InputContainer>
               <ErrorMessage>* 8자 이내로 입력해주세요.</ErrorMessage>
             </FormField>
             <ButtonGroup>
@@ -86,18 +90,21 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 const Main = styled.main`
-  padding: 1rem;
+  padding: 2rem 1rem;
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden; /* Prevents scrolling */
 `;
 
 const Title = styled.h2`
   text-align: center;
   color: #444;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
+  font-size: 1.2rem;
+  letter-spacing: -1px;
 `;
 
 const Form = styled.div`
@@ -107,57 +114,82 @@ const Form = styled.div`
 `;
 
 const FormField = styled.div`
-  margin-bottom: 1rem;
-  width: 80%;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const Label = styled.label`
-  display: block;
+const InputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const LabelTag = styled.div`
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 25px;
   font-size: 1rem;
-  color: #444;
-  margin-bottom: 0.5rem;
+  font-weight: 500;
+  margin-right: 10px;
+  white-space: nowrap;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const NicknameInput = styled.input`
-  width: 100%;
-  padding: 0.5rem;
+  flex: 1;
+  padding: 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+  background-color: #fff;
 `;
 
 const ErrorMessage = styled.p`
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   color: red;
   margin-top: 0.5rem;
+  text-align: left;
+  width: 100%;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 2rem;
 `;
 
 const DeleteButton = styled.button`
   width: 45%;
   padding: 0.75rem;
-  background-color: #fff;
-  color: #467048;
-  border: 1px solid #467048;
+  background-color: white;
+  color: #a9b782;
+  border: 1px solid #a9b782;
   border-radius: 30px;
   font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const SubmitButton = styled.button`
   width: 45%;
   padding: 0.75rem;
   background-color: #467048;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 30px;
   font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 export default MyPageEdit;

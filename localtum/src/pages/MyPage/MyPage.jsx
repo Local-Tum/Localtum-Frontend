@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Header from "../../components/home/Header";
 import Banner from "../../components/home/Banner";
 import Nav from "../../components/home/Nav";
-import NicknameSection from "../../components/mypage/NicknameSection";
 import MenuList from "../../components/mypage/MenuList";
 import LogoutModal from "../../components/mypage/LogoutModal";
 import styled from "styled-components";
@@ -30,7 +29,6 @@ const MyPage = () => {
       <Banner />
       <Nav activeIndex={3} />
       <MainContent>
-        <NicknameSection nickname="아기사자 님" />
         <MenuList onLogoutClick={handleLogout} />
       </MainContent>
       {isLogoutModalOpen && (
