@@ -19,32 +19,33 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
   background-color: #fff;
-  padding: 20px;
+  padding: 30px 20px;
   border-radius: 8px;
   width: 100%;
-  max-width: 480px;
+  max-width: 360px;
   text-align: center;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Text = styled.div`
   font-size: 1rem;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #d9534f;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px; /* 버튼 간격 조정 */
+  gap: 10px;
 `;
 
 const CancelButton = styled.button`
@@ -66,7 +67,7 @@ const ConfirmButton = styled.button`
   padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
-  width: 100px; 
+  width: 100px;
   font-size: 0.875rem;
   font-weight: bold;
 `;
