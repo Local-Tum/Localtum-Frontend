@@ -190,10 +190,9 @@ const ActionButton = styled.button`
   margin-top: 1rem;
   padding: 0.75rem;
   background-color: ${(props) =>
-    props.variant === "filled" ? "#467048" : "white"};
-  color: ${(props) => (props.variant === "filled" ? "white" : "#808180")};
-  border: 2px solid
-    ${(props) => (props.variant === "filled" ? "#467048" : "#A9B782")};
+    props.variant === "filled" ? "#467048" : "#b5b6b5"};
+  color: white;
+  border: none;
   border-radius: 30px;
   font-size: 1rem;
   font-weight: bold;
