@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const ImageSlider = () => {
+const ImageSlider = ({ images }) => {
   return (
     <SliderContainer>
       <SliderButton>{"<"}</SliderButton>
-      <ImagePlaceholder>커버 사진</ImagePlaceholder>
+      <ImagePlaceholder>
+        {images.map((img, index) => (
+          <Image src={img} alt={`Slide ${index}`} key={index} />
+        ))}
+      </ImagePlaceholder>
       <SliderButton>{">"}</SliderButton>
     </SliderContainer>
   );
@@ -41,6 +45,12 @@ const ImagePlaceholder = styled.div`
   border: 1px dashed #ccc;
   border-radius: 15px;
   margin: 0 1rem;
+`;
+
+const Image = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 `;
 
 export default ImageSlider;

@@ -28,6 +28,8 @@ const CardWrapper = styled.div`
   max-width: 480px;
   margin: 0 auto 20px auto;
   text-align: left;
+  padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 const CardContainer = styled.div`
@@ -35,6 +37,7 @@ const CardContainer = styled.div`
   border-radius: 10px;
   padding: 20px;
   background-color: #fff;
+  box-sizing: border-box;
 `;
 
 const CardTitle = styled.div`
@@ -49,13 +52,18 @@ const StampsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  align-items: center;
-  justify-items: center;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
 `;
 
 const Stamp = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border: 2px solid #a9b782;
   border-radius: 50%;
   display: flex;
@@ -64,18 +72,21 @@ const Stamp = styled.div`
   background-color: ${(props) => (props.filled ? "#A9B782" : "#f9f9f9")};
   position: relative;
 
-  &:not(:last-child) img {
-    width: 70%;
-    height: 70%;
-    background-color: ${(props) => (props.filled ? "#A9B782" : "transparent")};
-    border-radius: 50%;
+  @media (max-width: 480px) {
+    width: 48px;
+    height: 48px;
   }
 `;
 
 const StampImage = styled.img`
-  width: 70%;
-  height: 70%;
+  width: 60%;
+  height: 60%;
   object-fit: contain;
+
+  @media (max-width: 480px) {
+    width: 50%;
+    height: 50%;
+  }
 `;
 
 const FreeText = styled.div`

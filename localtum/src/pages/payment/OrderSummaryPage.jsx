@@ -23,7 +23,6 @@ const OrderSummaryPage = () => {
 
   const handleCouponConfirm = () => {
     setCouponModalOpen(false);
-
     alert("쿠폰이 적용되었습니다.");
   };
 
@@ -67,7 +66,7 @@ const OrderSummaryPage = () => {
             <Section>
               <SectionTitle>쿠폰 적용</SectionTitle>
               <CouponInput onClick={handleCouponClick}>
-                쿠폰 선택
+                쿠폰
                 <CouponButton>▼</CouponButton>
               </CouponInput>
             </Section>
@@ -142,7 +141,7 @@ const CafeInfo = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Adjusted margin */
 `;
 
 const CafeName = styled.h2`
@@ -157,7 +156,7 @@ const Divider = styled.div`
 `;
 
 const OrderItem = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Adjusted margin */
 `;
 
 const ItemInfo = styled.div`
@@ -167,14 +166,17 @@ const ItemInfo = styled.div`
 `;
 
 const ItemName = styled.h3`
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #444;
 `;
 
 const ItemDetails = styled.div`
   font-size: 1rem;
+  font-weight: bold;
   color: #444;
   cursor: pointer;
+  display: flex; /* Added to align the expand button */
+  justify-content: space-between; /* Adjusted to ensure text alignment */
 `;
 
 const ExpandButton = styled.span`
@@ -185,12 +187,12 @@ const ExpandButton = styled.span`
 const ExpandedDetails = styled.div`
   font-size: 0.9rem;
   color: #666;
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
   margin-left: 1rem;
 `;
 
 const Detail = styled.div`
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 `;
 
 const AdditionalSections = styled.div`
@@ -202,7 +204,9 @@ const Section = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -1px;
   color: #444;
   margin-bottom: 0.5rem;
 `;
@@ -212,7 +216,7 @@ const Input = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px; /* Increased border-radius */
 `;
 
 const CouponInput = styled.div`
@@ -220,6 +224,7 @@ const CouponInput = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 1rem;
+  font-weight: 500;
   color: #444;
   cursor: pointer;
 `;
@@ -233,7 +238,7 @@ const PaymentOption = styled.label`
   align-items: center;
   font-size: 0.875rem;
   color: #444;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem; /* Increased margin between options */
 `;
 
 const RadioButton = styled.input`

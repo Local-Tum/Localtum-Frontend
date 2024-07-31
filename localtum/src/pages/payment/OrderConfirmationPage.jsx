@@ -10,8 +10,8 @@ const OrderConfirmationPage = ({ status = "accepted" }) => {
         <Main>
           <CafeName>멋쟁이 사자처럼</CafeName>
           <OrderInfo>
-            <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
             <OrderTime>2024.07.17 15:00</OrderTime>
+            <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
             <OrderNumber>주문번호 282</OrderNumber>
           </OrderInfo>
           <Divider />
