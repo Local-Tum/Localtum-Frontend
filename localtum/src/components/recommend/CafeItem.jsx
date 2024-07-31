@@ -17,7 +17,7 @@ const CafeItem = ({ cafe }) => {
             setIsFavorite(JSON.parse(favoriteStatus));
         }
 
-        const cafeStatus = localStorage.getItem(`cafe-${cafe.id}-status`);
+        const cafeStatus = localStorage.getItem(`status-${cafe.id}`);
         if (cafeStatus) {
             setStatus(cafeStatus);
         }
