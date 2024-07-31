@@ -33,9 +33,9 @@ export default function Banner() {
   };
 
   return (
-    <BannerContainer onClick={handleBannerClick}>
+    <BannerContainer>
       {transitions((style, item) => (
-        <AnimatedBannerBox key={item} style={{ ...style, backgroundImage: `url(${item})` }} />
+        <AnimatedBannerBox key={item} style={{ ...style, backgroundImage: `url(${item})` }} onClick={handleBannerClick} />
       ))}
       <NavDots>
         {banners.map((_, dotIndex) => (
