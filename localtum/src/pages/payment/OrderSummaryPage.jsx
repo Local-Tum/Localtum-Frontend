@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/cafedetailpage/Header";
+import CouponModal from "../../components/Order/CouponModal";
 
 const OrderSummaryPage = () => {
   const [expandedItem, setExpandedItem] = useState(null);
+  const [isCouponModalOpen, setCouponModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleExpand = (itemName) => {
@@ -13,6 +15,20 @@ const OrderSummaryPage = () => {
 
   const handleOrderButtonClick = () => {
     navigate("/orderconfirmation");
+  };
+
+  const handleCouponClick = () => {
+    setCouponModalOpen(true);
+  };
+
+  const handleCouponConfirm = () => {
+    setCouponModalOpen(false);
+
+    alert("쿠폰이 적용되었습니다.");
+  };
+
+  const handleCouponCancel = () => {
+    setCouponModalOpen(false);
   };
 
   return (
@@ -50,9 +66,9 @@ const OrderSummaryPage = () => {
             <Divider />
             <Section>
               <SectionTitle>쿠폰 적용</SectionTitle>
-              <CouponInput>
-                쿠폰
-                <CouponButton>&gt;</CouponButton>
+              <CouponInput onClick={handleCouponClick}>
+                쿠폰 선택
+                <CouponButton>▼</CouponButton>
               </CouponInput>
             </Section>
             <Divider />
@@ -97,6 +113,12 @@ const OrderSummaryPage = () => {
           </Summary>
           <OrderButton onClick={handleOrderButtonClick}>결제하기</OrderButton>
         </Main>
+        {isCouponModalOpen && (
+          <CouponModal
+            onConfirm={handleCouponConfirm}
+            onCancel={handleCouponCancel}
+          />
+        )}
       </Container>
     </>
   );

@@ -52,7 +52,6 @@ const Register = () => {
     }
 
     localStorage.setItem("user", JSON.stringify(registerVal));
-    console.log("회원가입 시도:", registerVal);
     alert("회원가입이 완료되었습니다.");
     navigate("/");
   };
@@ -63,6 +62,7 @@ const Register = () => {
       <Title>회원가입</Title>
       <Form>
         <InputContainer>
+          <Label>아이디</Label>
           <Input
             type="text"
             name="username"
@@ -72,6 +72,7 @@ const Register = () => {
           />
         </InputContainer>
         <InputContainer>
+          <Label>비밀번호</Label>
           <Input
             type="password"
             name="password"
@@ -81,6 +82,7 @@ const Register = () => {
           />
         </InputContainer>
         <InputContainer>
+          <Label>비밀번호 확인</Label>
           <Input
             type="password"
             name="confirmPassword"
@@ -91,6 +93,7 @@ const Register = () => {
           {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         </InputContainer>
         <InputContainer>
+          <Label>닉네임 설정</Label>
           <Input
             type="text"
             name="nickname"
@@ -100,7 +103,17 @@ const Register = () => {
           />
           {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
         </InputContainer>
-        <ActionButton onClick={handleSubmit} variant="filled">
+        <ActionButton
+          onClick={handleSubmit}
+          variant={
+            registerVal.username &&
+            registerVal.password &&
+            registerVal.confirmPassword &&
+            registerVal.nickname
+              ? "filled"
+              : "outlined"
+          }
+        >
           가입하기
         </ActionButton>
       </Form>
@@ -143,6 +156,13 @@ const InputContainer = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
+  margin-bottom: 1rem;
+`;
+
+const Label = styled.label`
+  font-size: 13px;
+  font-weight: 600;
+  color: #595b59;
   margin-bottom: 0.5rem;
 `;
 
@@ -151,12 +171,15 @@ const Input = styled.input`
   background-color: #f6f3f3;
   border: none;
   border-radius: 15px;
-  font-size: 0.7rem;
-  color: #b5b6b5;
+  font-size: 13px;
+  color: #595b59;
+  &::placeholder {
+    color: #b5b6b5;
+  }
 `;
 
 const ErrorMessage = styled.div`
-  font-size: 0.75rem;
+  font-size: 14px;
   color: red;
   margin-top: 0.5rem;
 `;

@@ -19,6 +19,10 @@ import CouponPage from "./components/cafedetailpage/CouponPage";
 import PaymentPage from "./pages/payment/PaymentPage";
 import OrderSummaryPage from "./pages/payment/OrderSummaryPage";
 import OrderConfirmationPage from "./pages/payment/OrderConfirmationPage";
+import MyPageEdit from "./pages/MyPage/MyPageEdit";
+import MyPageCoupon from "./pages/MyPage/MyPageCoupon";
+import PolicyPage from "./pages/MyPage/PolicyPage";
+import StampList from "./pages/MyPage/StampList";
 
 const App = () => {
   return (
@@ -47,6 +51,11 @@ const App = () => {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/order" element={<OrderSummaryPage />} />
         <Route path="/orderconfirmation" element={<OrderConfirmationPage />} />
+        {/* 마이페이지 */}
+        <Route path="/mypageedit" element={<MyPageEdit />} />
+        <Route path="/mypagecoupon" element={<MyPageCoupon />} />
+        <Route path="/policy" element={<PolicyPage />} />
+        <Route path="/stamplist" element={<StampList />} />
       </Routes>
     </Router>
   );

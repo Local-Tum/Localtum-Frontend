@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../../components/cafedetailpage/Header";
+import Header from "../../components/mypageedit/Header";
 import ImageSlider from "../../components/cafedetailpage/ImageSlider";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
 import StampStatus from "../../components/cafedetailpage/StampStatus";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
 import { useNavigate } from "react-router-dom";
+import shoppingCartIcon from "../../assets/icons/shoppingCart.png";
 
 const CafeDetailPage = () => {
   const navigate = useNavigate();
@@ -22,9 +23,10 @@ const CafeDetailPage = () => {
           <CategoryFilter />
           <ProductList />
         </Main>
-        <CartButton onClick={() => navigate("/coupons")}>
-          할인쿠폰 받기
-        </CartButton>
+        <CouponButton onClick={() => navigate("/coupons")}>
+          <ButtonText>할인쿠폰 받기</ButtonText>
+          <CartIcon src={shoppingCartIcon} alt="Cart" />
+        </CouponButton>
       </Container>
     </>
   );
@@ -49,16 +51,34 @@ const Main = styled.main`
   overflow-y: auto;
 `;
 
-const CartButton = styled.button`
+const CouponButton = styled.button`
   width: 100%;
-  padding: 1rem;
-  background-color: #467048;
+  background-color: #a9b782;
   color: white;
   border: none;
-  border-radius: 0 0 30px 30px;
+  border-radius: 30px 30px 0 0;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+`;
+
+const ButtonText = styled.span`
+  color: #595b59;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: white;
+`;
+
+const CartIcon = styled.img`
+  width: 40px;
+  height: 40px;
 `;
 
 export default CafeDetailPage;
