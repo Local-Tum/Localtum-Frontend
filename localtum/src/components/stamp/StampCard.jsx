@@ -32,6 +32,7 @@ const CardWrapper = styled.div`
   max-width: 480px;
   margin: 0 auto 20px auto;
   text-align: left;
+  box-sizing: border-box;
 `;
 
 const CardContainer = styled.div`
@@ -39,6 +40,11 @@ const CardContainer = styled.div`
   border-radius: 10px;
   padding: 20px;
   background-color: #fff;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const CardTitle = styled.div`
@@ -47,6 +53,10 @@ const CardTitle = styled.div`
   margin-bottom: 10px;
   color: #444;
   text-align: left;
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const StampsContainer = styled.div`
@@ -55,6 +65,14 @@ const StampsContainer = styled.div`
   gap: 10px;
   align-items: center;
   justify-items: center;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(
+      5,
+      minmax(0, 1fr)
+    ); /* 각 스탬프가 일정한 너비를 가지도록 설정 */
+    gap: 5px;
+  }
 `;
 
 const Stamp = styled.div`
@@ -74,6 +92,11 @@ const Stamp = styled.div`
     background-color: ${(props) => (props.filled ? "#A9B782" : "transparent")};
     border-radius: 50%;
   }
+
+  @media (max-width: 480px) {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const StampImage = styled.img`
@@ -87,6 +110,10 @@ const FreeText = styled.div`
   font-weight: bold;
   color: #467048;
   text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 `;
 
 export default StampCard;

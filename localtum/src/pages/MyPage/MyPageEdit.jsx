@@ -40,86 +40,93 @@ const MyPageEdit = () => {
   };
 
   return (
-    <>
-      <Container>
-        <Header />
-        <Main>
-          <Title>회원 정보 수정</Title>
-          <Form>
-            <FormField>
-              <InputContainer>
-                <LabelTag>닉네임</LabelTag>
-                <NicknameInput
-                  type="text"
-                  value={nickname}
-                  onChange={handleNicknameChange}
-                  maxLength={8}
-                />
-              </InputContainer>
-              <ErrorMessage>* 8자 이내로 입력해주세요.</ErrorMessage>
-            </FormField>
-            <ButtonGroup>
-              <DeleteButton onClick={handleAccountDelete}>
-                회원 탈퇴
-              </DeleteButton>
-              <SubmitButton onClick={handleNicknameSubmit}>
-                수정하기
-              </SubmitButton>
-            </ButtonGroup>
-          </Form>
-        </Main>
-        {isAlertVisible && (
-          <Alert message={alertMessage} onClose={handleAlertClose} />
-        )}
-        {isDeleteConfirmationVisible && (
-          <Alert
-            message="회원 탈퇴 하시겠습니까?"
-            onClose={() => setIsDeleteConfirmationVisible(false)}
-            onConfirm={confirmAccountDelete}
-            showConfirmButtons
-          />
-        )}
-      </Container>
-    </>
+    <Container>
+      <Header />
+      <Main>
+        <Title>회원 정보 수정</Title>
+        <Form>
+          <FormField>
+            <InputContainer>
+              <LabelTag>닉네임</LabelTag>
+              <NicknameInput
+                type="text"
+                value={nickname}
+                onChange={handleNicknameChange}
+                maxLength={8}
+              />
+            </InputContainer>
+            <ErrorMessage>* 8자 이내로 입력해주세요.</ErrorMessage>
+          </FormField>
+          <ButtonGroup>
+            <DeleteButton onClick={handleAccountDelete}>회원 탈퇴</DeleteButton>
+            <SubmitButton onClick={handleNicknameSubmit}>수정하기</SubmitButton>
+          </ButtonGroup>
+        </Form>
+      </Main>
+      {isAlertVisible && (
+        <Alert message={alertMessage} onClose={handleAlertClose} />
+      )}
+      {isDeleteConfirmationVisible && (
+        <Alert
+          message="회원 탈퇴 하시겠습니까?"
+          onClose={() => setIsDeleteConfirmationVisible(false)}
+          onConfirm={confirmAccountDelete}
+          showConfirmButtons
+        />
+      )}
+    </Container>
   );
 };
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px;
   margin: 0 auto;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const Main = styled.main`
   padding: 2rem 1rem;
   flex: 1;
-  overflow: hidden; /* Prevents scrolling */
+  overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const Title = styled.h2`
   text-align: center;
   color: #444;
   margin-bottom: 4rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   letter-spacing: -1px;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const Form = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const FormField = styled.div`
   margin-bottom: 1.5rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 `;
 
 const InputContainer = styled.div`
@@ -130,13 +137,13 @@ const InputContainer = styled.div`
 
 const LabelTag = styled.div`
   background-color: #ffffff;
-  padding: 1rem;
-  border-radius: 25px;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
   font-size: 1rem;
   font-weight: 500;
-  margin-right: 10px;
+  margin-right: 15px;
   white-space: nowrap;
-  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
 const NicknameInput = styled.input`
@@ -144,8 +151,8 @@ const NicknameInput = styled.input`
   padding: 1rem;
   font-size: 1rem;
   border: none;
-  border-radius: 25px;
-  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   outline: none;
   background-color: #fff;
 `;
@@ -154,8 +161,10 @@ const ErrorMessage = styled.p`
   font-size: 0.7rem;
   color: red;
   margin-top: 0.5rem;
-  text-align: left;
+  margin-left: 14rem;
   width: 100%;
+  text-align: left;
+  box-sizing: border-box;
 `;
 
 const ButtonGroup = styled.div`
@@ -164,6 +173,7 @@ const ButtonGroup = styled.div`
   width: 100%;
   max-width: 400px;
   margin-top: 2rem;
+  box-sizing: border-box;
 `;
 
 const DeleteButton = styled.button`

@@ -23,6 +23,7 @@ import MyPageEdit from "./pages/MyPage/MyPageEdit";
 import MyPageCoupon from "./pages/MyPage/MyPageCoupon";
 import PolicyPage from "./pages/MyPage/PolicyPage";
 import StampList from "./pages/MyPage/StampList";
+import FavoriteList from "./pages/MyPage/FavoriteList";
 
 const App = () => {
   return (
@@ -56,6 +57,7 @@ const App = () => {
         <Route path="/mypagecoupon" element={<MyPageCoupon />} />
         <Route path="/policy" element={<PolicyPage />} />
         <Route path="/stamplist" element={<StampList />} />
+        <Route path="/favorite" element={<FavoriteList />} />
       </Routes>
     </Router>
   );
