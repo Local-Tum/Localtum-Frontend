@@ -47,7 +47,7 @@ const App = () => {
         <Route path="/SignUp" element={<TermsAgreement />} />
         <Route path="/Register" element={<Register />} />
         {/* 카페 상세화면 & 음료 주문 */}
-        <Route path="/CafeDetail" element={<CafeDetailPage />} />
+        <Route path="/cafedetail/:id" element={<CafeDetailPage />} /> 
         <Route path="/coupons" element={<CouponPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/order" element={<OrderSummaryPage />} />

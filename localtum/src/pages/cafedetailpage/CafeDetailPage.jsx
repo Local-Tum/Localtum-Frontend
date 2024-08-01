@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
 import ImageSlider from "../../components/cafedetailpage/ImageSlider";
@@ -6,49 +7,64 @@ import StoreInfo from "../../components/cafedetailpage/StoreInfo";
 import StampStatus from "../../components/cafedetailpage/StampStatus";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
-import { useNavigate } from "react-router-dom";
 import shoppingCartIcon from "../../assets/icons/shoppingCart.png";
+import Cafes from "../../components/Cafes/Cafes";
 
 const CafeDetailPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-
+  const cafe = Cafes.find((cafe) => cafe.id === parseInt(id, 10));
   return (
-    <>
-      <Container>
-        <Header />
-        <Main>
-          <ImageSlider />
-          <StoreInfo />
+    <Container>
+      <Header />
+      <Main>
+        <ContentWrapper>
+          <ImageSlider images={[cafe.image]} />
+          <StoreInfo
+            name={cafe.name}
+            address={cafe.address}
+            hours={cafe.hours}
+          />
           <StampStatus />
           <CategoryFilter />
-          <ProductList />
-        </Main>
-        <CouponButton onClick={() => navigate("/coupons")}>
-          <ButtonText>할인쿠폰 받기</ButtonText>
-          <CartIcon src={shoppingCartIcon} alt="Cart" />
-        </CouponButton>
-      </Container>
-    </>
+          {cafe.menu ? (
+            <ProductList menu={cafe.menu} />
+          ) : (
+            <div>메뉴 정보를 불러올 수 없습니다.</div>
+          )}
+        </ContentWrapper>
+      </Main>
+      <CouponButton onClick={() => navigate("/coupons")}>
+        <ButtonText>할인쿠폰 받기</ButtonText>
+        <CartIcon src={shoppingCartIcon} alt="Cart" />
+      </CouponButton>
+    </Container>
   );
 };
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   background-color: white;
-  margin: 0 auto;
-
-  @media (max-width: 480px) {
-    width: 100%;
-  }
+  box-sizing: border-box;
 `;
 
 const Main = styled.main`
-  padding: 1rem;
+  width: 100%;
+  padding: 1rem 0;
   flex: 1;
   overflow-y: auto;
+  box-sizing: border-box;
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 const CouponButton = styled.button`
@@ -65,6 +81,8 @@ const CouponButton = styled.button`
   align-items: center;
   padding: 1rem 2rem;
   box-sizing: border-box;
+  max-width: 480px;
+  margin: 0 auto;
 `;
 
 const ButtonText = styled.span`

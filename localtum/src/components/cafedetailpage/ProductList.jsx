@@ -1,18 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const ProductList = () => {
+const ProductList = ({ menu }) => {
   return (
     <ProductGrid>
-      {Array(12)
-        .fill()
-        .map((_, idx) => (
-          <Product key={idx}>
-            <ProductImage>상품 이미지</ProductImage>
-            <ProductName>아메리카노</ProductName>
-            <ProductPrice>3,000원</ProductPrice>
-          </Product>
-        ))}
+      {menu.map((item, idx) => (
+        <Product key={idx}>
+          <ProductImage src={item.image} alt={item.name} />
+          <ProductName>{item.name}</ProductName>
+          <ProductPrice>{item.price}원</ProductPrice>
+        </Product>
+      ))}
     </ProductGrid>
   );
 };
@@ -37,7 +35,7 @@ const Product = styled.div`
   align-items: center;
 `;
 
-const ProductImage = styled.div`
+const ProductImage = styled.img`
   width: 100%;
   height: 100px;
   background-color: #f6f3f3;
