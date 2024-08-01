@@ -1,42 +1,49 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../../components/cafedetailpage/Header";
+import Header from "../../components/mypageedit/Header";
+import nameIcon from "../../assets/icons/cafeName.png";
 
 const OrderConfirmationPage = ({ status = "accepted" }) => {
   return (
     <>
       <Container>
         <Header />
-        <Main>
-          <CafeName>멋쟁이 사자처럼</CafeName>
-          <OrderInfo>
-            <OrderTime>2024.07.17 15:00</OrderTime>
-            <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
-            <OrderNumber>주문번호 282</OrderNumber>
-          </OrderInfo>
-          <Divider />
-          <OrderDetails>
-            <Detail>
-              <Label>주문 상품</Label>
-              <Value>아메리카노</Value>
-            </Detail>
-            <Detail>
-              <Label>결제 금액</Label>
-              <Value className="amount">2,500원</Value>
-            </Detail>
-          </OrderDetails>
-          <Divider />
-          <OrderProgress>
-            <ProgressBar>
-              <Progress active={status} />
-              <ProgressText>
-                <span>결제 완료</span>
-                <span>주문 접수</span>
-                <span>제조 완료</span>
-              </ProgressText>
-            </ProgressBar>
-          </OrderProgress>
-        </Main>
+        <MainContainer>
+          <Main>
+            <CafeInfo>
+              <CafeNameIcon src={nameIcon} alt="*" />
+              <CafeName>멋쟁이 사자처럼</CafeName>
+            </CafeInfo>
+            <Divider />
+            <OrderInfo>
+              <OrderTime>2024.07.17 15:00</OrderTime>
+              <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
+              <OrderNumber>주문번호 282</OrderNumber>
+            </OrderInfo>
+            <Divider />
+            <OrderDetails>
+              <Detail>
+                <Label>주문 상품</Label>
+                <Value>아메리카노</Value>
+              </Detail>
+              <Detail>
+                <Label>결제 금액</Label>
+                <Value className="amount">2,500원</Value>
+              </Detail>
+            </OrderDetails>
+            <Divider />
+            <OrderProgress>
+              <ProgressBar>
+                <Progress active={status} />
+                <ProgressText active={status}>
+                  <span className="payment-complete">결제 완료</span>
+                  <span className="order-accepted">주문 접수</span>
+                  <span className="manufacture-complete">제조 완료</span>
+                </ProgressText>
+              </ProgressBar>
+            </OrderProgress>
+          </Main>
+        </MainContainer>
       </Container>
     </>
   );
@@ -44,23 +51,48 @@ const OrderConfirmationPage = ({ status = "accepted" }) => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  box-sizing: border-box;
+`;
+
+const MainContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  overflow-y: auto;
+  box-sizing: border-box;
 `;
 
 const Main = styled.main`
-  padding: 1rem;
+  width: 100%;
+  max-width: 480px;
   flex: 1;
-  overflow-y: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-sizing: border-box;
+  padding: 0 1rem;
 `;
 
-const CafeName = styled.h1`
-  font-size: 1.25rem;
-  color: #467048;
+const CafeInfo = styled.div`
+  display: flex;
+  align-items: center;
   margin-bottom: 0.5rem;
-  text-align: left;
+`;
+
+const CafeNameIcon = styled.img`
+  width: 1.5rem;
+  margin-right: 0.5rem;
+`;
+
+const CafeName = styled.h2`
+  font-size: 1.2rem;
+  color: #282828;
+  font-weight: 700;
+  margin-bottom: 1rem;
 `;
 
 const OrderInfo = styled.div`
@@ -81,12 +113,14 @@ const OrderCompleteMessage = styled.h2`
 
 const OrderNumber = styled.p`
   font-size: 0.875rem;
+  font-weight: 700;
   color: #467048;
-  background-color: #f6f6f6;
+  background-color: #fff;
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
   text-align: left;
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
 `;
 
 const Divider = styled.div`
@@ -107,13 +141,18 @@ const Detail = styled.div`
 
 const Label = styled.div`
   color: #444;
+  font-weight: 600;
+  font-size: 1rem;
 `;
 
 const Value = styled.div`
-  color: #444;
+  color: #595b59;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.8px;
   &.amount {
-    color: #d9534f;
-    font-weight: bold;
+    color: #ca7070;
+    font-weight: 700;
   }
 `;
 
@@ -130,9 +169,9 @@ const ProgressBar = styled.div`
 const Progress = styled.div`
   display: flex;
   width: 100%;
-  height: 20px;
+  height: 30px;
   background-color: #e7e7e7;
-  border-radius: 5px;
+  border-radius: 30px;
   margin: 1rem 0;
 
   &::before {
@@ -146,7 +185,7 @@ const Progress = styled.div`
         : "33%"};
     height: 100%;
     background-color: #467048;
-    border-radius: 5px;
+    border-radius: 30px;
   }
 `;
 
@@ -154,8 +193,24 @@ const ProgressText = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  font-size: 0.875rem;
-  color: #888;
+  font-size: 1rem;
+
+  .payment-complete {
+    font-weight: ${(props) => (props.active === "payment" ? "bold" : "normal")};
+    color: ${(props) => (props.active === "payment" ? "#444" : "#808180")};
+  }
+
+  .order-accepted {
+    font-weight: ${(props) => (props.active === "accepted" ? "bold" : "normal")};
+    color: ${(props) => (props.active === "accepted" ? "#444" : "#808180")};
+
+  }
+
+  .manufacture-complete {
+    font-weight: ${(props) => (props.active === "complete" ? "bold" : "normal")};
+    color: ${(props) => (props.active === "complete" ? "#444" : "#808180")};
+
+  }
 `;
 
 export default OrderConfirmationPage;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
@@ -15,6 +15,7 @@ const CafeDetailPage = () => {
   const cafe = Cafes.find((cafe) => cafe.id === parseInt(id, 10));
   const defaultCafe = Cafes.find((cafe) => cafe.id === 1);
   const status = localStorage.getItem(`status-${id}`) || "closed";
+  const [notificationCount, setNotificationCount] = useState(0);
 
   if (!cafe) {
     return <div>카페 정보를 찾을 수 없습니다.</div>;
@@ -44,9 +45,14 @@ const CafeDetailPage = () => {
           )}
         </ContentWrapper>
       </Main>
-      <CouponButton onClick={() => navigate("/coupons")}>
-        <ButtonText>할인쿠폰 받기</ButtonText>
-        <CartIcon src={shoppingCartIcon} alt="Cart" />
+      <CouponButton>
+        <ButtonText onClick={() => navigate("/coupons")}>
+          할인쿠폰 받기
+        </ButtonText>
+        <CartContainer onClick={() => navigate("/order")}>
+          <CartIcon src={shoppingCartIcon} alt="Cart" />
+          <NotificationBadge>{notificationCount}</NotificationBadge>
+        </CartContainer>
       </CouponButton>
     </Container>
   );
@@ -118,9 +124,36 @@ const ButtonText = styled.span`
   box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
 `;
 
+const CartContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 0.2rem;
+`;
+
+
 const CartIcon = styled.img`
   width: 30px;
   height: 30px;
 `;
+
+const NotificationBadge = styled.div`
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #e7e7e7;
+  color: #808180;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+`;
+
 
 export default CafeDetailPage;
