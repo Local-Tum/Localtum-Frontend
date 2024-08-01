@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import openIcon from '../../assets/icons/openIcon.png';
 import closedIcon from '../../assets/icons/closedIcon.png';
@@ -6,11 +7,13 @@ import cafeName from '../../assets/icons/cafeName.png';
 import favoriteButton from '../../assets/icons/favoriteButton.png';
 import favoriteButtonOff from '../../assets/icons/favoriteButtonOff.png';
 
-const Item = ({ name, address, status, image }) => {
+const Item = ({ id, name, address, status, image }) => {
     const [isFavorite, setIsFavorite] = useState(() => {
         const favoriteStatus = localStorage.getItem(`favorite-${name}`);
         return favoriteStatus ? JSON.parse(favoriteStatus) : false;
     });
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         localStorage.setItem(`favorite-${name}`, JSON.stringify(isFavorite));
@@ -20,8 +23,12 @@ const Item = ({ name, address, status, image }) => {
         setIsFavorite(!isFavorite);
     };
 
+    const handleClick = () => {
+        navigate(`/cafedetail/${id}`);
+    };
+
     return (
-        <StyledItem>
+        <StyledItem onClick={handleClick}>
             <ImageContainer>
                 <ItemStatus
                     src={status === 'closed' ? closedIcon : openIcon}
@@ -30,7 +37,10 @@ const Item = ({ name, address, status, image }) => {
                 <FavoriteButton
                     src={isFavorite ? favoriteButton : favoriteButtonOff}
                     alt="★"
-                    onClick={toggleFavorite}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite();
+                    }}
                 />
                 {image ? (
                     <BackgroundImage src={image} alt="카페 사진" />
@@ -51,6 +61,7 @@ const StyledItem = styled.div`
     overflow: hidden;
     margin-bottom: 1rem;
     width: 50vw;
+    cursor: pointer;
     @media (max-width: 768px) {
         width: 80vw;
     }

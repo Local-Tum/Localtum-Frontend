@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import cupGreen from "../../assets/icons/cupGreen.png";
 
-const StampStatus = ({ title, stamps }) => {
+const StampStatus = ({ stamps }) => {
   return (
     <CardWrapper>
-      <CardTitle>{title}</CardTitle>
+      <CardTitle>스템프 현황</CardTitle>
       <CardContainer>
         <StampsContainer>
           {Array.from({ length: 10 }).map((_, index) => (
@@ -26,26 +26,36 @@ const StampStatus = ({ title, stamps }) => {
 const CardWrapper = styled.div`
   width: 100%;
   max-width: 480px;
-  margin: 0 auto 20px auto;
+  margin: 2rem auto 1rem auto;
   text-align: left;
   padding: 0 1rem;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const CardContainer = styled.div`
-  border: 1px solid #a9b782;
-  border-radius: 10px;
+  border: 4px solid #a9b782;
+  border-radius: 30px;
   padding: 20px;
   background-color: #fff;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const CardTitle = styled.div`
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #444;
+  color: #fff;
   text-align: left;
+  position: absolute;
+  top: -25px;
+  left: 28px;
+  background-color: #467048;
+  padding: 3px 10px;
+  height: 5rem;
+  border-radius: 16px;
+  
 `;
 
 const StampsContainer = styled.div`
@@ -64,7 +74,7 @@ const StampsContainer = styled.div`
 const Stamp = styled.div`
   width: 56px;
   height: 56px;
-  border: 2px solid #a9b782;
+  border: 3px solid #a9b782;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -90,9 +100,10 @@ const StampImage = styled.img`
 `;
 
 const FreeText = styled.div`
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #467048;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #a9b782;
+  letter-spacing: -0.64px;
   text-align: center;
 `;
 
