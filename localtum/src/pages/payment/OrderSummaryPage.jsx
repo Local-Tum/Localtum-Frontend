@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/cafedetailpage/Header";
+import Header from "../../components/mypageedit/Header";
 import CouponModal from "../../components/Order/CouponModal";
+import nameIcon from "../../assets/icons/cafeName.png";
+import underIcon2 from "../../assets/icons/underIcon2.png";
+import upperIcon from "../../assets/icons/upperIcon.png";
+import rightIcon from "../../assets/icons/rightIcon.png";
 
 const OrderSummaryPage = () => {
   const [expandedItem, setExpandedItem] = useState(null);
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const navigate = useNavigate();
 
   const toggleExpand = (itemName) => {
@@ -30,88 +35,130 @@ const OrderSummaryPage = () => {
     setCouponModalOpen(false);
   };
 
+  const handlePaymentChange = (e) => {
+    setSelectedPayment(e.target.value);
+  };
+
   return (
     <>
       <Container>
         <Header />
-        <Main>
-          <CafeInfo>
-            <CafeName>멋쟁이 사자처럼</CafeName>
-          </CafeInfo>
-          <Divider />
-          <OrderItem>
-            <ItemInfo>
-              <ItemName>주문 상품</ItemName>
-              <ItemDetails onClick={() => toggleExpand("아메리카노")}>
-                아메리카노{" "}
-                <ExpandButton>
-                  {expandedItem === "아메리카노" ? "▲" : "▼"}
-                </ExpandButton>
-              </ItemDetails>
-            </ItemInfo>
-            {expandedItem === "아메리카노" && (
-              <ExpandedDetails>
-                <Detail>Grande size 473ml</Detail>
-                <Detail>Ice 차갑게</Detail>
-              </ExpandedDetails>
-            )}
-          </OrderItem>
-          <Divider />
-          <AdditionalSections>
-            <Section>
-              <SectionTitle>매장 요청 사항</SectionTitle>
-              <Input placeholder="매장 요청사항이 있으면 적어주세요." />
-            </Section>
+        <MainContainer>
+          <Main>
+            <CafeInfo>
+              <CafeNameIcon src={nameIcon} alt="*" />
+              <CafeName>멋쟁이 사자처럼</CafeName>
+            </CafeInfo>
             <Divider />
-            <Section>
-              <SectionTitle>쿠폰 적용</SectionTitle>
-              <CouponInput onClick={handleCouponClick}>
-                쿠폰
-                <CouponButton>▼</CouponButton>
-              </CouponInput>
-            </Section>
+            <OrderItem>
+              <ItemInfo>
+                <ItemName>주문 상품</ItemName>
+                <ItemDetails onClick={() => toggleExpand("아메리카노")}>
+                  아메리카노{" "}
+                  <ExpandButton
+                    src={expandedItem === "아메리카노" ? upperIcon : underIcon2}
+                    alt={expandedItem === "아메리카노" ? "▲" : "▼"}
+                  />
+                </ItemDetails>
+              </ItemInfo>
+              {expandedItem === "아메리카노" && (
+                <ExpandedDetails>
+                  <Detail>Grande size 473ml</Detail>
+                  <Detail>Ice 차갑게</Detail>
+                </ExpandedDetails>
+              )}
+            </OrderItem>
             <Divider />
-            <Section>
-              <SectionTitle>결제 수단</SectionTitle>
-              <PaymentOption>
-                <RadioButton type="radio" name="payment" value="신용카드" />{" "}
-                신용카드
-              </PaymentOption>
-              <PaymentOption>
-                <RadioButton
-                  type="radio"
-                  name="payment"
-                  value="간편카드 결제"
-                />{" "}
-                간편카드 결제
-              </PaymentOption>
-              <PaymentOption>
-                <RadioButton type="radio" name="payment" value="네이버 페이" />{" "}
-                네이버 페이
-              </PaymentOption>
-              <PaymentOption>
-                <RadioButton type="radio" name="payment" value="카카오 페이" />{" "}
-                카카오 페이
-              </PaymentOption>
-            </Section>
-          </AdditionalSections>
-          <Divider />
-          <Summary>
-            <SummaryItem>
-              <SummaryLabel>상품 금액</SummaryLabel>
-              <SummaryValue>3,000원</SummaryValue>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryLabel>할인 금액</SummaryLabel>
-              <SummaryValue>-500원</SummaryValue>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryLabel>결제 금액</SummaryLabel>
-              <SummaryValue>2,500원</SummaryValue>
-            </SummaryItem>
-          </Summary>
-          <OrderButton onClick={handleOrderButtonClick}>결제하기</OrderButton>
-        </Main>
+            <AdditionalSections>
+              <Section>
+                <SectionTitle>매장 요청 사항</SectionTitle>
+                <Input placeholder="매장 요청사항이 있으면 적어주세요." />
+              </Section>
+              <Divider />
+              <Section>
+                <SectionTitle>쿠폰 적용</SectionTitle>
+                <CouponInput onClick={handleCouponClick}>
+                  쿠폰
+                  <CouponButton src={rightIcon} />
+                </CouponInput>
+              </Section>
+              <Divider />
+              <Section>
+                <SectionTitle>결제 수단</SectionTitle>
+                <PaymentOption>
+                  <CustomCheckbox>
+                    <RadioButton
+                      type="radio"
+                      name="payment"
+                      value="신용카드"
+                      onChange={handlePaymentChange}
+                    />
+                    <Checkmark />
+                    신용카드
+                  </CustomCheckbox>
+                </PaymentOption>
+                <PaymentOption>
+                  <CustomCheckbox>
+                    <RadioButton
+                      type="radio"
+                      name="payment"
+                      value="간편카드 결제"
+                      onChange={handlePaymentChange}
+                    />
+                    <Checkmark />
+                    간편카드 결제
+                  </CustomCheckbox>
+                </PaymentOption>
+                <PaymentOption>
+                  <CustomCheckbox>
+                    <RadioButton
+                      type="radio"
+                      name="payment"
+                      value="네이버 페이"
+                      onChange={handlePaymentChange}
+                    />
+                    <Checkmark />
+                    네이버 페이
+                  </CustomCheckbox>
+                </PaymentOption>
+                <PaymentOption>
+                  <CustomCheckbox>
+                    <RadioButton
+                      type="radio"
+                      name="payment"
+                      value="카카오 페이"
+                      onChange={handlePaymentChange}
+                    />
+                    <Checkmark />
+                    카카오 페이
+                  </CustomCheckbox>
+                </PaymentOption>
+              </Section>
+            </AdditionalSections>
+            <Divider />
+            <Summary>
+              <SummaryItem>
+                <SummaryLabel>상품 금액</SummaryLabel>
+                <SummaryValue>3,000원</SummaryValue>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryLabel>할인 금액</SummaryLabel>
+                <SummaryValue>-500원</SummaryValue>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryLabelTotal>결제 금액</SummaryLabelTotal>
+                <SummaryValueTotal>2,500원</SummaryValueTotal>
+              </SummaryItem>
+            </Summary>
+            <OrderButton
+              onClick={handleOrderButtonClick}
+              disabled={!selectedPayment}
+              active={!!selectedPayment}
+            >
+              결제하기
+            </OrderButton>
+          </Main>
+        </MainContainer>
         {isCouponModalOpen && (
           <CouponModal
             onConfirm={handleCouponConfirm}
@@ -125,28 +172,48 @@ const OrderSummaryPage = () => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 480px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  box-sizing: border-box;
+`;
+
+const MainContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  overflow-y: auto;
+  box-sizing: border-box;
 `;
 
 const Main = styled.main`
-  padding: 1rem;
+  width: 100%;
+  max-width: 480px;
   flex: 1;
-  overflow-y: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-sizing: border-box;
+  padding: 0 1rem;
 `;
 
 const CafeInfo = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem; /* Adjusted margin */
+  margin-bottom: 0.5rem;
+`;
+
+const CafeNameIcon = styled.img`
+  width: 1.5rem;
+  margin-right: 0.5rem;
 `;
 
 const CafeName = styled.h2`
-  font-size: 1.5rem;
-  color: #444;
+  font-size: 1.2rem;
+  color: #282828;
+  font-weight: 700;
+  margin-bottom: 1rem;
 `;
 
 const Divider = styled.div`
@@ -156,7 +223,7 @@ const Divider = styled.div`
 `;
 
 const OrderItem = styled.div`
-  margin-bottom: 0.5rem; /* Adjusted margin */
+  margin-bottom: 0.5rem;
 `;
 
 const ItemInfo = styled.div`
@@ -172,23 +239,26 @@ const ItemName = styled.h3`
 
 const ItemDetails = styled.div`
   font-size: 1rem;
-  font-weight: bold;
-  color: #444;
+  font-weight: 600;
+  color: #595b59;
   cursor: pointer;
-  display: flex; /* Added to align the expand button */
-  justify-content: space-between; /* Adjusted to ensure text alignment */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const ExpandButton = styled.span`
-  font-size: 1.2rem;
-  margin-left: 0.5rem;
+const ExpandButton = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 1.5rem;
 `;
 
 const ExpandedDetails = styled.div`
   font-size: 0.9rem;
   color: #666;
   margin-top: 0.3rem;
-  margin-left: 1rem;
+  margin-left: auto;
+  text-align: right;
 `;
 
 const Detail = styled.div`
@@ -208,15 +278,18 @@ const SectionTitle = styled.h3`
   font-weight: 650;
   letter-spacing: -1px;
   color: #444;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 const Input = styled.input`
-  width: 98%;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 10px; /* Increased border-radius */
+  width: 90%;
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  border: 2px solid #e7e7e7;
+  border-radius: 30px;
+  ::placeholder {
+    color: #b5b6b5;
+  }
 `;
 
 const CouponInput = styled.div`
@@ -224,25 +297,64 @@ const CouponInput = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 1rem;
-  font-weight: 500;
-  color: #444;
+  font-weight: 600;
+  color: #595b59;
   cursor: pointer;
 `;
 
-const CouponButton = styled.span`
-  font-size: 1.5rem;
+const CouponButton = styled.img`
+  height: 1rem;
 `;
 
 const PaymentOption = styled.label`
   display: flex;
   align-items: center;
   font-size: 0.875rem;
-  color: #444;
-  margin-bottom: 1rem; /* Increased margin between options */
+  font-weight: 500;
+  letter-spacing: -0.64px;
+  color: #595b59;
+  margin-bottom: 1rem;
+`;
+
+const CustomCheckbox = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
 `;
 
 const RadioButton = styled.input`
-  margin-right: 0.5rem;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &:checked + span {
+    background-color: #a9b782;
+  }
+`;
+
+const Checkbox = styled.input`
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &:checked + span {
+    background-color: #a9b782;
+  }
+`;
+
+const Checkmark = styled.span`
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid #e7e7e7;
+  margin-right: 8px;
+  position: relative;
 `;
 
 const Summary = styled.div`
@@ -256,29 +368,43 @@ const SummaryItem = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 const SummaryLabel = styled.div`
   font-size: 1rem;
   color: #444;
+  font-weight: 600;
+`;
+
+const SummaryLabelTotal = styled.div`
+  font-size: 1.1rem;
+  color: #282828;
+  font-weight: 700;
 `;
 
 const SummaryValue = styled.div`
   font-size: 1rem;
   color: #444;
+  font-weight: 700;
+`;
+
+const SummaryValueTotal = styled.div`
+  font-size: 1rem;
+  color: #ca7070;
+  font-weight: 700;
 `;
 
 const OrderButton = styled.button`
   width: 100%;
   padding: 0.75rem;
-  background-color: #467048;
+  background-color: ${({ active }) => (active ? "#467048" : "#808180")};
   color: white;
   border: none;
   border-radius: 30px;
   font-size: 1rem;
   font-weight: bold;
-  cursor: pointer;
+  cursor: ${({ active }) => (active ? "pointer" : "not-allowed")};
 `;
 
 export default OrderSummaryPage;

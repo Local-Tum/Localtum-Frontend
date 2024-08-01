@@ -1,11 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ProductList = ({ menu }) => {
+  const navigate = useNavigate();
+
+  const handleProductClick = (item) => {
+    navigate("/payment", { state: { item } });
+  };
+
   return (
     <ProductGrid>
       {menu.map((item, idx) => (
-        <Product key={idx}>
+        <Product key={idx} onClick={() => handleProductClick(item)}>
           <ProductImage src={item.image} alt={item.name} />
           <ProductName>{item.name}</ProductName>
           <ProductPrice>{item.price}원</ProductPrice>
@@ -28,6 +35,7 @@ const Product = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 `;
 
 const ProductImage = styled.img`
