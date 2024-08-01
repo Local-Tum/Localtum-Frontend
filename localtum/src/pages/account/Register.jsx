@@ -2,21 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../../assets/logos/mainlogo.png";
-import RegisterModal from './RegisterModal';
+import RegisterModal from "./RegisterModal";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    navigate("/");
-  };
-
   const [registerVal, setRegisterVal] = useState({
     username: "",
     password: "",
@@ -26,28 +17,28 @@ const Register = () => {
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    navigate("/");
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRegisterVal({ ...registerVal, [name]: value });
 
     if (name === "nickname") {
-      if (value.length > 8) {
-        setNicknameError("* 8자 이하로 입력해주세요.");
-      } else {
-        setNicknameError("");
-      }
+      setNicknameError(value.length > 8 ? "* 8자 이하로 입력해주세요." : "");
     }
 
     if (name === "confirmPassword") {
-      if (value !== registerVal.password) {
-        setPasswordError("비밀번호가 일치하지 않습니다.");
-      } else {
-        setPasswordError("");
-      }
+      setPasswordError(
+        value !== registerVal.password ? "비밀번호가 일치하지 않습니다." : ""
+      );
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !registerVal.username ||
       !registerVal.password ||
@@ -63,8 +54,24 @@ const Register = () => {
       return;
     }
 
-    localStorage.setItem("user", JSON.stringify(registerVal));
-    handleModalOpen();
+    const payload = {
+      memberId: registerVal.username,
+      password: registerVal.password,
+      nickname: registerVal.nickname,
+      memberRoles: ["ROLE_ADMIN"],
+    };
+
+    try {
+      const response = await axios.post("/api/signUp", payload);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      handleModalOpen();
+    } catch (error) {
+      alert("회원가입에 실패했습니다. 다시 시도해 주세요.");
+      console.error(
+        "Error:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
@@ -161,12 +168,11 @@ const Form = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-    @media (max-width: 768px) {
-      width: 80%;
+  @media (max-width: 768px) {
+    width: 80%;
   }
-
   @media (max-width: 480px) {
-      width: 80%;
+    width: 80%;
   }
 `;
 

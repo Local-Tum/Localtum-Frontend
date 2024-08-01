@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../../assets/logos/mainlogo.png";
 import SignInModal from "./SignInModal";
-import { signin } from "../../apis/api/user";
+import axios from "axios";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -26,17 +26,16 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      const response = await signin(loginVal);
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        alert("로그인 성공!");
-        navigate("/");
-      } else {
-        setErrorMessage(response.data.message || "로그인 실패");
-        handleModalOpen();
-      }
-    } catch (e) {
-      setErrorMessage(e.response?.data?.message || "로그인 중 오류 발생");
+      const response = await axios.post("/api/signIn", loginVal, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      localStorage.setItem("token", response.data.token);
+      alert("로그인 성공!");
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "로그인 중 오류 발생");
       handleModalOpen();
     }
   };
@@ -79,7 +78,11 @@ const SignIn = () => {
           회원가입
         </ActionButton>
       </ButtonContainer>
-      <SignInModal isOpen={isModalOpen} onClose={handleModalClose} message={errorMessage} />
+      <SignInModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        message={errorMessage}
+      />
     </Frame>
   );
 };
