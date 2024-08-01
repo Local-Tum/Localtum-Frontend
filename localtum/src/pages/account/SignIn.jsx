@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../../assets/logos/mainlogo.png";
 import SignInModal from "./SignInModal";
+import { signin } from "../../apis/api/user";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const [loginVal, setLoginVal] = useState({ username: "", password: "" });
+  const [loginVal, setLoginVal] = useState({ memberId: "", password: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -22,20 +24,21 @@ const SignIn = () => {
     setLoginVal({ ...loginVal, [name]: value });
   };
 
-  const handleSignIn = () => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (
-      !storedUser ||
-      storedUser.username !== loginVal.username ||
-      storedUser.password !== loginVal.password
-    ) {
+  const handleSignIn = async () => {
+    try {
+      const response = await signin(loginVal);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        alert("로그인 성공!");
+        navigate("/");
+      } else {
+        setErrorMessage(response.data.message || "로그인 실패");
+        handleModalOpen();
+      }
+    } catch (e) {
+      setErrorMessage(e.response?.data?.message || "로그인 중 오류 발생");
       handleModalOpen();
-      return;
     }
-
-    alert("로그인 성공!");
-    navigate("/");
   };
 
   const handleSignUp = () => {
@@ -51,9 +54,9 @@ const SignIn = () => {
           <Label>아이디</Label>
           <Input
             type="text"
-            name="username"
+            name="memberId"
             placeholder="아이디를 입력해 주세요."
-            value={loginVal.username}
+            value={loginVal.memberId}
             onChange={handleChange}
           />
         </InputContainer>
@@ -76,7 +79,7 @@ const SignIn = () => {
           회원가입
         </ActionButton>
       </ButtonContainer>
-      <SignInModal isOpen={isModalOpen} onClose={handleModalClose} />
+      <SignInModal isOpen={isModalOpen} onClose={handleModalClose} message={errorMessage} />
     </Frame>
   );
 };
