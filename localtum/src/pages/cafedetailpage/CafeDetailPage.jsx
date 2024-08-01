@@ -2,7 +2,6 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
-import ImageSlider from "../../components/cafedetailpage/ImageSlider";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
 import StampStatus from "../../components/cafedetailpage/StampStatus";
 import ProductList from "../../components/cafedetailpage/ProductList";
@@ -14,21 +13,32 @@ const CafeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const cafe = Cafes.find((cafe) => cafe.id === parseInt(id, 10));
+  const defaultCafe = Cafes.find((cafe) => cafe.id === 1);
+  const status = localStorage.getItem(`status-${id}`) || "closed";
+
+  if (!cafe) {
+    return <div>카페 정보를 찾을 수 없습니다.</div>;
+  }
+
+  const menu = cafe.menu ? cafe.menu : defaultCafe.menu;
+
   return (
     <Container>
       <Header />
       <Main>
         <ContentWrapper>
-          <ImageSlider images={[cafe.image]} />
           <StoreInfo
             name={cafe.name}
             address={cafe.address}
+            status={status}
             hours={cafe.hours}
+            image={cafe.image}
           />
           <StampStatus />
+          <StyledHR />
           <CategoryFilter />
-          {cafe.menu ? (
-            <ProductList menu={cafe.menu} />
+          {menu ? (
+            <ProductList menu={menu} />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>
           )}
@@ -53,18 +63,29 @@ const Container = styled.div`
 
 const Main = styled.main`
   width: 100%;
-  padding: 1rem 0;
   flex: 1;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   overflow-y: auto;
   box-sizing: border-box;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto;
   padding: 0 1rem;
   box-sizing: border-box;
+`;
+
+const StyledHR = styled.hr`
+  border: 1rem;
+  height: 3px;
+  background-color: #e7e7e7;
+  margin-bottom: 1rem;
+  width: 100%;
 `;
 
 const CouponButton = styled.button`
@@ -83,20 +104,23 @@ const CouponButton = styled.button`
   box-sizing: border-box;
   max-width: 480px;
   margin: 0 auto;
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
 `;
 
 const ButtonText = styled.span`
   color: #595b59;
   font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: -0.64px;
+  padding: 0.3rem 1rem;
+  border-radius: 30px;
   background-color: white;
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
 `;
 
 const CartIcon = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 
 export default CafeDetailPage;

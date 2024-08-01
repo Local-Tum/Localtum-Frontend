@@ -22,6 +22,9 @@ const CategoryContainer = styled.div`
   margin-bottom: 1rem;
   border-bottom: 1px solid #e0e0e0;
   padding: 0 3px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
 `;
 
 const CategoryButton = styled.button`
@@ -45,6 +48,16 @@ const CategoryButton = styled.button`
     position: absolute;
     bottom: -1px;
     left: 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.4rem 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+    padding: 0.3rem 0;
   }
 `;
 

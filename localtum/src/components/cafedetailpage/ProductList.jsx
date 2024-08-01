@@ -19,14 +19,9 @@ const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 `;
 
 const Product = styled.div`
@@ -37,7 +32,7 @@ const Product = styled.div`
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 100px;
+  height: 150px;
   background-color: #f6f3f3;
   border-radius: 15px;
   display: flex;
@@ -53,12 +48,14 @@ const ProductName = styled.p`
   font-weight: bold;
   color: #444;
   margin: 0;
+  text-align: center;
 `;
 
 const ProductPrice = styled.p`
   font-size: 0.7rem;
   color: #444;
   margin: 0;
+  text-align: center;
 `;
 
 export default ProductList;
