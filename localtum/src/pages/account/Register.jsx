@@ -62,7 +62,11 @@ const Register = () => {
     };
 
     try {
-      const response = await axios.post("/api/signUp", payload);
+      const response = await axios.post("/api/signUp", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       localStorage.setItem("user", JSON.stringify(response.data));
       handleModalOpen();
     } catch (error) {

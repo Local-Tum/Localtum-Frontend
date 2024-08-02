@@ -121,7 +121,6 @@ const Form = styled.div`
   @media (max-width: 768px) {
     width: 80%;
   }
-
   @media (max-width: 480px) {
     width: 80%;
   }
