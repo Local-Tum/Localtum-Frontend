@@ -15,17 +15,18 @@ const Header = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const loginStatus = localStorage.getItem('isLoggedIn');
-        if (loginStatus !== null) {
-            try {
-                setIsLoggedIn(JSON.parse(loginStatus));
-            } catch (e) {
-                console.error('Error parsing login status from localStorage', e);
-            }
-        }
+        const checkLoginStatus = () => {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            setIsLoggedIn(isLoggedIn);
 
-        const storedNotificationCount = JSON.parse(localStorage.getItem('notificationCount')) || 0;
-        setNotificationCount(storedNotificationCount);
+            if (isLoggedIn) {
+                const storedNotificationCount = JSON.parse(localStorage.getItem('notificationCount')) || 0;
+                setNotificationCount(storedNotificationCount);
+            }
+        };
+
+        checkLoginStatus();
     }, []);
 
     const handleMembershipClick = () => {

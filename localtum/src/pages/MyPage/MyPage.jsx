@@ -16,6 +16,10 @@ const MyPage = () => {
   };
 
   const confirmLogout = () => {
+    // 로그아웃 시 로컬 스토리지에서 토큰과 로그인 상태 제거
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("token");
+
     setLogoutModalOpen(false);
     navigate("/");
   };
