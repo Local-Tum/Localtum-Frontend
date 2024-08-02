@@ -46,11 +46,11 @@ const Header = () => {
     };
 
     const handleLoginClick = () => {
-        navigate('/signin');
+        navigate('/SignIn');
     };
 
     const handleSignUpClick = () => {
-        navigate('/signup');
+        navigate('/SignUp');
     };
 
     const handleLogoClick = () => {

@@ -33,7 +33,7 @@ authApi.interceptors.response.use((response) => {
     // 토큰 만료시 로그아웃 처리
     if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
-        window.location.href = '/signIn'; // 로그인 페이지로 이동
+        window.location.href = '/SignIn'; // 로그인 페이지로 이동
     }
     return Promise.reject(error);
 });
