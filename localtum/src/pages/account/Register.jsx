@@ -62,11 +62,15 @@ const Register = () => {
     };
 
     try {
-      const response = await axios.post("/api/signUp", payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "https://15.165.139.216.nip.io/localtum/signUp", // 백엔드 서버 URL 직접 사용
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       localStorage.setItem("user", JSON.stringify(response.data));
       handleModalOpen();
     } catch (error) {

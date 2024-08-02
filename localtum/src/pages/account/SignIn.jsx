@@ -26,11 +26,15 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post("/api/signIn", loginVal, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "https://15.165.139.216.nip.io/localtum/signIn", // 백엔드 서버 URL 직접 사용
+        loginVal,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       localStorage.setItem("token", response.data.token); // 토큰 저장
       alert("로그인 성공!");
       navigate("/");
