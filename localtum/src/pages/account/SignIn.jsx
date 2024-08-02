@@ -31,7 +31,7 @@ const SignIn = () => {
           "Content-Type": "application/json",
         },
       });
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.token); // 토큰 저장
       alert("로그인 성공!");
       navigate("/");
     } catch (error) {
