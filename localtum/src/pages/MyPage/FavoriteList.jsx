@@ -1,21 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
 import CafeList from "../../components/recommend/CafeList";
 import cafes from "../../components/Cafes/Cafes";
+import { getBookmarks } from "../../apis/api/favorites"; // API 함수 임포트
 
 const FavoriteList = () => {
   const [visibleCount2, setVisibleCount2] = useState(2);
+  const [favoriteCafes, setFavoriteCafes] = useState([]);
 
-  const getFavoriteCafes = () => {
-    return cafes.filter((cafe) => {
-      const favoriteStatus = localStorage.getItem(`favorite-${cafe.name}`);
-      return favoriteStatus === "true";
-    });
-  };
+  useEffect(() => {
+    const fetchFavoriteCafes = async () => {
+      try {
+        const response = await getBookmarks();
+        if (response.status === 200) {
+          const transformedCafes = response.data.data.map(item => {
+            const cafe = cafes.find(cafe => cafe.name === item.cafeName);
+            const storedDistance = localStorage.getItem(`distance-${cafe.id}`);
+            return {
+              ...cafe,
+              distance: storedDistance || 'N/A'
+            };
+          });
+          setFavoriteCafes(transformedCafes);
+        } else {
+          console.error('Failed to fetch favorite cafes:', response);
+        }
+      } catch (error) {
+        console.error('Failed to fetch favorite cafes:', error);
+      }
+    };
+
+    fetchFavoriteCafes();
+  }, []);
 
   const loadMoreCafes2 = () => {
-    setVisibleCount2((prevCount) => prevCount + 2);
+    setVisibleCount2(prevCount => prevCount + 2);
   };
 
   return (
@@ -23,12 +43,12 @@ const FavoriteList = () => {
       <Header />
       <MainContent>
         <Title>즐겨찾기</Title>
-        <CafeListContainer>
-          <CafeList cafes={getFavoriteCafes()} visibleCount={visibleCount2} />
-          {visibleCount2 < getFavoriteCafes().length && (
+        <CafeListWrapper>
+          <CafeList cafes={favoriteCafes} visibleCount={visibleCount2} />
+          {visibleCount2 < favoriteCafes.length && (
             <LoadMoreButton onClick={loadMoreCafes2}>더보기</LoadMoreButton>
           )}
-        </CafeListContainer>
+        </CafeListWrapper>
       </MainContent>
     </Container>
   );
@@ -37,11 +57,9 @@ const FavoriteList = () => {
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
   @media (max-width: 768px) {
     padding: 1rem;
   }
@@ -57,6 +75,7 @@ const MainContent = styled.div`
   align-items: center;
   margin-top: 2rem;
   overflow: hidden;
+  padding-bottom: 5rem;
 
   @media (max-width: 768px) {
     margin-top: 1.5rem;
@@ -65,6 +84,12 @@ const MainContent = styled.div`
   @media (max-width: 480px) {
     margin-top: 1rem;
   }
+`;
+
+const CafeListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const CafeListContainer = styled.div`
@@ -86,18 +111,19 @@ const CafeListContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 5rem;
 
   @media (max-width: 768px) {
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
   }
 `;
 

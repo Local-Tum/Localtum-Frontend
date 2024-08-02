@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CafeItem from './CafeItem';
 
-const CafeList = ({ cafes, visibleCount }) => {
+const CafeList = ({ cafes, visibleCount, toggleFavorite }) => {
     const [sortedCafes, setSortedCafes] = useState([]);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ const CafeList = ({ cafes, visibleCount }) => {
     return (
         <CafeListContainer>
             {sortedCafes.slice(0, visibleCount).map((cafe, index) => (
-                <CafeItem key={index} cafe={cafe} />
+                <CafeItem key={index} cafe={cafe} toggleFavorite={toggleFavorite} />
             ))}
         </CafeListContainer>
     );

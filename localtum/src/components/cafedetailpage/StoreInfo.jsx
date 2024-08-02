@@ -7,64 +7,59 @@ import closedIcon from "../../assets/icons/closedIcon.png";
 import cafeNameIcon from "../../assets/icons/cafeName.png";
 import favoriteButton from "../../assets/icons/favoriteButton.png";
 import favoriteButtonOff from "../../assets/icons/favoriteButtonOff.png";
+import { addBookmark, deleteBookmark, getBookmarks } from '../../apis/api/favorites'; // API 함수 임포트
 
-const StoreInfo = ({ name, address, status, image }) => {
-  const [isFavorite, setIsFavorite] = useState(() => {
-    const favoriteStatus = localStorage.getItem(`favorite-${name}`);
-    return favoriteStatus ? JSON.parse(favoriteStatus) : false;
-  });
-
+const StoreInfo = ({ id, name, address, status, image }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem(`favorite-${name}`, JSON.stringify(isFavorite));
-  }, [isFavorite, name]);
+    const fetchFavoriteStatus = async () => {
+      try {
+        const response = await getBookmarks();
+        if (response.status === 200) {
+          const favoriteCafes = response.data.data;
+          const isFavoriteCafe = favoriteCafes.some(item => item.cafeName === name);
+          setIsFavorite(isFavoriteCafe);
+        } else {
+          console.error('Failed to fetch favorite cafes:', response);
+        }
+      } catch (error) {
+        console.error('Failed to fetch favorite cafes:', error);
+      }
+    };
 
-  const toggleFavorite = () => {
+    fetchFavoriteStatus();
+  }, [name]);
+
+  const toggleFavorite = async () => {
     const newFavoriteStatus = !isFavorite;
     setIsFavorite(newFavoriteStatus);
 
-    const token = localStorage.getItem("token"); // 저장된 토큰 가져오기
-
-    if (newFavoriteStatus) {
-      axios
-        .post(
-          `/api/favorites/${name}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log("즐겨찾기 성공:", response.data);
-        })
-        .catch((error) => {
-          console.error("즐겨찾기 실패:", error);
-          // 에러가 발생하면 상태를 다시 원래대로 되돌립니다.
-          setIsFavorite(!newFavoriteStatus);
-        });
-    } else {
-      axios
-        .delete(`/api/favorites/${name}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log("즐겨찾기 취소 성공:", response.data);
-        })
-        .catch((error) => {
-          console.error("즐겨찾기 취소 실패:", error);
-          // 에러가 발생하면 상태를 다시 원래대로 되돌립니다.
-          setIsFavorite(!newFavoriteStatus);
-        });
+    try {
+      if (newFavoriteStatus) {
+        const response = await addBookmark(name);
+        if (response.status !== 200) {
+          throw new Error('Failed to add favorite');
+        }
+      } else {
+        const response = await deleteBookmark(name);
+        if (response.status !== 200) {
+          throw new Error('Failed to remove favorite');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+      setIsFavorite(!newFavoriteStatus); // 에러가 발생하면 상태를 다시 원래대로 되돌립니다.
     }
   };
 
+  const handleClick = () => {
+    navigate(`/cafe_details/${id}`);
+  };
+
   return (
-    <InfoContainer>
+    <InfoContainer onClick={handleClick}>
       <ImageContainer>
         <FavoriteButton
           src={isFavorite ? favoriteButton : favoriteButtonOff}

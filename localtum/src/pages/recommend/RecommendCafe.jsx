@@ -9,12 +9,22 @@ const RecommendCafe = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [visibleCount, setVisibleCount] = useState(2);
+    const [sortedCafes, setSortedCafes] = useState([]);
     const { item } = location.state;
 
+    useEffect(() => {
+        const sorted = [...cafes].sort((a, b) => {
+            const distanceA = parseFloat(localStorage.getItem(`distance-${a.id}`)) || Infinity;
+            const distanceB = parseFloat(localStorage.getItem(`distance-${b.id}`)) || Infinity;
+            return distanceA - distanceB;
+        });
+        setSortedCafes(sorted);
+    }, [visibleCount]);
 
     const loadMoreItems = () => {
         setVisibleCount(prevCount => prevCount + 2);
     };
+
     return (
         <Container>
             <Header />
@@ -22,10 +32,10 @@ const RecommendCafe = () => {
                 <Title>
                     <span><strong>'{item}'</strong> 판매하는 카페</span>
                 </Title>
-                <CafeList cafes={cafes.slice(0, visibleCount)} />
-                {visibleCount < cafes.length && (
+                <CafeList cafes={sortedCafes.slice(0, visibleCount)} />
+                {visibleCount < sortedCafes.length && (
                 <LoadMoreButton onClick={loadMoreItems}>더보기</LoadMoreButton>
-            )}            
+            )}
             </Content>
         </Container>
     );
