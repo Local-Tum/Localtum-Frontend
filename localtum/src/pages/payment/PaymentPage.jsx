@@ -54,8 +54,7 @@ const PaymentPage = () => {
   const finalPrice = totalPrice + discount;
 
   const handleAddToCart = async () => {
-    const token = localStorage.getItem("token"); // 저장된 토큰 가져오기
-
+    const token = localStorage.getItem("token");
     const cartData = {
       size,
       status: temperature,
@@ -77,12 +76,35 @@ const PaymentPage = () => {
           },
         }
       );
-      alert("장바구니에 성공적으로 담겼습니다!"); // 장바구니 추가 성공 알림
-      navigate("/cart"); // 장바구니 페이지로 이동
+      console.log("Response:", response);
+      alert("장바구니에 성공적으로 담겼습니다!");
+      navigate("/cart");
     } catch (error) {
       console.error("장바구니 담기 요청 실패:", error);
-      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요."); // 장바구니 추가 실패 알림
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("Error request:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
     }
+  };
+
+  const handleOrderNow = () => {
+    const orderData = {
+      item,
+      size,
+      temperature,
+      prices: finalPrice,
+      options: personalOptions,
+      quantity,
+    };
+
+    navigate("/order", { state: orderData });
   };
 
   return (
@@ -286,7 +308,7 @@ const PaymentPage = () => {
             </Summary>
             <Actions>
               <CartButton onClick={handleAddToCart}>장바구니 담기</CartButton>
-              <OrderButton>바로 주문</OrderButton>
+              <OrderButton onClick={handleOrderNow}>바로 주문</OrderButton>
             </Actions>
           </Main>
         </MainContainer>

@@ -1,9 +1,33 @@
 import React from "react";
 import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/mypageedit/Header";
 import nameIcon from "../../assets/icons/cafeName.png";
 
-const OrderConfirmationPage = ({ status = "accepted" }) => {
+const OrderConfirmationPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  if (!location.state) {
+    navigate("/ordersummary");
+    return null;
+  }
+
+  const { order } = location.state;
+
+  const progressStatus = () => {
+    switch (order.status) {
+      case "payment":
+        return "33%";
+      case "accepted":
+        return "66%";
+      case "complete":
+        return "100%";
+      default:
+        return "0";
+    }
+  };
+
   return (
     <>
       <Container>
@@ -12,33 +36,53 @@ const OrderConfirmationPage = ({ status = "accepted" }) => {
           <Main>
             <CafeInfo>
               <CafeNameIcon src={nameIcon} alt="*" />
-              <CafeName>멋쟁이 사자처럼</CafeName>
+              <CafeName>{order.cafeName}</CafeName>
             </CafeInfo>
             <Divider />
             <OrderInfo>
-              <OrderTime>2024.07.17 15:00</OrderTime>
-              <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
-              <OrderNumber>주문번호 282</OrderNumber>
+              <OrderTime>{order.date}</OrderTime>
+              <OrderCompleteMessage>
+                주문이 완료되었습니다.
+              </OrderCompleteMessage>
+              <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
             </OrderInfo>
             <Divider />
             <OrderDetails>
               <Detail>
                 <Label>주문 상품</Label>
-                <Value>아메리카노</Value>
+                <Value>{order.menuName}</Value>
               </Detail>
               <Detail>
                 <Label>결제 금액</Label>
-                <Value className="amount">2,500원</Value>
+                <Value className="amount">{order.price}원</Value>
               </Detail>
             </OrderDetails>
             <Divider />
             <OrderProgress>
               <ProgressBar>
-                <Progress active={status} />
-                <ProgressText active={status}>
-                  <span className="payment-complete">결제 완료</span>
-                  <span className="order-accepted">주문 접수</span>
-                  <span className="manufacture-complete">제조 완료</span>
+                <Progress width={progressStatus()} />
+                <ProgressText>
+                  <span
+                    className={`progress-step ${
+                      order.status === "payment" ? "active" : ""
+                    }`}
+                  >
+                    결제 완료
+                  </span>
+                  <span
+                    className={`progress-step ${
+                      order.status === "accepted" ? "active" : ""
+                    }`}
+                  >
+                    주문 접수
+                  </span>
+                  <span
+                    className={`progress-step ${
+                      order.status === "complete" ? "active" : ""
+                    }`}
+                  >
+                    제조 완료
+                  </span>
                 </ProgressText>
               </ProgressBar>
             </OrderProgress>
@@ -48,7 +92,6 @@ const OrderConfirmationPage = ({ status = "accepted" }) => {
     </>
   );
 };
-
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -120,7 +163,8 @@ const OrderNumber = styled.p`
   padding: 0.5rem 1rem;
   border-radius: 30px;
   text-align: left;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const Divider = styled.div`
@@ -177,12 +221,7 @@ const Progress = styled.div`
   &::before {
     content: "";
     display: block;
-    width: ${(props) =>
-      props.active === "complete"
-        ? "100%"
-        : props.active === "accepted"
-        ? "66%"
-        : "33%"};
+    width: ${(props) => props.width};
     height: 100%;
     background-color: #467048;
     border-radius: 30px;
@@ -195,21 +234,14 @@ const ProgressText = styled.div`
   width: 100%;
   font-size: 1rem;
 
-  .payment-complete {
-    font-weight: ${(props) => (props.active === "payment" ? "bold" : "normal")};
-    color: ${(props) => (props.active === "payment" ? "#444" : "#808180")};
-  }
+  .progress-step {
+    font-weight: normal;
+    color: #808180;
 
-  .order-accepted {
-    font-weight: ${(props) => (props.active === "accepted" ? "bold" : "normal")};
-    color: ${(props) => (props.active === "accepted" ? "#444" : "#808180")};
-
-  }
-
-  .manufacture-complete {
-    font-weight: ${(props) => (props.active === "complete" ? "bold" : "normal")};
-    color: ${(props) => (props.active === "complete" ? "#444" : "#808180")};
-
+    &.active {
+      font-weight: bold;
+      color: #444;
+    }
   }
 `;
 

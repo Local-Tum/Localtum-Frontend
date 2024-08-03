@@ -22,10 +22,21 @@ const CafeDetailPage = () => {
     return <div>카페 정보를 찾을 수 없습니다.</div>;
   }
 
-  const menu = cafe.menu ? cafe.menu : defaultCafe.menu;
+  const menu = defaultCafe.menu; // 모든 카페가 동일한 메뉴를 가짐
 
   const handleCouponRequest = async () => {
-    const token = localStorage.getItem("token"); // 저장된 토큰 가져오기
+    const token = localStorage.getItem("token");
+    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+
+    // 이미 받은 쿠폰인지 확인
+    const alreadyReceived = storedCoupons.some(
+      (coupon) => coupon.title === `'${cafe.name}' 음료 2,000원 할인 쿠폰`
+    );
+
+    if (alreadyReceived) {
+      alert("이미 받은 쿠폰입니다.");
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -40,19 +51,30 @@ const CafeDetailPage = () => {
           },
         }
       );
-      alert("쿠폰 받기 성공!"); // 쿠폰 받기 성공 알림
+
+      // 쿠폰 받은 후 쿠폰 목록에 추가
+      const newCoupon = {
+        title: `'${cafe.name}' 음료 2,000원 할인 쿠폰`,
+        expiry: "2024년 8월 7일까지",
+        used: false,
+      };
+
+      storedCoupons.push(newCoupon);
+      localStorage.setItem("coupons", JSON.stringify(storedCoupons));
+
+      alert("쿠폰 받기 성공!");
     } catch (error) {
       console.error("쿠폰 받기 요청 실패:", error);
-      alert("쿠폰 받기 실패"); // 쿠폰 받기 실패 알림
+      alert("쿠폰 받기 실패");
     }
   };
 
   const handleProductClick = (product) => {
-    navigate("/payment", {
+    navigate("/ordersummary", {
       state: {
         item: {
           ...product,
-          cafe_name: cafe.name, // cafe_name 추가
+          cafe_name: cafe.name,
         },
       },
     });
