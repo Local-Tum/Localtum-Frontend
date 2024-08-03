@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
-import StampCard from '../../components/stamp/StampCard';
+import StampCard from "../../components/stamp/StampCard";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
 import shoppingCartIcon from "../../assets/icons/shoppingCart.png";
@@ -27,7 +27,7 @@ const CafeDetailPage = () => {
           const { data } = await getCafeStamp(cafe.name);
           setStamps(data.data.stampCount);
         } catch (error) {
-          console.error('Failed to fetch stamps:', error);
+          console.error("Failed to fetch stamps:", error);
         }
       };
 
@@ -110,10 +110,7 @@ const CafeDetailPage = () => {
             hours={cafe.hours}
             image={cafe.image}
           />
-          <StampCard 
-            title={cafe.name}
-            stamps={stamps}
-          />
+          <StampCard title={cafe.name} stamps={stamps} />
           <StyledHR />
           <CategoryFilter />
           {menu ? (
