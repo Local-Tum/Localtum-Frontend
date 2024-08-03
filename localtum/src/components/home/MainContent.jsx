@@ -92,20 +92,22 @@ const MainContent = () => {
   };
   
   const getCafeStatus = (cafe) => {
-      const now = new Date();
-      const dayOfWeek = now.getDay();
-      const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-      const today = dayNames[dayOfWeek];
-      const currentTime = `${now.getHours()}:${now.getMinutes()}`;
-  
-      if (cafe.hours[today]) {
-          const { open, close, lastOrder } = cafe.hours[today];
-          if (currentTime >= open && currentTime <= lastOrder) {
-              return 'open';
-          }
-      }
-      return 'closed';
-  };
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    const today = dayNames[dayOfWeek];
+
+    const padTime = (time) => time.toString().padStart(2, '0');
+    const currentTime = `${padTime(now.getHours())}:${padTime(now.getMinutes())}`;
+
+    if (cafe.hours[today]) {
+        const { open, close, lastOrder } = cafe.hours[today];
+        if (currentTime >= open && currentTime <= lastOrder) {
+            return 'open';
+        }
+    }
+    return 'closed';
+};
   
 
     const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
