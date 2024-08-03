@@ -5,7 +5,7 @@ import cupGreen from "../../assets/icons/cupGreen.png";
 const StampStatus = ({ stamps }) => {
   return (
     <CardWrapper>
-      <CardTitle>스템프 현황</CardTitle>
+      <CardTitle>스탬프 현황</CardTitle>
       <CardContainer>
         <StampsContainer>
           {Array.from({ length: 10 }).map((_, index) => (
