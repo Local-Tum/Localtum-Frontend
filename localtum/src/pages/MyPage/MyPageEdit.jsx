@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Add import for useNavigate
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
 import EditModal from "../../components/mypageedit/EditModal";
 import AccountDeleteModal from "../../components/mypageedit/AccountDeleteModal";
 import DeleteModal from "../../components/mypageedit/DeleteModal";
+import { updateNickname } from "../../apis/api/user"; // API 함수 임포트
 
 const MyPageEdit = () => {
   const [nickname, setNickname] = useState("");
@@ -13,13 +14,12 @@ const MyPageEdit = () => {
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleNicknameChange = (e) => {
     const value = e.target.value;
     setNickname(value);
 
-    // Validate nickname length
     if (value.length > 8) {
       setErrorMessage("닉네임은 8자 이내이어야 합니다.");
     } else {
@@ -27,11 +27,21 @@ const MyPageEdit = () => {
     }
   };
 
-  const handleNicknameSubmit = () => {
+  const handleNicknameSubmit = async () => {
     if (nickname.length > 8) {
       setErrorMessage("닉네임은 8자 이내이어야 합니다.");
     } else {
-      setIsModalOpen(true);
+      try {
+        const response = await updateNickname({ nickname });
+        if (response.status === 200) {
+          setIsModalOpen(true);
+        } else {
+          setErrorMessage("닉네임 수정에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("닉네임 수정 중 오류 발생:", error);
+        setErrorMessage("닉네임 수정 중 오류 발생");
+      }
     }
   };
 
@@ -50,12 +60,12 @@ const MyPageEdit = () => {
 
   const handleDeleteModalClose = () => {
     setDeleteSuccessModalOpen(false);
-    navigate("/"); // Navigate to home page when modal is closed
+    navigate("/"); 
   };
 
   const handleDeleteSuccessModalClose = () => {
     setDeleteSuccessModalOpen(false);
-    navigate("/"); // Navigate to home page when modal is closed
+    navigate("/"); 
   };
 
   return (
@@ -80,7 +90,7 @@ const MyPageEdit = () => {
             <DeleteButton onClick={handleAccountDelete}>회원 탈퇴</DeleteButton>
             <SubmitButton
               onClick={handleNicknameSubmit}
-              disabled={nickname.length > 8} // Disable if nickname length is more than 8
+              disabled={nickname.length > 8} 
             >
               수정하기
             </SubmitButton>

@@ -45,7 +45,8 @@ const MyPage = () => {
 
 const MainContent = styled.div`
   width: 100%;
-  max-width: 480px;
+  max-width: 720px;
+  
   margin: 0 auto;
   padding: 20px 1rem;
   display: flex;

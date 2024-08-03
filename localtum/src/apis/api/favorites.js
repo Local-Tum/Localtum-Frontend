@@ -1,3 +1,7 @@
+/**
+ * 즐겨찾기 관련 API
+ */
+
 import { defaultInstance, authInstance } from "../utils/instance";
 
 // 즐겨찾기 추가
