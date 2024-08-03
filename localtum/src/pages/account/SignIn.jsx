@@ -35,6 +35,7 @@ const SignIn = () => {
           },
         }
       );
+      localStorage.setItem("isLoggedIn", true); // 로그인 상태 저장
       localStorage.setItem("token", response.data.token); // 토큰 저장
       alert("로그인 성공!");
       navigate("/");

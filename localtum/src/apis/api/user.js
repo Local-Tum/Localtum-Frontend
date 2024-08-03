@@ -13,3 +13,25 @@ export const signin = async (userInfo) => {
     return e;
   }
 };
+
+// 사용자 정보 조회
+export const getUserInfo = async () => {
+  try {
+    const result = await authInstance.get(`/localtum/mypage/user`);
+    return result;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
+// 닉네임 수정
+export const updateNickname = async (nickname) => {
+  try {
+    const result = await authInstance.put(`/localtum/mypage/user`, nickname);
+    return result;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
