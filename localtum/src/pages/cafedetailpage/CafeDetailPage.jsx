@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
-import StampCard from '../../components/stamp/StampCard';
+import StampCard from "../../components/stamp/StampCard";
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
 import shoppingCartIcon from "../../assets/icons/shoppingCart.png";
@@ -26,7 +27,7 @@ const CafeDetailPage = () => {
           const { data } = await getCafeStamp(cafe.name);
           setStamps(data.data.stampCount);
         } catch (error) {
-          console.error('Failed to fetch stamps:', error);
+          console.error("Failed to fetch stamps:", error);
         }
       };
 
@@ -38,7 +39,63 @@ const CafeDetailPage = () => {
     return <div>카페 정보를 찾을 수 없습니다.</div>;
   }
 
-  const menu = cafe.menu ? cafe.menu : defaultCafe.menu;
+  const menu = defaultCafe.menu; // 모든 카페가 동일한 메뉴를 가짐
+
+  const handleCouponRequest = async () => {
+    const token = localStorage.getItem("token");
+    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+
+    // 이미 받은 쿠폰인지 확인
+    const alreadyReceived = storedCoupons.some(
+      (coupon) => coupon.title === `'${cafe.name}' 음료 2,000원 할인 쿠폰`
+    );
+
+    if (alreadyReceived) {
+      alert("이미 받은 쿠폰입니다.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          cafe.name
+        )}/coupon`,
+        { description: 2000 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 쿠폰 받은 후 쿠폰 목록에 추가
+      const newCoupon = {
+        title: `'${cafe.name}' 음료 2,000원 할인 쿠폰`,
+        expiry: "2024년 8월 7일까지",
+        used: false,
+      };
+
+      storedCoupons.push(newCoupon);
+      localStorage.setItem("coupons", JSON.stringify(storedCoupons));
+
+      alert("쿠폰 받기 성공!");
+    } catch (error) {
+      console.error("쿠폰 받기 요청 실패:", error);
+      alert("쿠폰 받기 실패");
+    }
+  };
+
+  const handleProductClick = (product) => {
+    navigate("/ordersummary", {
+      state: {
+        item: {
+          ...product,
+          cafe_name: cafe.name,
+        },
+      },
+    });
+  };
 
   return (
     <Container>
@@ -46,29 +103,25 @@ const CafeDetailPage = () => {
       <Main>
         <ContentWrapper>
           <StoreInfo
+            id={cafe.id}
             name={cafe.name}
             address={cafe.address}
             status={status}
             hours={cafe.hours}
             image={cafe.image}
           />
-          <StampCard 
-            title={cafe.name}
-            stamps={stamps}
-          />
+          <StampCard title={cafe.name} stamps={stamps} />
           <StyledHR />
           <CategoryFilter />
           {menu ? (
-            <ProductList menu={menu} />
+            <ProductList menu={menu} onProductClick={handleProductClick} />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>
           )}
         </ContentWrapper>
       </Main>
       <CouponButton>
-        <ButtonText onClick={() => navigate("/coupons")}>
-          할인쿠폰 받기
-        </ButtonText>
+        <ButtonText onClick={handleCouponRequest}>할인쿠폰 받기</ButtonText>
         <CartContainer onClick={() => navigate("/order")}>
           <CartIcon src={shoppingCartIcon} alt="Cart" />
           <NotificationBadge>{notificationCount}</NotificationBadge>
@@ -130,7 +183,8 @@ const CouponButton = styled.button`
   box-sizing: border-box;
   max-width: 480px;
   margin: 0 auto;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const ButtonText = styled.span`
@@ -141,7 +195,8 @@ const ButtonText = styled.span`
   padding: 0.3rem 1rem;
   border-radius: 30px;
   background-color: white;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const CartContainer = styled.div`

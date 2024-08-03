@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import mainlogo from "../../assets/logos/mainlogo.png";
 import backIcon from "../../assets/icons/backIcon.png";
@@ -8,23 +8,13 @@ import { useNavigate } from "react-router-dom";
 
 const MyCoupon = () => {
   const navigate = useNavigate();
-  const coupons = [
-    {
-      title: "'멋쟁이사자' 음료 2,000원 할인 쿠폰",
-      expiry: "2024년 8월 7일까지",
-      used: false,
-    },
-    {
-      title: "'달달해' 음료 한 잔 무료 쿠폰",
-      expiry: "2024년 9월 23일까지",
-      used: false,
-    },
-    {
-      title: "'라떼는' 음료 2,000원 할인 쿠폰",
-      expiry: "2024년 8월 16일까지",
-      used: true,
-    },
-  ];
+  const [coupons, setCoupons] = useState([]);
+
+  useEffect(() => {
+    // 쿠폰을 로컬 스토리지에서 가져옴
+    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+    setCoupons(storedCoupons);
+  }, []);
 
   return (
     <StyledContainer>
@@ -41,18 +31,22 @@ const MyCoupon = () => {
         <Title>내 쿠폰</Title>
       </TitleContainer>
       <CouponList>
-        {coupons.map((coupon, index) => (
-          <CouponItem key={index}>
-            <CouponImage
-              src={coupon.used ? coupondone : couponbase}
-              alt="coupon"
-            />
-            <CouponTextContainer>
-              <CouponTitle>{coupon.title}</CouponTitle>
-              <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
-            </CouponTextContainer>
-          </CouponItem>
-        ))}
+        {coupons.length > 0 ? (
+          coupons.map((coupon, index) => (
+            <CouponItem key={index}>
+              <CouponImage
+                src={coupon.used ? coupondone : couponbase}
+                alt="coupon"
+              />
+              <CouponTextContainer>
+                <CouponTitle>{coupon.title}</CouponTitle>
+                <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
+              </CouponTextContainer>
+            </CouponItem>
+          ))
+        ) : (
+          <NoCoupons>쿠폰이 없습니다.</NoCoupons>
+        )}
       </CouponList>
     </StyledContainer>
   );
@@ -240,6 +234,8 @@ const CouponTitle = styled.h2`
   font-weight: 700;
   margin: 0 0 1rem 0;
   color: #444;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
@@ -247,6 +243,7 @@ const CouponTitle = styled.h2`
 
   @media (max-width: 480px) {
     font-size: 0.75rem;
+    max-width: 70%;
   }
 `;
 
@@ -264,6 +261,12 @@ const CouponExpiry = styled.p`
   @media (max-width: 480px) {
     font-size: 0.625rem;
   }
+`;
+
+const NoCoupons = styled.div`
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #808180;
 `;
 
 export default MyCoupon;

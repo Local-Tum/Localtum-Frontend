@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import CouponModal from "../../components/Order/CouponModal";
 import nameIcon from "../../assets/icons/cafeName.png";
@@ -9,6 +10,8 @@ import upperIcon from "../../assets/icons/upperIcon.png";
 import rightIcon from "../../assets/icons/rightIcon.png";
 
 const OrderSummaryPage = () => {
+  const location = useLocation();
+  const { item, size = '기본 사이즈', temperature = 'HOT', prices = item.price, options = [], quantity = 1 } = location.state;
   const [expandedItem, setExpandedItem] = useState(null);
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -18,8 +21,48 @@ const OrderSummaryPage = () => {
     setExpandedItem(expandedItem === itemName ? null : itemName);
   };
 
-  const handleOrderButtonClick = () => {
-    navigate("/orderconfirmation");
+  const handleOrderButtonClick = async () => {
+    const token = localStorage.getItem("token");
+    const orderData = {
+      coupon: 200,
+      size,
+      status: temperature,
+      prices,
+      options,
+      quantity,
+    };
+
+    try {
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          item.cafe_name
+        )}/${encodeURIComponent(item.name)}/order`,
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Response:", response);
+      alert("주문이 성공적으로 완료되었습니다!");
+
+      // 주문 완료 후 orderconfirmation 페이지로 이동, order 데이터 전달
+      navigate("/orderconfirmation", { state: { order: { ...response.data, cafeName: item.cafe_name, menuName: item.name, price: prices * quantity - 200, date: new Date().toLocaleString() } } });
+    } catch (error) {
+      console.error("주문 요청 실패:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("Error request:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+      alert("주문에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const handleCouponClick = () => {
@@ -47,24 +90,24 @@ const OrderSummaryPage = () => {
           <Main>
             <CafeInfo>
               <CafeNameIcon src={nameIcon} alt="*" />
-              <CafeName>멋쟁이 사자처럼</CafeName>
+              <CafeName>{item.cafe_name}</CafeName>
             </CafeInfo>
             <Divider />
             <OrderItem>
               <ItemInfo>
                 <ItemName>주문 상품</ItemName>
-                <ItemDetails onClick={() => toggleExpand("아메리카노")}>
-                  아메리카노{" "}
+                <ItemDetails onClick={() => toggleExpand(item.name)}>
+                  {item.name}{" "}
                   <ExpandButton
-                    src={expandedItem === "아메리카노" ? upperIcon : underIcon2}
-                    alt={expandedItem === "아메리카노" ? "▲" : "▼"}
+                    src={expandedItem === item.name ? upperIcon : underIcon2}
+                    alt={expandedItem === item.name ? "▲" : "▼"}
                   />
                 </ItemDetails>
               </ItemInfo>
-              {expandedItem === "아메리카노" && (
+              {expandedItem === item.name && (
                 <ExpandedDetails>
-                  <Detail>Grande size 473ml</Detail>
-                  <Detail>Ice 차갑게</Detail>
+                  <Detail>{size}</Detail>
+                  <Detail>{temperature}</Detail>
                 </ExpandedDetails>
               )}
             </OrderItem>
@@ -139,15 +182,17 @@ const OrderSummaryPage = () => {
             <Summary>
               <SummaryItem>
                 <SummaryLabel>상품 금액</SummaryLabel>
-                <SummaryValue>3,000원</SummaryValue>
+                <SummaryValue>{prices.toLocaleString()}원</SummaryValue>
               </SummaryItem>
               <SummaryItem>
                 <SummaryLabel>할인 금액</SummaryLabel>
-                <SummaryValue>-500원</SummaryValue>
+                <SummaryValue>-200원</SummaryValue>
               </SummaryItem>
               <SummaryItem>
                 <SummaryLabelTotal>결제 금액</SummaryLabelTotal>
-                <SummaryValueTotal>2,500원</SummaryValueTotal>
+                <SummaryValueTotal>
+                  {(prices * quantity - 200).toLocaleString()}원
+                </SummaryValueTotal>
               </SummaryItem>
             </Summary>
             <OrderButton
@@ -169,7 +214,6 @@ const OrderSummaryPage = () => {
     </>
   );
 };
-
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
