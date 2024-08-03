@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
 import StampCard from "../../components/stamp/StampCard";
+import { getStampList } from "../../apis/api/stamp";
 
 const StampList = () => {
-  const stampsData = [
-    { title: "멋쟁이 사자처럼", stamps: 5, maxStamps: 10 },
-    { title: "라떼는", stamps: 3, maxStamps: 10 },
-    // 필요한 데이터 추가
-  ];
+  const [stamps, setStamps] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStamps = async () => {
+      try {
+        const data = await getStampList();
+        setStamps(data.data);
+      } catch (error) {
+        setError('Failed to fetch stamps');
+        console.error('Failed to fetch stamps:', error);
+      }
+    };
+
+    fetchStamps();
+  }, []);
 
   return (
     <Container>
       <Header />
       <Main>
         <Title>스탬프 목록</Title>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <StampCardsContainer>
-          {stampsData.map((stamp, index) => (
+          {stamps.map((stamp, index) => (
             <StampCard
               key={index}
-              title={stamp.title}
-              stamps={stamp.stamps}
-              maxStamps={stamp.maxStamps}
+              title={stamp.cafename}
+              stamps={stamp.stampCount}
+              maxStamps={10} // maxStamps 값을 적절히 설정
             />
           ))}
         </StampCardsContainer>
-        <MoreButton>더보기</MoreButton>
       </Main>
     </Container>
   );
@@ -105,6 +117,11 @@ const MoreButton = styled.button`
     padding: 6px 24px;
     font-size: 0.75rem;
   }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
 `;
 
 export default StampList;

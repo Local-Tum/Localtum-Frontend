@@ -30,55 +30,58 @@ const StampCard = ({ title, stamps }) => {
 const CardWrapper = styled.div`
   width: 100%;
   max-width: 480px;
-  margin: 0 auto 20px auto;
+  margin: 2rem auto 1rem auto;
   text-align: left;
+  padding: 0 1rem;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const CardContainer = styled.div`
-  border: 1px solid #a9b782;
-  border-radius: 10px;
+  border: 4px solid #a9b782;
+  border-radius: 30px;
   padding: 20px;
   background-color: #fff;
   box-sizing: border-box;
-
+  position: relative;
   @media (max-width: 480px) {
     padding: 10px;
   }
 `;
 
 const CardTitle = styled.div`
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #444;
+  color: #fff;
   text-align: left;
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
-  }
+  position: absolute;
+  top: -25px;
+  left: 28px;
+  background-color: #467048;
+  padding: 3px 10px;
+  height: 5rem;
+  border-radius: 16px;
+  
 `;
 
 const StampsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  align-items: center;
-  justify-items: center;
+  width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(
-      5,
-      minmax(0, 1fr)
-    ); /* 각 스탬프가 일정한 너비를 가지도록 설정 */
-    gap: 5px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
   }
 `;
 
 const Stamp = styled.div`
-  width: 60px;
-  height: 60px;
-  border: 2px solid #a9b782;
+  width: 56px;
+  height: 56px;
+  border: 3px solid #a9b782;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -86,34 +89,29 @@ const Stamp = styled.div`
   background-color: ${(props) => (props.filled ? "#A9B782" : "#f9f9f9")};
   position: relative;
 
-  &:not(:last-child) img {
-    width: 70%;
-    height: 70%;
-    background-color: ${(props) => (props.filled ? "#A9B782" : "transparent")};
-    border-radius: 50%;
-  }
-
   @media (max-width: 480px) {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 `;
 
 const StampImage = styled.img`
-  width: 70%;
-  height: 70%;
+  width: 60%;
+  height: 60%;
   object-fit: contain;
+
+  @media (max-width: 480px) {
+    width: 50%;
+    height: 50%;
+  }
 `;
 
 const FreeText = styled.div`
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #467048;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #a9b782;
+  letter-spacing: -0.64px;
   text-align: center;
-
-  @media (max-width: 480px) {
-    font-size: 0.7rem;
-  }
 `;
 
 export default StampCard;
