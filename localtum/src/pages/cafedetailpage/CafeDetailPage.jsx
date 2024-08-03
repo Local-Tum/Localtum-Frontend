@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
 import StampStatus from "../../components/cafedetailpage/StampStatus";
@@ -23,12 +24,47 @@ const CafeDetailPage = () => {
 
   const menu = cafe.menu ? cafe.menu : defaultCafe.menu;
 
+  const handleCouponRequest = async () => {
+    const token = localStorage.getItem("token"); // 저장된 토큰 가져오기
+
+    try {
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          cafe.name
+        )}/coupon`,
+        { description: 2000 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("쿠폰 받기 성공!"); // 쿠폰 받기 성공 알림
+    } catch (error) {
+      console.error("쿠폰 받기 요청 실패:", error);
+      alert("쿠폰 받기 실패"); // 쿠폰 받기 실패 알림
+    }
+  };
+
+  const handleProductClick = (product) => {
+    navigate("/payment", {
+      state: {
+        item: {
+          ...product,
+          cafe_name: cafe.name, // cafe_name 추가
+        },
+      },
+    });
+  };
+
   return (
     <Container>
       <Header />
       <Main>
         <ContentWrapper>
           <StoreInfo
+            id={cafe.id}
             name={cafe.name}
             address={cafe.address}
             status={status}
@@ -39,16 +75,14 @@ const CafeDetailPage = () => {
           <StyledHR />
           <CategoryFilter />
           {menu ? (
-            <ProductList menu={menu} />
+            <ProductList menu={menu} onProductClick={handleProductClick} />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>
           )}
         </ContentWrapper>
       </Main>
       <CouponButton>
-        <ButtonText onClick={() => navigate("/coupons")}>
-          할인쿠폰 받기
-        </ButtonText>
+        <ButtonText onClick={handleCouponRequest}>할인쿠폰 받기</ButtonText>
         <CartContainer onClick={() => navigate("/order")}>
           <CartIcon src={shoppingCartIcon} alt="Cart" />
           <NotificationBadge>{notificationCount}</NotificationBadge>
@@ -110,7 +144,8 @@ const CouponButton = styled.button`
   box-sizing: border-box;
   max-width: 480px;
   margin: 0 auto;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const ButtonText = styled.span`
@@ -121,7 +156,8 @@ const ButtonText = styled.span`
   padding: 0.3rem 1rem;
   border-radius: 30px;
   background-color: white;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const CartContainer = styled.div`
@@ -132,7 +168,6 @@ const CartContainer = styled.div`
   cursor: pointer;
   margin-left: 0.2rem;
 `;
-
 
 const CartIcon = styled.img`
   width: 30px;
@@ -154,6 +189,5 @@ const NotificationBadge = styled.div`
   font-size: 0.6rem;
   font-weight: 600;
 `;
-
 
 export default CafeDetailPage;

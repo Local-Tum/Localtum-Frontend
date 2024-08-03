@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 
 const PaymentPage = () => {
@@ -12,6 +13,7 @@ const PaymentPage = () => {
   const [personalOptions, setPersonalOptions] = useState([]);
   const [hasTumblerDiscount, setHasTumblerDiscount] = useState(false);
   const [additionalShotCost, setAdditionalShotCost] = useState(0);
+  const navigate = useNavigate();
 
   const handleQuantityChange = (type) => {
     if (type === "increment") {
@@ -22,36 +24,66 @@ const PaymentPage = () => {
   };
 
   const handleOptionChange = (option, isSelected) => {
-    if (option === "샷 추가 +500원") {
-      const cost = isSelected ? 500 : -500;
+    const optionCosts = {
+      "샷 추가 +500원": 500,
+      "2샷 추가 +1,000원": 1000,
+      "연유 추가 +700원": 700,
+      "샷 저당 스테비아 추가 +600원": 600,
+      "텀블러 지참 시 500원 할인": -500,
+    };
+
+    if (option in optionCosts) {
+      const cost = isSelected ? optionCosts[option] : -optionCosts[option];
       setAdditionalShotCost(additionalShotCost + cost);
     }
-    if (option === "2샷 추가 +1,000원") {
-      const cost = isSelected ? 1000 : -1000;
-      setAdditionalShotCost(additionalShotCost + cost);
-    }
-    if (option === "연유 추가 +700원") {
-      const cost = isSelected ? 700 : -700;
-      setAdditionalShotCost(additionalShotCost + cost);
-    }
-    if (option === "샷 저당 스테비아 추가 +600원") {
-      const cost = isSelected ? 600 : -600;
-      setAdditionalShotCost(additionalShotCost + cost);
-    }
-    if (option === "텀블러 지참 시 500원 할인") {
-      setHasTumblerDiscount(isSelected);
-    }
+
     if (isSelected) {
       setPersonalOptions([...personalOptions, option]);
     } else {
       setPersonalOptions(personalOptions.filter((item) => item !== option));
     }
+
+    if (option === "텀블러 지참 시 500원 할인") {
+      setHasTumblerDiscount(isSelected);
+    }
   };
 
   const basePrice = additionalShotCost + parseInt(item.price, 10);
   const totalPrice = basePrice * quantity;
-  const discount = (hasTumblerDiscount ? -500 : 0 ) * quantity;
+  const discount = (hasTumblerDiscount ? -500 : 0) * quantity;
   const finalPrice = totalPrice + discount;
+
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("token"); // 저장된 토큰 가져오기
+
+    const cartData = {
+      size,
+      status: temperature,
+      prices: finalPrice,
+      options: personalOptions,
+      quantity,
+    };
+
+    try {
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          item.cafe_name
+        )}/${encodeURIComponent(item.name)}/cart`,
+        cartData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("장바구니에 성공적으로 담겼습니다!"); // 장바구니 추가 성공 알림
+      navigate("/cart"); // 장바구니 페이지로 이동
+    } catch (error) {
+      console.error("장바구니 담기 요청 실패:", error);
+      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요."); // 장바구니 추가 실패 알림
+    }
+  };
 
   return (
     <>
@@ -167,8 +199,7 @@ const PaymentPage = () => {
                         handleOptionChange(e.target.value, e.target.checked)
                       }
                     />
-                    <Checkmark />
-                    샷 추가 +500원
+                    <Checkmark />샷 추가 +500원
                   </CustomCheckbox>
                 </Option>
                 <Option>
@@ -207,8 +238,7 @@ const PaymentPage = () => {
                         handleOptionChange(e.target.value, e.target.checked)
                       }
                     />
-                    <Checkmark />
-                    샷 저당 스테비아 추가 +600원
+                    <Checkmark />샷 저당 스테비아 추가 +600원
                   </CustomCheckbox>
                 </Option>
               </OptionGroup>
@@ -255,7 +285,7 @@ const PaymentPage = () => {
               </SummaryItem>
             </Summary>
             <Actions>
-              <CartButton>장바구니 담기</CartButton>
+              <CartButton onClick={handleAddToCart}>장바구니 담기</CartButton>
               <OrderButton>바로 주문</OrderButton>
             </Actions>
           </Main>
