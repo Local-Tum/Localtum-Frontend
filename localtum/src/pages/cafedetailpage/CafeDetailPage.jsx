@@ -3,11 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/mypageedit/Header";
 import StoreInfo from "../../components/cafedetailpage/StoreInfo";
-import StampStatus from "../../components/cafedetailpage/StampStatus";
+import StampCard from '../../components/stamp/StampCard';
 import ProductList from "../../components/cafedetailpage/ProductList";
 import CategoryFilter from "../../components/cafedetailpage/CategoryFilter";
 import shoppingCartIcon from "../../assets/icons/shoppingCart.png";
 import Cafes from "../../components/Cafes/Cafes";
+import { getCafeStamp } from "../../apis/api/stamp";
 
 const CafeDetailPage = () => {
   const { id } = useParams();
@@ -16,6 +17,22 @@ const CafeDetailPage = () => {
   const defaultCafe = Cafes.find((cafe) => cafe.id === 1);
   const status = localStorage.getItem(`status-${id}`) || "closed";
   const [notificationCount, setNotificationCount] = useState(0);
+  const [stamps, setStamps] = useState(0);
+
+  useEffect(() => {
+    if (cafe) {
+      const fetchStamps = async () => {
+        try {
+          const { data } = await getCafeStamp(cafe.name);
+          setStamps(data.data.stampCount);
+        } catch (error) {
+          console.error('Failed to fetch stamps:', error);
+        }
+      };
+
+      fetchStamps();
+    }
+  }, [cafe]);
 
   if (!cafe) {
     return <div>카페 정보를 찾을 수 없습니다.</div>;
@@ -35,7 +52,10 @@ const CafeDetailPage = () => {
             hours={cafe.hours}
             image={cafe.image}
           />
-          <StampStatus />
+          <StampCard 
+            title={cafe.name}
+            stamps={stamps}
+          />
           <StyledHR />
           <CategoryFilter />
           {menu ? (
@@ -133,7 +153,6 @@ const CartContainer = styled.div`
   margin-left: 0.2rem;
 `;
 
-
 const CartIcon = styled.img`
   width: 30px;
   height: 30px;
@@ -154,6 +173,5 @@ const NotificationBadge = styled.div`
   font-size: 0.6rem;
   font-weight: 600;
 `;
-
 
 export default CafeDetailPage;
