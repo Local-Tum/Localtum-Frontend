@@ -1,17 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/home/Header';
 import Banner from '../../components/home/Banner';
 import Nav from '../../components/home/Nav';
 import OrderItem from '../../components/Order/OrderItem';
-
-const orders = [
-    { cafeName: "멋쟁이 사자처럼", date: "2024.07.17 15:00", orderNumber: "282", status: "픽업 대기 중" },
-    { cafeName: "멋쟁이 사자처럼", date: "2024.07.17 15:00", orderNumber: "282", status: "픽업 완료" },
-    { cafeName: "멋쟁이 사자처럼", date: "2024.07.17 15:00", orderNumber: "282", status: "픽업 완료" }
-];
+import { getOrderList } from '../../apis/api/orderlist.js';
 
 const Order = () => {
+    const [orders, setOrders] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(3); // 초기값을 3으로 설정
+    const [loading, setLoading] = useState(true);
+
+    const loadMoreOrders = () => {
+        setVisibleCount(prevCount => prevCount + 3); // 3개씩 더 보여줌
+    };
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await getOrderList();
+                if (response.status === 200) {
+                    console.log("Fetched Orders:", response.data); // 데이터 값을 콘솔에 출력
+                    setOrders(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Container>
             <Header />
@@ -21,12 +46,12 @@ const Order = () => {
                 <OrderContainer>
                     <Notice>*3개월 이내 주문내역만 표시됩니다.</Notice>
                     <OrderList>
-                        {orders.map((order, index) => (
+                        {orders.slice(0, visibleCount).map((order, index) => (
                             <OrderItem key={index} order={order} />
                         ))}
                     </OrderList>
                 </OrderContainer>
-                <MoreButton>더보기</MoreButton>
+                {visibleCount < orders.length && <MoreButton onClick={loadMoreOrders}>더보기</MoreButton>}
             </Content>
         </Container>
     );
