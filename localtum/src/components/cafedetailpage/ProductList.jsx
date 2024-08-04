@@ -2,11 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const ProductList = ({ menu, cafeName }) => {
+const ProductList = ({ menu, cafeId, cafeName }) => {
   const navigate = useNavigate();
 
   const handleProductClick = (item) => {
-    navigate("/payment", { state: { item: { ...item, cafe_name: cafeName } } });
+    navigate("/payment", {
+      state: { item: { ...item, cafe_id: cafeId, cafe_name: cafeName } },
+    });
   };
 
   return (

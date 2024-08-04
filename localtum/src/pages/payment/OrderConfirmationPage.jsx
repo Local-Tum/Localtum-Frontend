@@ -29,69 +29,66 @@ const OrderConfirmationPage = () => {
   };
 
   return (
-    <>
-      <Container>
-        <Header />
-        <MainContainer>
-          <Main>
-            <CafeInfo>
-              <CafeNameIcon src={nameIcon} alt="*" />
-              <CafeName>{order.cafeName}</CafeName>
-            </CafeInfo>
-            <Divider />
-            <OrderInfo>
-              <OrderTime>{order.date}</OrderTime>
-              <OrderCompleteMessage>
-                주문이 완료되었습니다.
-              </OrderCompleteMessage>
-              <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
-            </OrderInfo>
-            <Divider />
-            <OrderDetails>
-              <Detail>
-                <Label>주문 상품</Label>
-                <Value>{order.menuName}</Value>
-              </Detail>
-              <Detail>
-                <Label>결제 금액</Label>
-                <Value className="amount">{order.price}원</Value>
-              </Detail>
-            </OrderDetails>
-            <Divider />
-            <OrderProgress>
-              <ProgressBar>
-                <Progress width={progressStatus()} />
-                <ProgressText>
-                  <span
-                    className={`progress-step ${
-                      order.status === "payment" ? "active" : ""
-                    }`}
-                  >
-                    결제 완료
-                  </span>
-                  <span
-                    className={`progress-step ${
-                      order.status === "accepted" ? "active" : ""
-                    }`}
-                  >
-                    주문 접수
-                  </span>
-                  <span
-                    className={`progress-step ${
-                      order.status === "complete" ? "active" : ""
-                    }`}
-                  >
-                    제조 완료
-                  </span>
-                </ProgressText>
-              </ProgressBar>
-            </OrderProgress>
-          </Main>
-        </MainContainer>
-      </Container>
-    </>
+    <Container>
+      <Header />
+      <MainContainer>
+        <Main>
+          <CafeInfo>
+            <CafeNameIcon src={nameIcon} alt="*" />
+            <CafeName>{order.cafeName}</CafeName>
+          </CafeInfo>
+          <Divider />
+          <OrderInfo>
+            <OrderTime>{order.date}</OrderTime>
+            <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
+            <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
+          </OrderInfo>
+          <Divider />
+          <OrderDetails>
+            <Detail>
+              <Label>주문 상품</Label>
+              <Value>{order.menuName}</Value>
+            </Detail>
+            <Detail>
+              <Label>결제 금액</Label>
+              <Value className="amount">{order.price}원</Value>
+            </Detail>
+          </OrderDetails>
+          <Divider />
+          <OrderProgress>
+            <ProgressBar>
+              <Progress width={progressStatus()} />
+              <ProgressText>
+                <span
+                  className={`progress-step ${
+                    order.status === "payment" ? "active" : ""
+                  }`}
+                >
+                  결제 완료
+                </span>
+                <span
+                  className={`progress-step ${
+                    order.status === "accepted" ? "active" : ""
+                  }`}
+                >
+                  주문 접수
+                </span>
+                <span
+                  className={`progress-step ${
+                    order.status === "complete" ? "active" : ""
+                  }`}
+                >
+                  제조 완료
+                </span>
+              </ProgressText>
+            </ProgressBar>
+          </OrderProgress>
+        </Main>
+      </MainContainer>
+    </Container>
   );
 };
+
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;

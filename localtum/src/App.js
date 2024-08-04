@@ -25,6 +25,7 @@ import PolicyPage from "./pages/MyPage/PolicyPage";
 import StampList from "./pages/MyPage/StampList";
 import FavoriteList from "./pages/MyPage/FavoriteList";
 import OrderHistoryPage from "./pages/Order/OrderHistoryPage";
+import OrderSummaryCartPage from "./pages/payment/OrderCartSummaryPage";
 
 const App = () => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/coupons" element={<CouponPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/order" element={<OrderSummaryPage />} />
+        <Route path="/order/cart" element={<OrderSummaryCartPage />} />
         <Route path="/ordersummary" element={<OrderHistoryPage />} />
         <Route path="/orderconfirmation" element={<OrderConfirmationPage />} />
         {/* 마이페이지 */}

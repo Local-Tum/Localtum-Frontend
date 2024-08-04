@@ -16,6 +16,11 @@ const MyCoupon = () => {
     setCoupons(storedCoupons);
   }, []);
 
+  const handleCouponClick = (cafeId) => {
+    // 쿠폰을 사용하기 위해 해당 카페의 cafe_detail 페이지로 이동
+    navigate(`/cafe_details/${cafeId}`);
+  };
+
   return (
     <StyledContainer>
       <StyledHeader>
@@ -33,7 +38,10 @@ const MyCoupon = () => {
       <CouponList>
         {coupons.length > 0 ? (
           coupons.map((coupon, index) => (
-            <CouponItem key={index}>
+            <CouponItem
+              key={index}
+              onClick={() => handleCouponClick(coupon.cafeId)}
+            >
               <CouponImage
                 src={coupon.used ? coupondone : couponbase}
                 alt="coupon"
@@ -195,6 +203,8 @@ const CouponItem = styled.div`
   position: relative;
   width: 90%;
   max-width: 700px;
+  cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+
   @media (max-width: 768px) {
     height: 120px;
     margin: 1rem 0;
@@ -250,7 +260,6 @@ const CouponTitle = styled.h2`
 const CouponExpiry = styled.p`
   font-size: 0.875rem;
   font-weight: 400;
-
   margin: 0;
   color: #808180;
 

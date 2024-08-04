@@ -15,6 +15,8 @@ const PaymentPage = () => {
   const [additionalShotCost, setAdditionalShotCost] = useState(0);
   const navigate = useNavigate();
 
+  console.log("Item received in PaymentPage:", item); // 디버깅 로그
+
   const handleQuantityChange = (type) => {
     if (type === "increment") {
       setQuantity(quantity + 1);
@@ -53,45 +55,22 @@ const PaymentPage = () => {
   const discount = (hasTumblerDiscount ? -500 : 0) * quantity;
   const finalPrice = totalPrice + discount;
 
-  const handleAddToCart = async () => {
-    const token = localStorage.getItem("token");
+  const handleAddToCart = () => {
     const cartData = {
+      ...item,
       size,
-      status: temperature,
-      prices: finalPrice,
-      options: personalOptions,
+      temperature,
+      finalPrice,
+      personalOptions,
       quantity,
     };
 
-    try {
-      const response = await axios.post(
-        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
-          item.cafe_name
-        )}/${encodeURIComponent(item.name)}/cart`,
-        cartData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Response:", response);
-      alert("장바구니에 성공적으로 담겼습니다!");
-      navigate("/cart");
-    } catch (error) {
-      console.error("장바구니 담기 요청 실패:", error);
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-        console.error("Error response status:", error.response.status);
-        console.error("Error response headers:", error.response.headers);
-      } else if (error.request) {
-        console.error("Error request:", error.request);
-      } else {
-        console.error("Error message:", error.message);
-      }
-      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
-    }
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    storedCartItems.push(cartData);
+    localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+
+    alert("장바구니에 성공적으로 담겼습니다!");
+    navigate(-1);
   };
 
   const handleOrderNow = () => {

@@ -86,17 +86,6 @@ const CafeDetailPage = () => {
     }
   };
 
-  const handleProductClick = (product) => {
-    navigate("/ordersummary", {
-      state: {
-        item: {
-          ...product,
-          cafe_name: cafe.name,
-        },
-      },
-    });
-  };
-
   return (
     <Container>
       <Header />
@@ -114,7 +103,10 @@ const CafeDetailPage = () => {
           <StyledHR />
           <CategoryFilter />
           {menu ? (
-            <ProductList menu={menu} onProductClick={handleProductClick} />
+            <ProductList
+              menu={menu}
+              cafeName={cafe.name} // cafeName 전달
+            />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>
           )}
@@ -122,7 +114,7 @@ const CafeDetailPage = () => {
       </Main>
       <CouponButton>
         <ButtonText onClick={handleCouponRequest}>할인쿠폰 받기</ButtonText>
-        <CartContainer onClick={() => navigate("/order")}>
+        <CartContainer onClick={() => navigate("/order/cart")}>
           <CartIcon src={shoppingCartIcon} alt="Cart" />
           <NotificationBadge>{notificationCount}</NotificationBadge>
         </CartContainer>

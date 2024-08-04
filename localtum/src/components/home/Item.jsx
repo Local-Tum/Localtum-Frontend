@@ -6,7 +6,11 @@ import closedIcon from "../../assets/icons/closedIcon.png";
 import cafeName from "../../assets/icons/cafeName.png";
 import favoriteButton from "../../assets/icons/favoriteButton.png";
 import favoriteButtonOff from "../../assets/icons/favoriteButtonOff.png";
-import { addBookmark, deleteBookmark, getBookmarks } from '../../apis/api/favorites';
+import {
+  addBookmark,
+  deleteBookmark,
+  getBookmarks,
+} from "../../apis/api/favorites";
 
 const Item = ({ id, name, address, status, image }) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -18,13 +22,15 @@ const Item = ({ id, name, address, status, image }) => {
         const response = await getBookmarks();
         if (response.status === 200) {
           const favoriteCafes = response.data.data;
-          const isFavoriteCafe = favoriteCafes.some(item => item.cafeName === name);
+          const isFavoriteCafe = favoriteCafes.some(
+            (item) => item.cafeName === name
+          );
           setIsFavorite(isFavoriteCafe);
         } else {
-          console.error('Failed to fetch favorite cafes:', response);
+          console.error("Failed to fetch favorite cafes:", response);
         }
       } catch (error) {
-        console.error('Failed to fetch favorite cafes:', error);
+        console.error("Failed to fetch favorite cafes:", error);
       }
     };
 
@@ -38,18 +44,18 @@ const Item = ({ id, name, address, status, image }) => {
         if (response.status === 200) {
           setIsFavorite(false);
         } else {
-          console.error('Failed to remove favorite:', response);
+          console.error("Failed to remove favorite:", response);
         }
       } else {
         const response = await addBookmark(name);
         if (response.status === 200) {
           setIsFavorite(true);
         } else {
-          console.error('Failed to add favorite:', response);
+          console.error("Failed to add favorite:", response);
         }
       }
     } catch (error) {
-      console.error('Failed to toggle favorite:', error);
+      console.error("Failed to toggle favorite:", error);
     }
   };
 
