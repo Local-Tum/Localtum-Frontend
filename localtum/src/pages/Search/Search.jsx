@@ -8,7 +8,7 @@ import CafeList from '../../components/recommend/CafeList';
 import CafeMap from '../../components/Search/CafeMap';
 import SearchKeyword from '../../components/Search/SearchKeyword';
 import cafes from '../../components/Cafes/Cafes';
-import { getBookmarks, addBookmark, deleteBookmark } from '../../apis/api/favorites'; // API 함수 임포트
+import { getBookmarks, addBookmark, deleteBookmark } from '../../apis/api/favorites';
 
 const Search = () => {
     const [activeIndex, setActiveIndex] = useState(0);

@@ -1,23 +1,36 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import orderIcon from "../../assets/icons/OrderIcon.png";
 import orderIconGrey from "../../assets/icons/OrderIconGrey.png";
 import gtIcon from "../../assets/icons/gtIcon.png";
 
-const OrderItem = ({ order, onClick }) => {
-  const icon = order.status === "픽업 완료" ? orderIconGrey : orderIcon;
+const OrderItem = ({ order }) => {
+  const navigate = useNavigate();
+  const isWaiting = order.pickupStatus === "WAIT";
+  const icon = isWaiting ? orderIcon : orderIconGrey;
+  const statusText = isWaiting ? "픽업 대기 중" : "픽업 완료";
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleString('ko-KR', options).replace(/\. /g, '.').replace('오후', '').replace('오전', '');
+  };
+
+  const handleClick = () => {
+    navigate("/orderconfirmation", { state: { order, formattedDate: formatDate(order.createdAt) } });
+  };
 
   return (
-    <OrderContainer onClick={onClick}>
-      <IconBox active={order.status === "픽업 대기 중"}>
-        <OrderIcon src={icon} alt={order.status} />
-        <OrderStatus>{order.status}</OrderStatus>
+    <OrderContainer onClick={handleClick}>
+      <IconBox active={isWaiting}>
+        <OrderIcon src={icon} alt={statusText} />
+        <OrderStatus>{statusText}</OrderStatus>
       </IconBox>
       <InfoBox>
         <TextBox>
-          <CafeName>{order.cafeName}</CafeName>
-          <OrderDate>{order.date}</OrderDate>
-          <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
+          <CafeName>{order.cafename}</CafeName>
+          <OrderDate>{formatDate(order.createdAt)}</OrderDate>
+          <OrderNumber>주문번호 {order.id}</OrderNumber>
         </TextBox>
         <ArrowIcon src={gtIcon} alt=">" />
       </InfoBox>
