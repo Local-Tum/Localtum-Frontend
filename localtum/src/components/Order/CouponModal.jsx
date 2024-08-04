@@ -1,40 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const CouponModal = ({ onConfirm, onCancel }) => {
-  const [selectedCoupon, setSelectedCoupon] = useState(false);
+const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
+  const [coupons, setCoupons] = useState([]);
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
 
-  const handleCouponSelect = () => {
-    setSelectedCoupon(true);
+  useEffect(() => {
+    // 쿠폰을 로컬 스토리지에서 가져옴
+    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+    setCoupons(storedCoupons);
+  }, []);
+
+  const handleCouponSelect = (coupon) => {
+    setSelectedCoupon(coupon);
+  };
+
+  const handleConfirm = () => {
+    if (selectedCoupon) {
+      applyCoupon(selectedCoupon);
+      onConfirm();
+    } else {
+      alert("쿠폰을 선택해주세요.");
+    }
   };
 
   return (
     <ModalOverlay>
       <ModalContent>
         <ModalTitle>쿠폰 적용</ModalTitle>
-        <CouponItem>
-          <CustomCheckbox onClick={handleCouponSelect}>
-            <CouponRadioButton
-              type="radio"
-              name="coupon"
-              checked={selectedCoupon}
-              readOnly
-            />
-            <Checkmark />
-          </CustomCheckbox>
-          <CouponDescription>
-            '멋쟁이사자' 음료 2,000원 할인 쿠폰
-            <CouponExpiry>유효기간 : ~ 2024년 8월 7일까지</CouponExpiry>
-          </CouponDescription>
-        </CouponItem>
+        {coupons.length > 0 ? (
+          coupons.map((coupon, index) => (
+            <CouponItem key={index} onClick={() => handleCouponSelect(coupon)}>
+              <CustomCheckbox>
+                <CouponRadioButton
+                  type="radio"
+                  name="coupon"
+                  checked={selectedCoupon === coupon}
+                  readOnly
+                />
+                <Checkmark />
+              </CustomCheckbox>
+              <CouponDescription>
+                {coupon.title}
+                <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
+              </CouponDescription>
+            </CouponItem>
+          ))
+        ) : (
+          <NoCoupons>사용 가능한 쿠폰이 없습니다.</NoCoupons>
+        )}
         <Spacer />
         <ButtonGroup>
           <CancelButton onClick={onCancel}>취소</CancelButton>
-          <ConfirmButton
-            onClick={onConfirm}
-            disabled={!selectedCoupon}
-            active={selectedCoupon}
-          >
+          <ConfirmButton onClick={handleConfirm} active={selectedCoupon}>
             확인
           </ConfirmButton>
         </ButtonGroup>
@@ -62,10 +80,11 @@ const ModalContent = styled.div`
   width: 100%;
   max-width: 400px;
   text-align: center;
-  height: 60%; /* 기본 높이를 60%로 설정 */
+  height: 60%;
   display: flex;
   flex-direction: column;
-  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.10), 3px 3px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
+    3px 3px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const ModalTitle = styled.h3`
@@ -77,6 +96,7 @@ const CouponItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
+  cursor: pointer;
 `;
 
 const CustomCheckbox = styled.div`
@@ -125,6 +145,11 @@ const CouponExpiry = styled.div`
   color: #808180;
 `;
 
+const NoCoupons = styled.div`
+  font-size: 1rem;
+  color: #808180;
+`;
+
 const Spacer = styled.div`
   flex-grow: 1;
 `;
@@ -140,7 +165,7 @@ const CancelButton = styled.button`
   border: 2px solid #808180;
   width: 8rem;
   height: 3rem;
-  background: #FFF;
+  background: #fff;
   flex-shrink: 0;
   background: none;
   color: #595b59;

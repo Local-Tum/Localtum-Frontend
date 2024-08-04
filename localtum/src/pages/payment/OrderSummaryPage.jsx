@@ -11,10 +11,18 @@ import rightIcon from "../../assets/icons/rightIcon.png";
 
 const OrderSummaryPage = () => {
   const location = useLocation();
-  const { item, size = '기본 사이즈', temperature = 'HOT', prices = item.price, options = [], quantity = 1 } = location.state;
+  const {
+    item,
+    size = "기본 사이즈",
+    temperature = "HOT",
+    prices = item.price,
+    options = [],
+    quantity = 1,
+  } = location.state;
   const [expandedItem, setExpandedItem] = useState(null);
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const navigate = useNavigate();
 
   const toggleExpand = (itemName) => {
@@ -24,7 +32,7 @@ const OrderSummaryPage = () => {
   const handleOrderButtonClick = async () => {
     const token = localStorage.getItem("token");
     const orderData = {
-      coupon: 200,
+      coupon: couponDiscount,
       size,
       status: temperature,
       prices,
@@ -49,7 +57,17 @@ const OrderSummaryPage = () => {
       alert("주문이 성공적으로 완료되었습니다!");
 
       // 주문 완료 후 orderconfirmation 페이지로 이동, order 데이터 전달
-      navigate("/orderconfirmation", { state: { order: { ...response.data, cafeName: item.cafe_name, menuName: item.name, price: prices * quantity - 200, date: new Date().toLocaleString() } } });
+      navigate("/orderconfirmation", {
+        state: {
+          order: {
+            ...response.data,
+            cafeName: item.cafe_name,
+            menuName: item.name,
+            price: prices * quantity - couponDiscount,
+            date: new Date().toLocaleString(),
+          },
+        },
+      });
     } catch (error) {
       console.error("주문 요청 실패:", error);
       if (error.response) {
@@ -67,6 +85,10 @@ const OrderSummaryPage = () => {
 
   const handleCouponClick = () => {
     setCouponModalOpen(true);
+  };
+
+  const applyCoupon = (coupon) => {
+    setCouponDiscount(2000); // 쿠폰 할인가
   };
 
   const handleCouponConfirm = () => {
@@ -182,16 +204,20 @@ const OrderSummaryPage = () => {
             <Summary>
               <SummaryItem>
                 <SummaryLabel>상품 금액</SummaryLabel>
-                <SummaryValue>{prices.toLocaleString()}원</SummaryValue>
+                <SummaryValue>
+                  {(prices * quantity).toLocaleString()}원
+                </SummaryValue>
               </SummaryItem>
               <SummaryItem>
                 <SummaryLabel>할인 금액</SummaryLabel>
-                <SummaryValue>-200원</SummaryValue>
+                <SummaryValue>
+                  -{couponDiscount.toLocaleString()}원
+                </SummaryValue>
               </SummaryItem>
               <SummaryItem>
                 <SummaryLabelTotal>결제 금액</SummaryLabelTotal>
                 <SummaryValueTotal>
-                  {(prices * quantity - 200).toLocaleString()}원
+                  {(prices * quantity - couponDiscount).toLocaleString()}원
                 </SummaryValueTotal>
               </SummaryItem>
             </Summary>
@@ -208,12 +234,14 @@ const OrderSummaryPage = () => {
           <CouponModal
             onConfirm={handleCouponConfirm}
             onCancel={handleCouponCancel}
+            applyCoupon={applyCoupon}
           />
         )}
       </Container>
     </>
   );
 };
+
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
