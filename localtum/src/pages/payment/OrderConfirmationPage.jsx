@@ -13,15 +13,15 @@ const OrderConfirmationPage = () => {
     return null;
   }
 
-  const { order } = location.state;
+  const { order, formattedDate } = location.state;
 
   const progressStatus = () => {
-    switch (order.status) {
-      case "payment":
+    switch (order.orderStatus) {
+      case "PREPARE":
         return "33%";
-      case "accepted":
+      case "PROGRESS":
         return "66%";
-      case "complete":
+      case "COMPLETE":
         return "100%";
       default:
         return "0";

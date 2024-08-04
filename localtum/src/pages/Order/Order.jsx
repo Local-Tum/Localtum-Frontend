@@ -1,69 +1,60 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Header from "../../components/home/Header";
-import Banner from "../../components/home/Banner";
-import Nav from "../../components/home/Nav";
-import OrderItem from "../../components/Order/OrderItem";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Header from '../../components/home/Header';
+import Banner from '../../components/home/Banner';
+import Nav from '../../components/home/Nav';
+import OrderItem from '../../components/Order/OrderItem';
+import { getOrderList } from '../../apis/api/orderlist.js';
 
 const Order = () => {
-  const [orders, setOrders] = useState([]);
-  const navigate = useNavigate();
+    const [orders, setOrders] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(3); // 초기값을 3으로 설정
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const token = localStorage.getItem("token");
-      const cafeName = "exampleCafe";
-      const menuName = "exampleMenu";
-      const url = `https://15.165.139.216.nip.io/localtum/cafe_details/${cafeName}/${menuName}/order_history`;
-
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        setOrders(response.data);
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
-      }
+    const loadMoreOrders = () => {
+        setVisibleCount(prevCount => prevCount + 3); // 3개씩 더 보여줌
     };
 
-    fetchOrders();
-  }, []);
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await getOrderList();
+                if (response.status === 200) {
+                    console.log("Fetched Orders:", response.data); // 데이터 값을 콘솔에 출력
+                    setOrders(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  const handleOrderClick = (order) => {
-    navigate("/orderconfirmation", { state: { order } });
-  };
+        fetchOrders();
+    }, []);
 
-  return (
-    <Container>
-      <Header />
-      <Banner />
-      <Nav activeIndex={2} />
-      <Content>
-        <OrderContainer>
-          <Notice>*3개월 이내 주문내역만 표시됩니다.</Notice>
-          <OrderList>
-            {orders.length > 0 ? (
-              orders.map((order, index) => (
-                <OrderItem
-                  key={index}
-                  order={order}
-                  onClick={() => handleOrderClick(order)}
-                />
-              ))
-            ) : (
-              <NoOrders>주문 내역이 없습니다.</NoOrders>
-            )}
-          </OrderList>
-        </OrderContainer>
-        {orders.length > 0 && <MoreButton>더보기</MoreButton>}
-      </Content>
-    </Container>
-  );
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <Container>
+            <Header />
+            <Banner />
+            <Nav activeIndex={2} />
+            <Content>
+                <OrderContainer>
+                    <Notice>*3개월 이내 주문내역만 표시됩니다.</Notice>
+                    <OrderList>
+                        {orders.slice(0, visibleCount).map((order, index) => (
+                            <OrderItem key={index} order={order} />
+                        ))}
+                    </OrderList>
+                </OrderContainer>
+                {visibleCount < orders.length && <MoreButton onClick={loadMoreOrders}>더보기</MoreButton>}
+            </Content>
+        </Container>
+    );
 };
 
 const Container = styled.div``;
