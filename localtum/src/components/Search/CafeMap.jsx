@@ -2,8 +2,11 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import markerImage from '../../assets/icons/mapIcon.png';
 import Cafes from '../../components/Cafes/Cafes';
+import { useNavigate } from 'react-router-dom'; // useNavigate hook import
 
 const CafeMap = () => {
+    const navigate = useNavigate(); // useNavigate hook 사용
+
     useEffect(() => {
         const loadKakaoMap = () => {
             if (!window.kakao || !window.kakao.maps) {
@@ -61,6 +64,10 @@ const CafeMap = () => {
                     map: map
                 });
 
+                window.kakao.maps.event.addListener(addressMarker, 'click', () => {
+                    navigate(`/cafe_details/${cafe.id}`);
+                });
+
                 const content = `
                     <div style="
                         display: flex;
@@ -102,7 +109,7 @@ const CafeMap = () => {
         return () => {
             document.head.removeChild(script);
         };
-    }, []);
+    }, [navigate]);
 
     return <MapContainer id="map" />;
 };
