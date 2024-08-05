@@ -29,11 +29,11 @@ const MenuList = ({ onLogoutClick }) => {
         </UserInfoContainer>
         <MenuItemContainer>
           <MenuItem onClick={() => navigate('/mypageedit')}>회원 정보 수정</MenuItem>
-          <MenuItem onClick={() => navigate('/mypagecoupon')}>쿠폰</MenuItem>
+          <MenuItem onClick={() => navigate('/mycoupon')}>쿠폰</MenuItem>
           <MenuItem onClick={() => navigate('/stamplist')}>스탬프</MenuItem>
           <MenuItem onClick={() => navigate('/favorite')}>카페 즐겨찾기</MenuItem>
           <MenuItem onClick={() => navigate('/policy')}>약관 및 정책</MenuItem>
-          <MenuItem onClick={onLogoutClick} style={{ color: 'red' }}>로그아웃</MenuItem>
+          <MenuItem onClick={onLogoutClick} style={{ color: '#ca7070' }}>로그아웃</MenuItem>
         </MenuItemContainer>
       </Container>
     </>
