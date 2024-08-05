@@ -12,7 +12,7 @@ const StampCard = ({ title, stamps }) => {
           {Array.from({ length: 10 }).map((_, index) => (
             <Stamp key={index} filled={index < stamps} freeDrink={index === 9}>
               {index === 9 ? (
-                <FreeText>한 잔 무료!</FreeText>
+                <FreeText filled={index < stamps}>한 잔 무료!</FreeText>
               ) : (
                 <StampImage
                   src={index < stamps ? cupDone : cupGreen}
@@ -109,7 +109,7 @@ const StampImage = styled.img`
 const FreeText = styled.div`
   font-size: 0.7rem;
   font-weight: 600;
-  color: #a9b782;
+  color: ${(props) => (props.filled ? "#fff" : "#a9b782")};
   letter-spacing: -0.64px;
   text-align: center;
 `;
