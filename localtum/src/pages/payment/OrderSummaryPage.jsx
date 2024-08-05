@@ -26,13 +26,13 @@ const OrderSummaryPage = () => {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const navigate = useNavigate();
 
-  const toggleExpand = (itemName) => {
+  const toggleExpand = (itemName) =>
     setExpandedItem(expandedItem === itemName ? null : itemName);
-  };
 
   const handleOrderButtonClick = async () => {
     const token = localStorage.getItem("token");
     const orderData = {
+      couponName: appliedCoupon ? appliedCoupon.couponName : "", // null 대신 빈 문자열
       coupon: couponDiscount,
       size,
       status: temperature,
@@ -40,6 +40,9 @@ const OrderSummaryPage = () => {
       options,
       quantity,
     };
+
+    // 콘솔에 orderData 객체 출력하여 확인
+    console.log("Order Data:", orderData);
 
     try {
       const response = await axios.post(
@@ -54,46 +57,33 @@ const OrderSummaryPage = () => {
           },
         }
       );
-      console.log("Response:", response);
       alert("주문이 성공적으로 완료되었습니다!");
-
-      // 주문 완료 후 orderconfirmation 페이지로 이동, order 데이터 전달
       navigate("/orderconfirmation", {
         state: {
-          order: response.data.data[0]
+          order: response.data.data[0],
         },
       });
 
-      // 사용한 쿠폰 상태 업데이트
       if (appliedCoupon) {
         const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
         const updatedCoupons = storedCoupons.map((coupon) =>
-          coupon.cafe_name === appliedCoupon.cafe_name ? { ...coupon, used: true } : coupon
+          coupon.cafe_name === appliedCoupon.cafe_name
+            ? { ...coupon, used: true }
+            : coupon
         );
         localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
       }
     } catch (error) {
       console.error("주문 요청 실패:", error);
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-        console.error("Error response status:", error.response.status);
-        console.error("Error response headers:", error.response.headers);
-      } else if (error.request) {
-        console.error("Error request:", error.request);
-      } else {
-        console.error("Error message:", error.message);
-      }
       alert("주문에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  const handleCouponClick = () => {
-    setCouponModalOpen(true);
-  };
+  const handleCouponClick = () => setCouponModalOpen(true);
 
   const applyCoupon = (coupon) => {
     if (coupon.cafe_name === item.cafe_name) {
-      setCouponDiscount(Number(coupon.coupon_description));
+      setCouponDiscount(Number(coupon.couponAmount));
       setAppliedCoupon(coupon);
       alert("쿠폰이 적용되었습니다.");
     } else {
@@ -101,17 +91,11 @@ const OrderSummaryPage = () => {
     }
   };
 
-  const handleCouponConfirm = () => {
-    setCouponModalOpen(false);
-  };
+  const handleCouponConfirm = () => setCouponModalOpen(false);
 
-  const handleCouponCancel = () => {
-    setCouponModalOpen(false);
-  };
+  const handleCouponCancel = () => setCouponModalOpen(false);
 
-  const handlePaymentChange = (e) => {
-    setSelectedPayment(e.target.value);
-  };
+  const handlePaymentChange = (e) => setSelectedPayment(e.target.value);
 
   return (
     <>
@@ -157,7 +141,8 @@ const OrderSummaryPage = () => {
                 </CouponInput>
                 {appliedCoupon && (
                   <AppliedCoupon>
-                    적용된 쿠폰: '{appliedCoupon.cafe_name}' 음료 {appliedCoupon.coupon_description}원 할인 쿠폰
+                    적용된 쿠폰: '{appliedCoupon.couponName}' 음료{" "}
+                    {appliedCoupon.couponAmount}원 할인 쿠폰
                   </AppliedCoupon>
                 )}
               </Section>
