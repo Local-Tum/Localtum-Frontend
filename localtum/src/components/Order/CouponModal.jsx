@@ -10,7 +10,7 @@ const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
     const fetchCoupons = async () => {
       const result = await getCouponList();
       if (result.status === 200) {
-        const availableCoupons = result.data.filter(coupon => !coupon.used);
+        const availableCoupons = result.data.filter(coupon => coupon.couponStatus !== "USED");
         setCoupons(availableCoupons);
       } else {
         console.error("Failed to fetch coupons", result);
@@ -33,32 +33,38 @@ const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <ModalOverlay>
       <ModalContent>
         <ModalTitle>쿠폰 적용</ModalTitle>
-        {coupons.length > 0 ? (
-          coupons.map((coupon, index) => (
-            <CouponItem key={index} onClick={() => handleCouponSelect(coupon)}>
-              <CustomCheckbox>
-                <CouponRadioButton
-                  type="radio"
-                  name="coupon"
-                  checked={selectedCoupon === coupon}
-                  readOnly
-                />
-                <Checkmark />
-              </CustomCheckbox>
-              <CouponDescription>
-                '{coupon.cafe_name}' 음료 {coupon.coupon_description}원 할인 쿠폰
-                <CouponExpiry>유효기간: </CouponExpiry>
-              </CouponDescription>
-            </CouponItem>
-          ))
-        ) : (
-          <NoCoupons>사용 가능한 쿠폰이 없습니다.</NoCoupons>
-        )}
-        <Spacer />
+        <CouponList>
+          {coupons.length > 0 ? (
+            coupons.map((coupon, index) => (
+              <CouponItem key={index} onClick={() => handleCouponSelect(coupon)}>
+                <CustomCheckbox>
+                  <CouponRadioButton
+                    type="radio"
+                    name="coupon"
+                    checked={selectedCoupon === coupon}
+                    readOnly
+                  />
+                  <Checkmark />
+                </CustomCheckbox>
+                <CouponDescription>
+                  '{coupon.cafeName}' 음료 {coupon.couponDescription}원 할인 쿠폰
+                  <CouponExpiry>유효기간: {formatDate(coupon.expirationDate)}</CouponExpiry>
+                </CouponDescription>
+              </CouponItem>
+            ))
+          ) : (
+            <NoCoupons>사용 가능한 쿠폰이 없습니다.</NoCoupons>
+          )}
+        </CouponList>
         <ButtonGroup>
           <CancelButton onClick={onCancel}>취소</CancelButton>
           <ConfirmButton onClick={handleConfirm} active={selectedCoupon}>
@@ -94,11 +100,17 @@ const ModalContent = styled.div`
   flex-direction: column;
   box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
     3px 3px 10px 0px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Add scroll for long content */
 `;
 
 const ModalTitle = styled.h3`
   font-size: 1.25rem;
   margin-bottom: 2rem;
+`;
+
+const CouponList = styled.div`
+  flex: 1;
+  overflow-y: auto; /* Ensure CouponList can scroll if content is long */
 `;
 
 const CouponItem = styled.div`
