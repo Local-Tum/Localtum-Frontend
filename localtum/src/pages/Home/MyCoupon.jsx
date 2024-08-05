@@ -4,6 +4,7 @@ import mainlogo from "../../assets/logos/mainlogo.png";
 import backIcon from "../../assets/icons/backIcon.png";
 import couponbase from "../../assets/images/couponbase.png";
 import coupondone from "../../assets/images/coupondone.png";
+import noCoupon from "../../assets/images/noCoupon.png";
 import { useNavigate } from "react-router-dom";
 import Cafes from '../../components/Cafes/Cafes';
 
@@ -41,9 +42,9 @@ const MyCoupon = () => {
       <TitleContainer>
         <Title>내 쿠폰</Title>
       </TitleContainer>
-      <CouponList>
-        {coupons.length > 0 ? (
-          coupons.map((coupon, index) => (
+      {coupons.length > 0 ? (
+        <CouponList>
+          {coupons.map((coupon, index) => (
             <CouponItem key={index} onClick={() => handleUseCoupon(coupon.title)}>
               <CouponImage
                 src={coupon.used ? coupondone : couponbase}
@@ -54,11 +55,13 @@ const MyCoupon = () => {
                 <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
               </CouponTextContainer>
             </CouponItem>
-          ))
-        ) : (
-          <NoCoupons>쿠폰이 없습니다.</NoCoupons>
-        )}
-      </CouponList>
+          ))}
+        </CouponList>
+      ) : (
+        <NoCouponContainer>
+          <NoCouponImage src={noCoupon} alt="No Coupons Available" />
+        </NoCouponContainer>
+      )}
     </StyledContainer>
   );
 };
@@ -275,31 +278,19 @@ const CouponExpiry = styled.p`
   }
 `;
 
-const NoCoupons = styled.div`
-  margin-top: 2rem;
-  font-size: 1.2rem;
-  color: #808180;
+const NoCouponContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 7rem;
+  margin-bottom: 7rem;
 `;
 
-const UseButton = styled.button`
-  background-color: #4caf50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 1rem;
-  font-size: 1rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.75rem;
-    padding: 0.5rem 0.5rem;
-  }
+const NoCouponImage = styled.img`
+  width: 100%;
+  max-width: 300px;
 `;
 
 export default MyCoupon;
