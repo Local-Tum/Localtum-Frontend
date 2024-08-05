@@ -35,23 +35,23 @@ const OrderConfirmationPage = () => {
         <Main>
           <CafeInfo>
             <CafeNameIcon src={nameIcon} alt="*" />
-            <CafeName>{order.cafeName}</CafeName>
+            <CafeName>{order.cafename}</CafeName>
           </CafeInfo>
           <Divider />
           <OrderInfo>
-            <OrderTime>{order.date}</OrderTime>
+            <OrderTime>{formattedDate}</OrderTime>
             <OrderCompleteMessage>주문이 완료되었습니다.</OrderCompleteMessage>
-            <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
+            <OrderNumber>주문번호 {order.id}</OrderNumber>
           </OrderInfo>
           <Divider />
           <OrderDetails>
             <Detail>
               <Label>주문 상품</Label>
-              <Value>{order.menuName}</Value>
+              <Value>{order.orderMenu}</Value>
             </Detail>
             <Detail>
               <Label>결제 금액</Label>
-              <Value className="amount">{order.price}원</Value>
+              <Value className="amount">{order.prices}원</Value>
             </Detail>
           </OrderDetails>
           <Divider />
@@ -61,21 +61,21 @@ const OrderConfirmationPage = () => {
               <ProgressText>
                 <span
                   className={`progress-step ${
-                    order.status === "payment" ? "active" : ""
+                    order.orderStatus === "payment" ? "active" : ""
                   }`}
                 >
                   결제 완료
                 </span>
                 <span
                   className={`progress-step ${
-                    order.status === "accepted" ? "active" : ""
+                    order.orderStatus === "accepted" ? "active" : ""
                   }`}
                 >
                   주문 접수
                 </span>
                 <span
                   className={`progress-step ${
-                    order.status === "complete" ? "active" : ""
+                    order.orderStatus === "complete" ? "active" : ""
                   }`}
                 >
                   제조 완료
