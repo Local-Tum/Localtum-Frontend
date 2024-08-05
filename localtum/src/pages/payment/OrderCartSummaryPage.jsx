@@ -90,7 +90,7 @@ const OrderCartSummaryPage = () => {
   };
 
   const applyCoupon = (coupon) => {
-    if (coupon.title.includes(cartItems[0]?.cafe_name)) {
+    if (coupon.cafe_name === cartItems[0]?.cafe_name) {
       setCouponDiscount(Number(coupon.couponAmount));
       setAppliedCoupon(coupon);
       alert("쿠폰이 적용되었습니다.");
