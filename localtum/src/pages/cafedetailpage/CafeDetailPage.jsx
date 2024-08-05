@@ -41,13 +41,20 @@ const CafeDetailPage = () => {
 
   const menu = defaultCafe.menu; // 모든 카페가 동일한 메뉴를 가짐
 
+  const getRandomCouponAmount = () => {
+    const amounts = [500, 1000, 1500, 2000, 2500, 3000];
+    const randomIndex = Math.floor(Math.random() * amounts.length);
+    return amounts[randomIndex];
+  };
+
   const handleCouponRequest = async () => {
     const token = localStorage.getItem("token");
     const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+    const couponAmount = getRandomCouponAmount();
 
-    // 이미 받은 쿠폰인지 확인
+    // 이미 받은 쿠폰인지 확인 (카페 이름 기준)
     const alreadyReceived = storedCoupons.some(
-      (coupon) => coupon.title === `'${cafe.name}' 음료 2,000원 할인 쿠폰`
+      (coupon) => coupon.title.includes(cafe.name)
     );
 
     if (alreadyReceived) {
@@ -60,7 +67,7 @@ const CafeDetailPage = () => {
         `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
           cafe.name
         )}/coupon`,
-        { description: 2000 },
+        { description: couponAmount },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,9 +78,10 @@ const CafeDetailPage = () => {
 
       // 쿠폰 받은 후 쿠폰 목록에 추가
       const newCoupon = {
-        title: `'${cafe.name}' 음료 2,000원 할인 쿠폰`,
+        title: `'${cafe.name}' 음료 ${couponAmount}원 할인 쿠폰`,
         expiry: "2024년 8월 7일까지",
         used: false,
+        couponAmount: couponAmount
       };
 
       storedCoupons.push(newCoupon);
