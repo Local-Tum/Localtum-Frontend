@@ -33,6 +33,8 @@ const CafeDetailPage = () => {
 
       fetchStamps();
     }
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    setNotificationCount(storedCartItems.length);
   }, [cafe]);
 
   if (!cafe) {
@@ -94,6 +96,13 @@ const CafeDetailPage = () => {
     }
   };
 
+  const addToCart = (item) => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    storedCartItems.push(item);
+    localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+    setNotificationCount(storedCartItems.length);
+  };
+
   return (
     <Container>
       <Header />
@@ -113,7 +122,8 @@ const CafeDetailPage = () => {
           {menu ? (
             <ProductList
               menu={menu}
-              cafeName={cafe.name} // cafeName 전달
+              cafeName={cafe.name}
+              addToCart={addToCart}
             />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>
