@@ -5,9 +5,10 @@ import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import CouponModal from "../../components/Order/CouponModal";
 import nameIcon from "../../assets/icons/cafeName.png";
-import upperIcon from "../../assets/icons/upperIcon.png"; // 필요에 따라 아이콘 경로 수정
-import underIcon2 from "../../assets/icons/underIcon2.png"; // 필요에 따라 아이콘 경로 수정
+import upperIcon from "../../assets/icons/upperIcon.png";
+import underIcon2 from "../../assets/icons/underIcon2.png";
 import rightIcon from "../../assets/icons/rightIcon.png";
+import deleteIcon from "../../assets/icons/deleteIcon.png";
 
 const OrderSummaryCartPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const OrderSummaryCartPage = () => {
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [expandedItem, setExpandedItem] = useState(null);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const OrderSummaryCartPage = () => {
 
     if (storedCartItems.length === 0) {
       alert("장바구니가 비어있습니다. 메뉴를 추가해주세요.");
-      navigate(-1); // 사용자가 올바른 경로로 돌아가도록 리디렉션
+      navigate(-1);
     }
   }, [navigate]);
 
@@ -58,13 +60,12 @@ const OrderSummaryCartPage = () => {
       console.log("Responses:", responses);
       alert("주문이 성공적으로 완료되었습니다!");
 
-      // Clear cart after successful order
       localStorage.removeItem("cartItems");
 
       navigate("/orderconfirmation", {
         state: {
           orders: responses.map((response, index) => ({
-            ...response.data,
+            ...response.data.data[0],  // Assuming the order information is in data[0]
             cafeName: cartItems[index].cafe_name,
             menuName: cartItems[index].name,
             price:
@@ -85,12 +86,17 @@ const OrderSummaryCartPage = () => {
   };
 
   const applyCoupon = (coupon) => {
-    setCouponDiscount(2000); // 쿠폰 할인가
+    if (coupon.title.includes(cartItems[0]?.cafe_name)) {
+      setCouponDiscount(Number(coupon.couponAmount));
+      setAppliedCoupon(coupon);
+      alert("쿠폰이 적용되었습니다.");
+    } else {
+      alert("이 쿠폰은 해당 카페에서 사용할 수 없습니다.");
+    }
   };
 
   const handleCouponConfirm = () => {
     setCouponModalOpen(false);
-    alert("쿠폰이 적용되었습니다.");
   };
 
   const handleCouponCancel = () => {
@@ -103,6 +109,12 @@ const OrderSummaryCartPage = () => {
 
   const toggleExpand = (itemName) => {
     setExpandedItem(expandedItem === itemName ? null : itemName);
+  };
+
+  const handleDelete = (itemName) => {
+    const updatedCartItems = cartItems.filter((item) => item.name !== itemName);
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
   return (
@@ -129,6 +141,11 @@ const OrderSummaryCartPage = () => {
                         alt={expandedItem === item.name ? "▲" : "▼"}
                       />
                     </ItemDetails>
+                    <DeleteButton
+                      src={deleteIcon}
+                      alt="X"
+                      onClick={() => handleDelete(item.name)}
+                    />
                   </ItemInfo>
                   {expandedItem === item.name && (
                     <ExpandedDetails>
@@ -145,13 +162,20 @@ const OrderSummaryCartPage = () => {
                 <SectionTitle>매장 요청 사항</SectionTitle>
                 <Input placeholder="매장 요청사항이 있으면 적어주세요." />
               </Section>
+              <Divider />
               <Section>
                 <SectionTitle>쿠폰 적용</SectionTitle>
                 <CouponInput onClick={handleCouponClick}>
                   쿠폰
                   <CouponButton src={rightIcon} />
                 </CouponInput>
+                {appliedCoupon && (
+                  <AppliedCoupon>
+                    적용된 쿠폰: {appliedCoupon.title}
+                  </AppliedCoupon>
+                )}
               </Section>
+              <Divider />
               <Section>
                 <SectionTitle>결제 수단</SectionTitle>
                 <PaymentOption>
@@ -204,6 +228,7 @@ const OrderSummaryCartPage = () => {
                 </PaymentOption>
               </Section>
             </AdditionalSections>
+            <Divider />
             <Summary>
               <SummaryItem>
                 <SummaryLabel>상품 금액</SummaryLabel>
@@ -326,7 +351,7 @@ const OrderItem = styled.div`
 
 const ItemInfo = styled.div`
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
 `;
 
@@ -352,12 +377,19 @@ const ExpandButton = styled.img`
   margin-left: 1.5rem;
 `;
 
+const DeleteButton = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 1.5rem;
+`;
+
 const ExpandedDetails = styled.div`
   font-size: 0.9rem;
   color: #666;
   margin-top: 0.3rem;
   margin-left: auto;
   text-align: right;
+  margin-right: 6rem;
 `;
 
 const Detail = styled.div`
@@ -405,6 +437,12 @@ const CouponButton = styled.img`
   height: 1rem;
 `;
 
+const AppliedCoupon = styled.div`
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #595b59;
+`;
+
 const PaymentOption = styled.label`
   display: flex;
   align-items: center;
@@ -423,6 +461,18 @@ const CustomCheckbox = styled.div`
 `;
 
 const RadioButton = styled.input`
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &:checked + span {
+    background-color: #a9b782;
+  }
+`;
+
+const Checkbox = styled.input`
   position: absolute;
   opacity: 0;
   cursor: pointer;

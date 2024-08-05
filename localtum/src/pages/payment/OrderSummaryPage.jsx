@@ -60,13 +60,7 @@ const OrderSummaryPage = () => {
       // 주문 완료 후 orderconfirmation 페이지로 이동, order 데이터 전달
       navigate("/orderconfirmation", {
         state: {
-          order: {
-            ...response.data,
-            cafeName: item.cafe_name,
-            menuName: item.name,
-            price: prices * quantity - couponDiscount,
-            date: new Date().toLocaleString(),
-          },
+          order: response.data.data[0]
         },
       });
 
@@ -74,7 +68,7 @@ const OrderSummaryPage = () => {
       if (appliedCoupon) {
         const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
         const updatedCoupons = storedCoupons.map((coupon) =>
-          coupon.title === appliedCoupon.title ? { ...coupon, used: true } : coupon
+          coupon.cafe_name === appliedCoupon.cafe_name ? { ...coupon, used: true } : coupon
         );
         localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
       }
@@ -98,8 +92,8 @@ const OrderSummaryPage = () => {
   };
 
   const applyCoupon = (coupon) => {
-    if (coupon.title.includes(item.cafe_name)) {
-      setCouponDiscount(Number(coupon.couponAmount)); // 할인 금액을 숫자로 변환
+    if (coupon.cafe_name === item.cafe_name) {
+      setCouponDiscount(Number(coupon.coupon_description));
       setAppliedCoupon(coupon);
       alert("쿠폰이 적용되었습니다.");
     } else {
@@ -163,7 +157,7 @@ const OrderSummaryPage = () => {
                 </CouponInput>
                 {appliedCoupon && (
                   <AppliedCoupon>
-                    적용된 쿠폰: {appliedCoupon.title}
+                    적용된 쿠폰: '{appliedCoupon.cafe_name}' 음료 {appliedCoupon.coupon_description}원 할인 쿠폰
                   </AppliedCoupon>
                 )}
               </Section>

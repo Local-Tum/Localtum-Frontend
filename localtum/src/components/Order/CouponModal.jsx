@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getCouponList } from '../../apis/api/coupon';
 
 const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
   const [coupons, setCoupons] = useState([]);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
 
   useEffect(() => {
-    // 사용 완료되지 않은 쿠폰만 로컬 스토리지에서 가져옴
-    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
-    const availableCoupons = storedCoupons.filter(coupon => !coupon.used);
-    setCoupons(availableCoupons);
+    const fetchCoupons = async () => {
+      const result = await getCouponList();
+      if (result.status === 200) {
+        const availableCoupons = result.data.filter(coupon => !coupon.used);
+        setCoupons(availableCoupons);
+      } else {
+        console.error("Failed to fetch coupons", result);
+      }
+    };
+
+    fetchCoupons();
   }, []);
 
   const handleCouponSelect = (coupon) => {
@@ -42,8 +50,8 @@ const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
                 <Checkmark />
               </CustomCheckbox>
               <CouponDescription>
-                {coupon.title}
-                <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
+                '{coupon.cafe_name}' 음료 {coupon.coupon_description}원 할인 쿠폰
+                <CouponExpiry>유효기간: </CouponExpiry>
               </CouponDescription>
             </CouponItem>
           ))

@@ -7,15 +7,23 @@ import coupondone from "../../assets/images/coupondone.png";
 import noCoupon from "../../assets/images/noCoupon.png";
 import { useNavigate } from "react-router-dom";
 import Cafes from '../../components/Cafes/Cafes';
+import { getCouponList } from '../../apis/api/coupon';
 
 const MyCoupon = () => {
   const navigate = useNavigate();
   const [coupons, setCoupons] = useState([]);
 
   useEffect(() => {
-    // 쿠폰을 로컬 스토리지에서 가져옴
-    const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
-    setCoupons(storedCoupons);
+    const fetchCoupons = async () => {
+      const result = await getCouponList();
+      if (result.status === 200) {
+        setCoupons(result.data);
+      } else {
+        console.error("Failed to fetch coupons", result);
+      }
+    };
+
+    fetchCoupons();
   }, []);
 
   const handleUseCoupon = (couponTitle) => {
@@ -44,15 +52,15 @@ const MyCoupon = () => {
       </TitleContainer>
       {coupons.length > 0 ? (
         <CouponList>
-          {coupons.map((coupon, index) => (
-            <CouponItem key={index} onClick={() => handleUseCoupon(coupon.title)}>
+          {coupons.map((coupon) => (
+            <CouponItem key={coupon.id} onClick={() => handleUseCoupon(coupon.cafe_name)}>
               <CouponImage
                 src={coupon.used ? coupondone : couponbase}
                 alt="coupon"
               />
               <CouponTextContainer>
-                <CouponTitle>{coupon.title}</CouponTitle>
-                <CouponExpiry>유효기간: {coupon.expiry}</CouponExpiry>
+                <CouponTitle>'{coupon.cafe_name}' 음료 {coupon.coupon_description}원 할인 쿠폰</CouponTitle>
+                <CouponExpiry>유효기간: </CouponExpiry>
               </CouponTextContainer>
             </CouponItem>
           ))}
@@ -237,10 +245,12 @@ const CouponTextContainer = styled.div`
 
   @media (max-width: 768px) {
     left: 40px;
+    width: 80%
   }
 
   @media (max-width: 480px) {
     left: 25px;
+    width: 80%;
   }
 `;
 
@@ -251,6 +261,7 @@ const CouponTitle = styled.h2`
   color: #444;
   white-space: pre-wrap;
   word-wrap: break-word;
+  letter-spacing: -0.96px;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
