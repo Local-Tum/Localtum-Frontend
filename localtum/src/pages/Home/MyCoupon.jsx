@@ -5,6 +5,7 @@ import backIcon from "../../assets/icons/backIcon.png";
 import couponbase from "../../assets/images/couponbase.png";
 import coupondone from "../../assets/images/coupondone.png";
 import { useNavigate } from "react-router-dom";
+import Cafes from '../../components/Cafes/Cafes';
 
 const MyCoupon = () => {
   const navigate = useNavigate();
@@ -15,6 +16,16 @@ const MyCoupon = () => {
     const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
     setCoupons(storedCoupons);
   }, []);
+
+  const handleUseCoupon = (couponTitle) => {
+    const matchedCafe = Cafes.find(cafe => couponTitle.includes(cafe.name));
+
+    if (matchedCafe) {
+      navigate(`/cafe_details/${matchedCafe.id}`);
+    } else {
+      alert("해당 카페를 찾을 수 없습니다.");
+    }
+  };
 
   return (
     <StyledContainer>
@@ -33,7 +44,7 @@ const MyCoupon = () => {
       <CouponList>
         {coupons.length > 0 ? (
           coupons.map((coupon, index) => (
-            <CouponItem key={index}>
+            <CouponItem key={index} onClick={() => handleUseCoupon(coupon.title)}>
               <CouponImage
                 src={coupon.used ? coupondone : couponbase}
                 alt="coupon"
@@ -219,6 +230,7 @@ const CouponTextContainer = styled.div`
   transform: translateY(-50%);
   text-align: left;
   color: black;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     left: 40px;
@@ -267,6 +279,27 @@ const NoCoupons = styled.div`
   margin-top: 2rem;
   font-size: 1.2rem;
   color: #808180;
+`;
+
+const UseButton = styled.button`
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.5rem;
+  }
 `;
 
 export default MyCoupon;
