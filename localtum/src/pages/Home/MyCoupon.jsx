@@ -16,6 +16,7 @@ const MyCoupon = () => {
   useEffect(() => {
     const fetchCoupons = async () => {
       const result = await getCouponList();
+      console.log("Fetched coupons:", result);
       if (result.status === 200) {
         setCoupons(result.data);
       } else {
@@ -36,6 +37,11 @@ const MyCoupon = () => {
     }
   };
 
+  const formatExpiryDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일까지`;
+  };
+
   return (
     <StyledContainer>
       <StyledHeader>
@@ -53,14 +59,14 @@ const MyCoupon = () => {
       {coupons.length > 0 ? (
         <CouponList>
           {coupons.map((coupon) => (
-            <CouponItem key={coupon.id} onClick={() => handleUseCoupon(coupon.cafe_name)}>
+            <CouponItem key={coupon.id} onClick={() => handleUseCoupon(coupon.cafeName)}>
               <CouponImage
-                src={coupon.used ? coupondone : couponbase}
+                src={coupon.couponStatus === 'USED' ? coupondone : couponbase}
                 alt="coupon"
               />
               <CouponTextContainer>
-                <CouponTitle>'{coupon.cafe_name}' 음료 {coupon.coupon_description}원 할인 쿠폰</CouponTitle>
-                <CouponExpiry>유효기간: </CouponExpiry>
+                <CouponTitle>'{coupon.cafeName}' 음료 {coupon.couponDescription}원 할인 쿠폰</CouponTitle>
+                <CouponExpiry>유효기간: {formatExpiryDate(coupon.expirationDate)}</CouponExpiry>
               </CouponTextContainer>
             </CouponItem>
           ))}
