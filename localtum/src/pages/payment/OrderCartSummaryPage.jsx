@@ -10,7 +10,7 @@ import underIcon2 from "../../assets/icons/underIcon2.png";
 import rightIcon from "../../assets/icons/rightIcon.png";
 import deleteIcon from "../../assets/icons/deleteIcon.png";
 
-const OrderSummaryCartPage = () => {
+const OrderCartSummaryPage = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
@@ -62,17 +62,21 @@ const OrderSummaryCartPage = () => {
 
       localStorage.removeItem("cartItems");
 
+      const orderHistoryResponse = await axios.get(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          cartItems[0].cafe_name
+        )}/order_history`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       navigate("/orderconfirmation", {
         state: {
-          orders: responses.map((response, index) => ({
-            ...response.data.data[0],  // Assuming the order information is in data[0]
-            cafeName: cartItems[index].cafe_name,
-            menuName: cartItems[index].name,
-            price:
-              cartItems[index].finalPrice * cartItems[index].quantity -
-              couponDiscount,
-            date: new Date().toLocaleString(),
-          })),
+          orders: orderHistoryResponse.data.orders,
         },
       });
     } catch (error) {
@@ -544,4 +548,4 @@ const OrderButton = styled.button`
   cursor: ${({ active }) => (active ? "pointer" : "not-allowed")};
 `;
 
-export default OrderSummaryCartPage;
+export default OrderCartSummaryPage;
