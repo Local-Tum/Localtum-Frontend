@@ -22,6 +22,7 @@ import OrderConfirmationPage from "./pages/payment/OrderConfirmationPage";
 import MyPageEdit from "./pages/MyPage/MyPageEdit";
 import MyPageCoupon from "./pages/MyPage/MyPageCoupon";
 import PolicyPage from "./pages/MyPage/PolicyPage";
+import PolicyPageDetail from "./pages/MyPage/PolicyPageDetail";
 import StampList from "./pages/MyPage/StampList";
 import FavoriteList from "./pages/MyPage/FavoriteList";
 import OrderHistoryPage from "./pages/Order/OrderHistoryPage";
@@ -66,6 +67,7 @@ const App = () => {
         <Route path="/mypageedit" element={<MyPageEdit />} />
         <Route path="/mypagecoupon" element={<MyPageCoupon />} />
         <Route path="/policy" element={<PolicyPage />} />
+        <Route path="/policy/detail/:policyName" element={<PolicyPageDetail />} />
         <Route path="/stamplist" element={<StampList />} />
         <Route path="/favorite" element={<FavoriteList />} />
       </Routes>

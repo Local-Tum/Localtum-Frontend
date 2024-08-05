@@ -1,31 +1,38 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/mypageedit/Header";
 
 const PolicyPage = () => {
+  const navigate = useNavigate();
+
+  const handleItemClick = (policyName) => {
+    navigate(`/policy/detail/${policyName}`);
+  };
+
   return (
     <Container>
       <Header />
       <MainContent>
         <Title>약관 및 정책</Title>
         <PolicyList>
-          <PolicyItem>
+          <PolicyItem onClick={() => handleItemClick("서비스 이용약관")}>
             서비스 이용약관
             <RightArrow>&gt;</RightArrow>
           </PolicyItem>
-          <PolicyItem>
+          <PolicyItem onClick={() => handleItemClick("개인정보 처리방침")}>
             개인정보 처리방침
             <RightArrow>&gt;</RightArrow>
           </PolicyItem>
-          <PolicyItem>
+          <PolicyItem onClick={() => handleItemClick("제 3자 개인정보 활용 동의")}>
             제 3자 개인정보 활용 동의
             <RightArrow>&gt;</RightArrow>
           </PolicyItem>
-          <PolicyItem>
+          <PolicyItem onClick={() => handleItemClick("마케팅 활용 동의")}>
             마케팅 활용 동의
             <RightArrow>&gt;</RightArrow>
           </PolicyItem>
-          <PolicyItem>
+          <PolicyItem onClick={() => handleItemClick("위치기반 서비스 이용 동의")}>
             위치기반 서비스 이용 동의
             <RightArrow>&gt;</RightArrow>
           </PolicyItem>
