@@ -35,6 +35,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/mycoupon" element={<MyCoupon />} />
         <Route path="/alarm" element={<Alarm />} />
+
         {/* 퍼스널 메뉴 추천 */}
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/recommend/feeling" element={<RecommendFeeling />} />

@@ -23,6 +23,7 @@ const OrderSummaryPage = () => {
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const navigate = useNavigate();
 
   const toggleExpand = (itemName) => {
@@ -68,6 +69,15 @@ const OrderSummaryPage = () => {
           },
         },
       });
+
+      // 사용한 쿠폰 상태 업데이트
+      if (appliedCoupon) {
+        const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
+        const updatedCoupons = storedCoupons.map((coupon) =>
+          coupon.title === appliedCoupon.title ? { ...coupon, used: true } : coupon
+        );
+        localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
+      }
     } catch (error) {
       console.error("주문 요청 실패:", error);
       if (error.response) {
@@ -88,12 +98,17 @@ const OrderSummaryPage = () => {
   };
 
   const applyCoupon = (coupon) => {
-    setCouponDiscount(2000); // 쿠폰 할인가
+    if (coupon.title.includes(item.cafe_name)) {
+      setCouponDiscount(Number(coupon.couponAmount)); // 할인 금액을 숫자로 변환
+      setAppliedCoupon(coupon);
+      alert("쿠폰이 적용되었습니다.");
+    } else {
+      alert("이 쿠폰은 해당 카페에서 사용할 수 없습니다.");
+    }
   };
 
   const handleCouponConfirm = () => {
     setCouponModalOpen(false);
-    alert("쿠폰이 적용되었습니다.");
   };
 
   const handleCouponCancel = () => {
@@ -146,6 +161,11 @@ const OrderSummaryPage = () => {
                   쿠폰
                   <CouponButton src={rightIcon} />
                 </CouponInput>
+                {appliedCoupon && (
+                  <AppliedCoupon>
+                    적용된 쿠폰: {appliedCoupon.title}
+                  </AppliedCoupon>
+                )}
               </Section>
               <Divider />
               <Section>
@@ -376,6 +396,12 @@ const CouponInput = styled.div`
 
 const CouponButton = styled.img`
   height: 1rem;
+`;
+
+const AppliedCoupon = styled.div`
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #595b59;
 `;
 
 const PaymentOption = styled.label`

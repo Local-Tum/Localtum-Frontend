@@ -6,9 +6,10 @@ const CouponModal = ({ onConfirm, onCancel, applyCoupon }) => {
   const [selectedCoupon, setSelectedCoupon] = useState(null);
 
   useEffect(() => {
-    // 쿠폰을 로컬 스토리지에서 가져옴
+    // 사용 완료되지 않은 쿠폰만 로컬 스토리지에서 가져옴
     const storedCoupons = JSON.parse(localStorage.getItem("coupons")) || [];
-    setCoupons(storedCoupons);
+    const availableCoupons = storedCoupons.filter(coupon => !coupon.used);
+    setCoupons(availableCoupons);
   }, []);
 
   const handleCouponSelect = (coupon) => {
