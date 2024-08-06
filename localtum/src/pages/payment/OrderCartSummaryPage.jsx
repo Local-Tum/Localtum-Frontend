@@ -31,23 +31,25 @@ const OrderCartSummaryPage = () => {
 
   const handleOrderButtonClick = async () => {
     const token = localStorage.getItem("token");
-
+  
     if (cartItems.length === 0) {
       alert("장바구니가 비어있습니다. 메뉴를 추가해주세요.");
       return;
     }
-
+  
     const cafeName = cartItems[0].cafe_name;
-
+  
     const requestData = {
       coupon: couponDiscount,
       couponName: appliedCoupon
         ? `'${appliedCoupon.cafeName}' 음료 ${appliedCoupon.couponDescription}원 할인 쿠폰`
         : "",
+      orderMenu: cartItems.map(item => item.name), // 주문 메뉴 배열로 추가
+      prices: calculateTotalPrice(),
     };
-
+  
     console.log("Request Data:", JSON.stringify(requestData, null, 2));
-
+  
     try {
       const response = await axios.post(
         `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
@@ -61,11 +63,11 @@ const OrderCartSummaryPage = () => {
           },
         }
       );
-
+  
       alert("주문이 성공적으로 완료되었습니다!");
-
+  
       const order = response.data.data[0];
-
+  
       const formattedDate = new Date(order.createdAt).toLocaleString("ko-KR", {
         year: "numeric",
         month: "long",
@@ -73,16 +75,14 @@ const OrderCartSummaryPage = () => {
         hour: "2-digit",
         minute: "2-digit",
       });
-
+  
       navigate("/order/cartconfirm", {
         state: {
           order,
           formattedDate,
         },
       });
-
-      localStorage.removeItem("cartItems");
-    } catch (error) {
+      } catch (error) {
       console.error("주문 요청 실패:", error);
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -98,7 +98,7 @@ const OrderCartSummaryPage = () => {
       }
     }
   };
-
+  
   const handleCouponClick = () => setCouponModalOpen(true);
 
   const applyCoupon = (coupon) => {
@@ -150,7 +150,7 @@ const OrderCartSummaryPage = () => {
 
   const calculateTotalPrice = () => {
     const total = cartItems.reduce((acc, item) => {
-      const itemPrice = Number(item.prices) || 0; // prices 값을 Number로 변환하여 계산
+      const itemPrice = Number(item.price) || 0; // prices 값을 Number로 변환하여 계산
       return acc + itemPrice * item.quantity;
     }, 0);
     return total;

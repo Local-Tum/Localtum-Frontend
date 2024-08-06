@@ -1,22 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/mypageedit/Header";
 import nameIcon from "../../assets/icons/cafeName.png";
 
 const OrderCartConfirmationTestPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const [formattedDate, setFormattedDate] = useState("");
 
-  if (!location.state) {
-    navigate("/order/cart");
-    return null;
-  }
+  useEffect(() => {
+    const storedOrder = JSON.parse(localStorage.getItem("cartItems")) || [];
+    if (storedOrder.length === 0) {
+      alert("장바구니가 비어있습니다.");
+      navigate("/order/cart");
+      return;
+    }
 
-  const { order, formattedDate } = location.state;
+    // Assuming the first item in the array for demonstration purposes
+    const orderData = {
+      cafename: storedOrder[0].cafe_name,
+      orderMenu: storedOrder,
+      prices: storedOrder.reduce((total, item) => total + Number(item.price) * item.quantity, 0),
+      orderStatus: "PREPARE", // or any default status
+      createdAt: new Date().toISOString(),
+      id: Math.floor(Math.random() * 1000) + 1, // Generate a random order id
+    };
+
+    setOrder(orderData);
+    const formatted = new Date(orderData.createdAt).toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    setFormattedDate(formatted);
+
+    // Clear the local storage
+    localStorage.removeItem("cartItems");
+  }, [navigate]);
 
   const progressStatus = () => {
-    switch (order.orderStatus) {
+    switch (order?.orderStatus) {
       case "PREPARE":
         return "33%";
       case "PROGRESS":
@@ -27,6 +53,10 @@ const OrderCartConfirmationTestPage = () => {
         return "0";
     }
   };
+
+  if (!order) {
+    return null;
+  }
 
   return (
     <Container>
@@ -47,11 +77,15 @@ const OrderCartConfirmationTestPage = () => {
           <OrderDetails>
             <Detail>
               <Label>주문 상품</Label>
-              <Value>{order.orderMenu}</Value>
+              <Value>
+                {order.orderMenu.map((menu, index) => (
+                  <div key={index}>{menu.name}</div>
+                ))}
+              </Value>
             </Detail>
             <Detail>
               <Label>결제 금액</Label>
-              <Value className="amount">{order.prices}원</Value>
+              <Value className="amount">{order.prices.toLocaleString()}원</Value>
             </Detail>
           </OrderDetails>
           <Divider />
