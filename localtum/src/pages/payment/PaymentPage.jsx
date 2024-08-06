@@ -115,7 +115,7 @@ const PaymentPage = () => {
       const response = await axios.post(
         `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
           cafe_name
-        )}/${encodeURIComponent(item.name)}/order_basket`,
+        )}/${encodeURIComponent(item.name)}/order`,
         {
           coupon: 500,
           couponName: "쿠폰이름",
