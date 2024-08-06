@@ -32,7 +32,7 @@ const OrderSummaryPage = () => {
   const handleOrderButtonClick = async () => {
     const token = localStorage.getItem("token");
     const orderData = {
-      couponName: appliedCoupon ? appliedCoupon.couponName : "", // null 대신 빈 문자열
+      couponName: appliedCoupon ? `'${appliedCoupon.cafeName}' 음료 ${appliedCoupon.couponDescription}원 할인 쿠폰` : "", // null 대신 빈 문자열
       coupon: couponDiscount,
       size,
       status: temperature,
