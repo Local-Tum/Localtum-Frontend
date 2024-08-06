@@ -55,8 +55,8 @@ const CafeDetailPage = () => {
     const couponAmount = getRandomCouponAmount();
 
     // 이미 받은 쿠폰인지 확인 (카페 이름 기준)
-    const alreadyReceived = storedCoupons.some(
-      (coupon) => coupon.title.includes(cafe.name)
+    const alreadyReceived = storedCoupons.some((coupon) =>
+      coupon.title.includes(cafe.name)
     );
 
     if (alreadyReceived) {
@@ -83,7 +83,7 @@ const CafeDetailPage = () => {
         title: `'${cafe.name}' 음료 ${couponAmount}원 할인 쿠폰`,
         expiry: "2024년 8월 7일까지",
         used: false,
-        couponAmount: couponAmount
+        couponAmount: couponAmount,
       };
 
       storedCoupons.push(newCoupon);
@@ -94,13 +94,6 @@ const CafeDetailPage = () => {
       console.error("쿠폰 받기 요청 실패:", error);
       alert("쿠폰 받기 실패");
     }
-  };
-
-  const addToCart = (item) => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    storedCartItems.push(item);
-    localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
-    setNotificationCount(storedCartItems.length);
   };
 
   return (
@@ -122,8 +115,8 @@ const CafeDetailPage = () => {
           {menu ? (
             <ProductList
               menu={menu}
+              cafeId={cafe.id || 1}
               cafeName={cafe.name}
-              addToCart={addToCart}
             />
           ) : (
             <div>메뉴 정보를 불러올 수 없습니다.</div>

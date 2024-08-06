@@ -7,6 +7,7 @@ import Header from "../../components/mypageedit/Header";
 const PaymentPage = () => {
   const location = useLocation();
   const { item } = location.state;
+  const { cafe_id, cafe_name } = item;
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("Grande size 473ml");
   const [temperature, setTemperature] = useState("Hot");
@@ -15,7 +16,8 @@ const PaymentPage = () => {
   const [additionalShotCost, setAdditionalShotCost] = useState(0);
   const navigate = useNavigate();
 
-  console.log("Item received in PaymentPage:", item); // 디버깅 로그
+  console.log("Item received in PaymentPage:", item);
+  console.log("Cafe ID received in PaymentPage:", cafe_id);
 
   const handleQuantityChange = (type) => {
     if (type === "increment") {
@@ -55,25 +57,49 @@ const PaymentPage = () => {
   const discount = (hasTumblerDiscount ? -500 : 0) * quantity;
   const finalPrice = totalPrice + discount;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const cartData = {
-      ...item,
       size,
-      temperature,
-      finalPrice,
-      personalOptions,
-      quantity,
+      status: temperature,
+      prices: finalPrice,
+      options: personalOptions,
     };
 
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    storedCartItems.push(cartData);
-    localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          cafe_name
+        )}/${encodeURIComponent(item.name)}`,
+        cartData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    alert("장바구니에 성공적으로 담겼습니다!");
-    navigate(-1);
+      const storedCartItems =
+        JSON.parse(localStorage.getItem("cartItems")) || [];
+      storedCartItems.push({
+        ...item,
+        ...cartData,
+        quantity,
+        cafe_id: cafe_id || 1,
+        finalPrice, // 추가된 부분
+      });
+      localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+
+      alert("장바구니에 성공적으로 담겼습니다!");
+      navigate(-1);
+    } catch (error) {
+      console.error("장바구니 담기 요청 실패:", error);
+      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
-  const handleOrderNow = () => {
+  const handleOrderNow = async () => {
     const orderData = {
       item,
       size,
@@ -81,9 +107,33 @@ const PaymentPage = () => {
       prices: finalPrice,
       options: personalOptions,
       quantity,
+      cafe_id: cafe_id || 1,
     };
 
-    navigate("/order", { state: orderData });
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          cafe_name
+        )}/${encodeURIComponent(item.name)}/order_basket`,
+        {
+          coupon: 500,
+          couponName: "쿠폰이름",
+          ...orderData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("주문이 성공적으로 완료되었습니다!");
+      navigate("/orderconfirmation", { state: response.data });
+    } catch (error) {
+      console.error("주문 요청 실패:", error);
+      alert("주문에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (

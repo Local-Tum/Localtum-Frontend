@@ -1,23 +1,59 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import nameIcon from "../../assets/icons/cafeName.png";
-import Cafes from "../../components/Cafes/Cafes";
 
 const OrderCartConfirmationPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (location.state && location.state.orders) {
-      setOrders(location.state.orders);
-    } else {
-      navigate("/ordersummary");
-    }
-  }, [location.state, navigate]);
+    const fetchOrderData = async () => {
+      if (location.state && location.state.orderId && location.state.cafeName) {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await axios.get(
+            `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+              location.state.cafeName
+            )}/order_history`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          console.log("Order data response:", response.data);
+
+          if (response.data && response.data.data) {
+            const orderData = response.data.data.find(
+              (order) => order.id === location.state.orderId
+            );
+            console.log("Matched order data:", orderData);
+            setOrder(orderData);
+          } else {
+            setError("Order not found.");
+          }
+        } catch (error) {
+          console.error("주문 데이터 가져오기 실패:", error);
+          setError("Failed to fetch order data.");
+        } finally {
+          setLoading(false); // 로딩 상태 해제
+        }
+      } else {
+        setError("Invalid order details.");
+        setLoading(false); // 로딩 상태 해제
+      }
+    };
+
+    fetchOrderData();
+    localStorage.removeItem("cartItems");
+  }, [location.state]);
 
   const progressStatus = (orderStatus) => {
     switch (orderStatus) {
@@ -32,71 +68,79 @@ const OrderCartConfirmationPage = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중일 때 표시할 내용
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>; // 에러 발생 시 표시할 내용
+  }
+
+  if (!order) {
+    return null;
+  }
+
   return (
     <Container>
       <Header />
       <MainContainer>
         <Main>
-          {orders.map((order, index) => {
-            const cafe = Cafes.find((cafe) => cafe.id === order.cafeId); // cafeId를 사용하여 카페 정보 가져오기
-            return (
-              <OrderDetailsContainer key={index}>
-                <CafeInfo>
-                  <CafeNameIcon src={nameIcon} alt="*" />
-                  <CafeName>{cafe?.name || "카페 이름"}</CafeName>{" "}
-                  {/* cafe.name 대신 cafe?.name 사용 */}
-                </CafeInfo>
-                <Divider />
-                <OrderInfo>
-                  <OrderTime>{order.date}</OrderTime>
-                  <OrderCompleteMessage>
-                    주문이 완료되었습니다.
-                  </OrderCompleteMessage>
-                  <OrderNumber>주문번호 {order.orderNumber}</OrderNumber>
-                </OrderInfo>
-                <Divider />
-                <OrderDetails>
-                  <Detail>
-                    <Label>주문 상품</Label>
-                    <Value>{order.menuName}</Value>
-                  </Detail>
-                  <Detail>
-                    <Label>결제 금액</Label>
-                    <Value className="amount">{order.price}원</Value>
-                  </Detail>
-                </OrderDetails>
-                <Divider />
-                <OrderProgress>
-                  <ProgressBar>
-                    <Progress width={progressStatus(order.status)} />
-                    <ProgressText>
-                      <span
-                        className={`progress-step ${
-                          order.status === "payment" ? "active" : ""
-                        }`}
-                      >
-                        결제 완료
-                      </span>
-                      <span
-                        className={`progress-step ${
-                          order.status === "accepted" ? "active" : ""
-                        }`}
-                      >
-                        주문 접수
-                      </span>
-                      <span
-                        className={`progress-step ${
-                          order.status === "complete" ? "active" : ""
-                        }`}
-                      >
-                        제조 완료
-                      </span>
-                    </ProgressText>
-                  </ProgressBar>
-                </OrderProgress>
-              </OrderDetailsContainer>
-            );
-          })}
+          <OrderDetailsContainer>
+            <CafeInfo>
+              <CafeNameIcon src={nameIcon} alt="*" />
+              <CafeName>{order.cafename || "카페 이름"}</CafeName>
+            </CafeInfo>
+            <Divider />
+            <OrderInfo>
+              <OrderTime>
+                {new Date(order.createdAt).toLocaleString()}
+              </OrderTime>
+              <OrderCompleteMessage>
+                주문이 완료되었습니다.
+              </OrderCompleteMessage>
+              <OrderNumber>주문번호 {order.id}</OrderNumber>
+            </OrderInfo>
+            <Divider />
+            <OrderDetails>
+              <Detail>
+                <Label>주문 상품</Label>
+                <Value>{order.orderMenu}</Value>
+              </Detail>
+              <Detail>
+                <Label>결제 금액</Label>
+                <Value className="amount">{order.prices}원</Value>
+              </Detail>
+            </OrderDetails>
+            <Divider />
+            <OrderProgress>
+              <ProgressBar>
+                <Progress width={progressStatus(order.orderStatus)} />
+                <ProgressText>
+                  <span
+                    className={`progress-step ${
+                      order.orderStatus === "PREPARE" ? "active" : ""
+                    }`}
+                  >
+                    결제 완료
+                  </span>
+                  <span
+                    className={`progress-step ${
+                      order.orderStatus === "PROGRESS" ? "active" : ""
+                    }`}
+                  >
+                    주문 접수
+                  </span>
+                  <span
+                    className={`progress-step ${
+                      order.orderStatus === "COMPLETE" ? "active" : ""
+                    }`}
+                  >
+                    제조 완료
+                  </span>
+                </ProgressText>
+              </ProgressBar>
+            </OrderProgress>
+          </OrderDetailsContainer>
         </Main>
       </MainContainer>
     </Container>
