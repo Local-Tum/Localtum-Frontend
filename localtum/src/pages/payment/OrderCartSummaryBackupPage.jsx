@@ -62,7 +62,6 @@ const OrderCartSummaryPage = () => {
 
       alert("주문이 성공적으로 완료되었습니다!");
 
-      // response.data.data가 제대로 된 값인지 확인
       console.log("Order response data:", response.data.data);
 
       navigate("/order/cartconfirm", {
@@ -302,101 +301,88 @@ const MainContainer = styled.div`
 
 const Main = styled.main`
   width: 100%;
-  max-width: 480px;
-  flex: 1;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  max-width: 1200px;
+  padding: 1rem;
   box-sizing: border-box;
-  padding: 0 1rem;
 `;
 
 const CafeInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 const CafeNameIcon = styled.img`
-  width: 1.5rem;
+  width: 24px;
+  height: 24px;
   margin-right: 0.5rem;
 `;
 
-const CafeName = styled.h2`
-  font-size: 1.2rem;
-  color: #282828;
-  font-weight: 700;
+const CafeName = styled.h1`
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const OrderSummary = styled.section`
   margin-bottom: 1rem;
 `;
 
-const Divider = styled.div`
-  background-color: #e7e7e7;
-  height: 1px;
-  margin: 1rem 0;
-`;
-
-const OrderSummary = styled.div`
-  margin-bottom: 2rem;
-`;
-
-const OrderSummaryTitle = styled.h3`
+const OrderSummaryTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: bold;
-  color: #444;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const OrderItem = styled.div`
-  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
 `;
 
 const ItemInfo = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-`;
-
-const ItemName = styled.h3`
-  font-size: 1rem;
-  color: #444;
-  margin-left: 1.5rem;
 `;
 
 const ItemDetails = styled.div`
-  font-size: 1rem;
-  font-weight: 600;
-  color: #595b59;
-  cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+`;
+
+const ItemName = styled.span`
+  font-size: 1rem;
+  margin-right: 0.5rem;
 `;
 
 const ExpandButton = styled.img`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-left: 1.5rem;
+  width: 16px;
+  height: 16px;
 `;
 
 const DeleteButton = styled.img`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-left: 1.5rem;
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5rem;
+  cursor: pointer;
 `;
 
 const ExpandedDetails = styled.div`
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.3rem;
-  margin-left: auto;
-  text-align: right;
-  margin-right: 6rem;
+  margin-top: 0.5rem;
 `;
 
-const Detail = styled.div`
-  margin-bottom: 0.3rem;
+const Detail = styled.p`
+  margin: 0;
 `;
 
-const AdditionalSections = styled.div`
+const Divider = styled.hr`
+  border: 1px solid #ccc;
+  margin: 1rem 0;
+`;
+
+const AdditionalSections = styled.section`
   margin-bottom: 1rem;
 `;
 
@@ -404,144 +390,100 @@ const Section = styled.div`
   margin-bottom: 1rem;
 `;
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h2`
   font-size: 1.2rem;
-  font-weight: 650;
-  letter-spacing: -1px;
-  color: #444;
-  margin-bottom: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 `;
 
 const Input = styled.input`
-  width: 90%;
-  padding: 0.8rem 1rem;
-  font-size: 0.8rem;
-  border: 2px solid #e7e7e7;
-  border-radius: 30px;
-  ::placeholder {
-    color: #b5b6b5;
-  }
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
 
 const CouponInput = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #595b59;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   cursor: pointer;
 `;
 
 const CouponButton = styled.img`
-  height: 1rem;
+  width: 16px;
+  height: 16px;
 `;
 
-const AppliedCoupon = styled.div`
+const AppliedCoupon = styled.p`
   margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #595b59;
+  font-size: 1rem;
 `;
 
-const PaymentOption = styled.label`
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: -0.64px;
-  color: #595b59;
-  margin-bottom: 1rem;
+const PaymentOption = styled.div`
+  margin: 0.5rem 0;
 `;
 
-const CustomCheckbox = styled.div`
+const CustomCheckbox = styled.label`
   display: flex;
   align-items: center;
   cursor: pointer;
-  user-select: none;
 `;
 
 const RadioButton = styled.input`
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-
-  &:checked + span {
-    background-color: #a9b782;
-  }
-`;
-
-const Checkbox = styled.input`
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-
-  &:checked + span {
-    background-color: #a9b782;
-  }
+  margin-right: 0.5rem;
 `;
 
 const Checkmark = styled.span`
-  height: 15px;
-  width: 15px;
-  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 50%;
-  border: 2px solid #e7e7e7;
-  margin-right: 8px;
-  position: relative;
+  display: inline-block;
 `;
 
-const Summary = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const Summary = styled.section`
   margin-bottom: 1rem;
 `;
 
 const SummaryItem = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
 `;
 
-const SummaryLabel = styled.div`
+const SummaryLabel = styled.span`
   font-size: 1rem;
-  color: #444;
-  font-weight: 600;
 `;
 
-const SummaryLabelTotal = styled.div`
-  font-size: 1.1rem;
-  color: #282828;
-  font-weight: 700;
-`;
-
-const SummaryValue = styled.div`
+const SummaryValue = styled.span`
   font-size: 1rem;
-  color: #444;
-  font-weight: 700;
 `;
 
-const SummaryValueTotal = styled.div`
-  font-size: 1rem;
-  color: #ca7070;
-  font-weight: 700;
+const SummaryLabelTotal = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const SummaryValueTotal = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
 
 const OrderButton = styled.button`
   width: 100%;
-  padding: 0.75rem;
-  background-color: ${({ active }) => (active ? "#467048" : "#808180")};
+  padding: 1rem;
+  background-color: ${(props) => (props.active ? "#007BFF" : "#ccc")};
   color: white;
   border: none;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: ${({ active }) => (active ? "pointer" : "not-allowed")};
+  border-radius: 4px;
+  cursor: ${(props) => (props.active ? "pointer" : "not-allowed")};
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
 `;
 
 export default OrderCartSummaryPage;
