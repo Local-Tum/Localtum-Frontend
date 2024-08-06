@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/mypageedit/Header";
 import nameIcon from "../../assets/icons/cafeName.png";
 
-const OrderConfirmationPage = () => {
+const OrderCartConfirmationTestPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const OrderConfirmationPage = () => {
         <Main>
           <CafeInfo>
             <CafeNameIcon src={nameIcon} alt="*" />
-            <CafeName>{order.cafename}</CafeName>
+            <CafeName>{order.cafeName}</CafeName>
           </CafeInfo>
           <Divider />
           <OrderInfo>
@@ -61,21 +61,21 @@ const OrderConfirmationPage = () => {
               <ProgressText>
                 <span
                   className={`progress-step ${
-                    order.orderStatus === "payment" ? "active" : ""
+                    order.orderStatus === "PREPARE" ? "active" : ""
                   }`}
                 >
                   결제 완료
                 </span>
                 <span
                   className={`progress-step ${
-                    order.orderStatus === "accepted" ? "active" : ""
+                    order.orderStatus === "PROGRESS" ? "active" : ""
                   }`}
                 >
                   주문 접수
                 </span>
                 <span
                   className={`progress-step ${
-                    order.orderStatus === "complete" ? "active" : ""
+                    order.orderStatus === "COMPLETE" ? "active" : ""
                   }`}
                 >
                   제조 완료
@@ -242,4 +242,4 @@ const ProgressText = styled.div`
   }
 `;
 
-export default OrderConfirmationPage;
+export default OrderCartConfirmationTestPage;

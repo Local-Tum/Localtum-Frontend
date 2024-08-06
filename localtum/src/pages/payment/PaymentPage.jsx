@@ -96,7 +96,10 @@ const PaymentPage = () => {
       alert("장바구니에 성공적으로 담겼습니다!");
       navigate(-1);
     } catch (error) {
-      console.error("장바구니 담기 요청 실패:", error.response ? error.response.data : error);
+      console.error(
+        "장바구니 담기 요청 실패:",
+        error.response ? error.response.data : error
+      );
       alert("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
     }
   };

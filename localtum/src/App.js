@@ -28,7 +28,7 @@ import FavoriteList from "./pages/MyPage/FavoriteList";
 import OrderHistoryPage from "./pages/Order/OrderHistoryPage";
 import OrderCartSummaryPage from "./pages/payment/OrderCartSummaryPage";
 import OrderCartConfirmationPage from "./pages/payment/OrderCartConfirmationpage";
-import OrderCartConfirmTestPage from "./pages/payment/OrderCartConfirmTestPage";
+import OrderCartConfirmationTestPage from "./pages/payment/OrderCartConfirmTestPage";
 
 const App = () => {
   return (
@@ -62,14 +62,12 @@ const App = () => {
           path="/order/cartconfirm/:orderId/:cafeName"
           element={<OrderCartConfirmationPage />}
         />
-        <Route
-          path="/order/cartconfirmation"
-          element={<OrderCartConfirmationPage />}
-        />
+        <Route path="/orderconfirmation" element={<OrderConfirmationPage />} />
+
         <Route path="/ordersummary" element={<OrderHistoryPage />} />
         <Route
-          path="/orderconfirmation"
-          element={<OrderCartConfirmTestPage />}
+          path="/order/cartconfirm"
+          element={<OrderCartConfirmationTestPage />}
         />
         {/* 마이페이지 */}
         <Route path="/mypageedit" element={<MyPageEdit />} />

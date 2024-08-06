@@ -64,12 +64,20 @@ const OrderCartSummaryPage = () => {
 
       alert("주문이 성공적으로 완료되었습니다!");
 
-      console.log("Order response data:", response.data.data);
+      const order = response.data.data[0];
+
+      const formattedDate = new Date(order.createdAt).toLocaleString("ko-KR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
       navigate("/order/cartconfirm", {
         state: {
-          cafeName,
-          orderId: response.data.data.id,
+          order,
+          formattedDate,
         },
       });
 
@@ -266,9 +274,7 @@ const OrderCartSummaryPage = () => {
             <Summary>
               <SummaryItem>
                 <SummaryLabel>상품 금액</SummaryLabel>
-                <SummaryValue>
-                  {totalPrice.toLocaleString()}원
-                </SummaryValue>
+                <SummaryValue>{totalPrice.toLocaleString()}원</SummaryValue>
               </SummaryItem>
               <SummaryItem>
                 <SummaryLabel>할인 금액</SummaryLabel>
