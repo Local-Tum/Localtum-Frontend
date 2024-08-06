@@ -15,7 +15,7 @@ const CafeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const cafe = Cafes.find((cafe) => cafe.id === parseInt(id, 10));
-  const defaultCafe = Cafes.find((cafe) => cafe.id === 1);
+  // const defaultCafe = Cafes.find((cafe) => cafe.id === 1);
   const status = localStorage.getItem(`status-${id}`) || "closed";
   const [notificationCount, setNotificationCount] = useState(0);
   const [stamps, setStamps] = useState(0);
@@ -41,7 +41,7 @@ const CafeDetailPage = () => {
     return <div>카페 정보를 찾을 수 없습니다.</div>;
   }
 
-  const menu = defaultCafe.menu; // 모든 카페가 동일한 메뉴를 가짐
+  const menu = cafe.menu; // 모든 카페가 동일한 메뉴를 가짐
 
   const getRandomCouponAmount = () => {
     const amounts = [500, 1000, 1500, 2000, 2500, 3000];
