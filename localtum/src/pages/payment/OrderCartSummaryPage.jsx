@@ -113,10 +113,32 @@ const OrderCartSummaryPage = () => {
   const toggleExpand = (itemName) =>
     setExpandedItem(expandedItem === itemName ? null : itemName);
 
-  const handleDelete = (itemName) => {
+  const handleDelete = async (itemName) => {
+    const token = localStorage.getItem("token");
+    const itemToDelete = cartItems.find((item) => item.name === itemName);
     const updatedCartItems = cartItems.filter((item) => item.name !== itemName);
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
+    try {
+      await axios.delete(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          itemToDelete.cafe_name
+        )}/${encodeURIComponent(itemToDelete.name)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setCartItems(updatedCartItems);
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
+      alert("메뉴가 장바구니에서 삭제되었습니다.");
+    } catch (error) {
+      console.error("메뉴 삭제 요청 실패:", error);
+      alert("메뉴 삭제에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
