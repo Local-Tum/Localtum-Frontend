@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Header from "../../components/mypageedit/Header";
-
+import axios from "axios";
 const PaymentPage = () => {
   const location = useLocation();
   const { item } = location.state;
