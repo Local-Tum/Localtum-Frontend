@@ -28,6 +28,11 @@ const OrderConfirmationPage = () => {
     }
   };
 
+  // prices와 coupon 값이 undefined 또는 null일 경우를 대비해 기본값을 0으로 설정
+  const prices = Number(order.prices) || 0;
+  const coupon = Number(order.coupon) || 0;
+  const totalPrice = (prices - coupon).toLocaleString();
+
   return (
     <Container>
       <Header />
@@ -51,7 +56,7 @@ const OrderConfirmationPage = () => {
             </Detail>
             <Detail>
               <Label>결제 금액</Label>
-              <Value className="amount">{order.prices}원</Value>
+              <Value className="amount">{totalPrice}원</Value>
             </Detail>
           </OrderDetails>
           <Divider />
