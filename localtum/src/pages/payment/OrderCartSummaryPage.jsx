@@ -64,7 +64,6 @@ const OrderCartSummaryPage = () => {
 
       alert("주문이 성공적으로 완료되었습니다!");
 
-      // response.data.data가 제대로 된 값인지 확인
       console.log("Order response data:", response.data.data);
 
       navigate("/order/cartconfirm", {
@@ -140,6 +139,16 @@ const OrderCartSummaryPage = () => {
       alert("메뉴 삭제에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
+  const calculateTotalPrice = () => {
+    const total = cartItems.reduce((acc, item) => {
+      const itemPrice = Number(item.prices) || 0; // prices 값을 Number로 변환하여 계산
+      return acc + itemPrice * item.quantity;
+    }, 0);
+    return total;
+  };
+
+  const totalPrice = calculateTotalPrice();
 
   return (
     <>
@@ -258,13 +267,7 @@ const OrderCartSummaryPage = () => {
               <SummaryItem>
                 <SummaryLabel>상품 금액</SummaryLabel>
                 <SummaryValue>
-                  {cartItems
-                    .reduce(
-                      (total, item) => total + item.finalPrice * item.quantity,
-                      0
-                    )
-                    .toLocaleString()}
-                  원
+                  {totalPrice.toLocaleString()}원
                 </SummaryValue>
               </SummaryItem>
               <SummaryItem>
@@ -276,13 +279,7 @@ const OrderCartSummaryPage = () => {
               <SummaryItem>
                 <SummaryLabelTotal>결제 금액</SummaryLabelTotal>
                 <SummaryValueTotal>
-                  {(
-                    cartItems.reduce(
-                      (total, item) => total + item.finalPrice * item.quantity,
-                      0
-                    ) - couponDiscount
-                  ).toLocaleString()}
-                  원
+                  {(totalPrice - couponDiscount).toLocaleString()}원
                 </SummaryValueTotal>
               </SummaryItem>
             </Summary>
