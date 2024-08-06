@@ -93,8 +93,8 @@ const OrderCartSummaryPage = () => {
   const handleCouponClick = () => setCouponModalOpen(true);
 
   const applyCoupon = (coupon) => {
-    if (coupon.cafe_name === cartItems[0]?.cafe_name) {
-      setCouponDiscount(Number(coupon.couponAmount));
+    if (coupon.cafeName === cartItems[0]?.cafe_name) {
+      setCouponDiscount(Number(coupon.couponDescription));
       setAppliedCoupon(coupon);
       alert("쿠폰이 적용되었습니다.");
     } else {
@@ -171,7 +171,8 @@ const OrderCartSummaryPage = () => {
                 </CouponInput>
                 {appliedCoupon && (
                   <AppliedCoupon>
-                    적용된 쿠폰: {appliedCoupon.title}
+                    적용된 쿠폰: '{appliedCoupon.cafeName}' 음료{""}
+                    {appliedCoupon.couponDescription}원 할인 쿠폰
                   </AppliedCoupon>
                 )}
               </Section>

@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/mypageedit/Header";
 import nameIcon from "../../assets/icons/cafeName.png";
 
 const OrderCartConfirmationPage = () => {
-  const location = useLocation();
+  const { orderId, cafeName } = useParams();
+  const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrderData = async () => {
-      if (location.state && location.state.orderId && location.state.cafeName) {
+      if (orderId && cafeName) {
+        console.log("Order ID:", orderId, "Cafe Name:", cafeName); // 디버깅 메시지 추가
         try {
           const token = localStorage.getItem("token");
+          console.log("Token:", token); // 디버깅 메시지 추가
+
           const response = await axios.get(
             `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
-              location.state.cafeName
+              cafeName
             )}/order_history`,
             {
               headers: {
@@ -32,7 +36,7 @@ const OrderCartConfirmationPage = () => {
 
           if (response.data && response.data.data) {
             const orderData = response.data.data.find(
-              (order) => order.id === location.state.orderId
+              (order) => order.id === parseInt(orderId, 10)
             );
             console.log("Matched order data:", orderData);
             setOrder(orderData);
@@ -46,6 +50,7 @@ const OrderCartConfirmationPage = () => {
           setLoading(false); // 로딩 상태 해제
         }
       } else {
+        console.error("Invalid order details:", { orderId, cafeName }); // 디버깅 메시지 추가
         setError("Invalid order details.");
         setLoading(false); // 로딩 상태 해제
       }
@@ -53,7 +58,7 @@ const OrderCartConfirmationPage = () => {
 
     fetchOrderData();
     localStorage.removeItem("cartItems");
-  }, [location.state]);
+  }, [orderId, cafeName]);
 
   const progressStatus = (orderStatus) => {
     switch (orderStatus) {
@@ -109,6 +114,18 @@ const OrderCartConfirmationPage = () => {
               <Detail>
                 <Label>결제 금액</Label>
                 <Value className="amount">{order.prices}원</Value>
+              </Detail>
+              <Detail>
+                <Label>크기</Label>
+                <Value>{order.size}</Value>
+              </Detail>
+              <Detail>
+                <Label>상태</Label>
+                <Value>{order.status}</Value>
+              </Detail>
+              <Detail>
+                <Label>추가 옵션</Label>
+                <Value>{order.options.join(", ")}</Value>
               </Detail>
             </OrderDetails>
             <Divider />

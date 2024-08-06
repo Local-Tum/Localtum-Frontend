@@ -32,7 +32,9 @@ const OrderSummaryPage = () => {
   const handleOrderButtonClick = async () => {
     const token = localStorage.getItem("token");
     const orderData = {
-      couponName: appliedCoupon ? appliedCoupon.couponName : "", // null 대신 빈 문자열
+      couponName: appliedCoupon
+        ? `'${appliedCoupon.cafeName}'음료${appliedCoupon.couponDescription}원 할인 쿠폰`
+        : "",
       coupon: couponDiscount,
       size,
       status: temperature,
@@ -82,8 +84,8 @@ const OrderSummaryPage = () => {
   const handleCouponClick = () => setCouponModalOpen(true);
 
   const applyCoupon = (coupon) => {
-    if (coupon.cafe_name === item.cafe_name) {
-      setCouponDiscount(Number(coupon.couponAmount));
+    if (coupon.cafeName === item.cafe_name) {
+      setCouponDiscount(Number(coupon.couponDescription));
       setAppliedCoupon(coupon);
       alert("쿠폰이 적용되었습니다.");
     } else {
@@ -141,8 +143,8 @@ const OrderSummaryPage = () => {
                 </CouponInput>
                 {appliedCoupon && (
                   <AppliedCoupon>
-                    적용된 쿠폰: '{appliedCoupon.couponName}' 음료{" "}
-                    {appliedCoupon.couponAmount}원 할인 쿠폰
+                    적용된 쿠폰: '{appliedCoupon.cafeName}' 음료{" "}
+                    {appliedCoupon.couponDescription}원 할인 쿠폰
                   </AppliedCoupon>
                 )}
               </Section>

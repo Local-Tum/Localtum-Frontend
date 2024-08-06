@@ -58,7 +58,7 @@ const App = () => {
         <Route path="/order" element={<OrderSummaryPage />} />
         <Route path="/order/cart" element={<OrderCartSummaryPage />} />
         <Route
-          path="/order/cartconfirm"
+          path="/order/cartconfirm/:orderId/:cafeName"
           element={<OrderCartConfirmationPage />}
         />
         <Route path="/ordersummary" element={<OrderHistoryPage />} />
@@ -67,7 +67,10 @@ const App = () => {
         <Route path="/mypageedit" element={<MyPageEdit />} />
         <Route path="/mypagecoupon" element={<MyPageCoupon />} />
         <Route path="/policy" element={<PolicyPage />} />
-        <Route path="/policy/detail/:policyName" element={<PolicyPageDetail />} />
+        <Route
+          path="/policy/detail/:policyName"
+          element={<PolicyPageDetail />}
+        />
         <Route path="/stamplist" element={<StampList />} />
         <Route path="/favorite" element={<FavoriteList />} />
       </Routes>
