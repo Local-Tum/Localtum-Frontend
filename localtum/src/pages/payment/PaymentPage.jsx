@@ -55,24 +55,53 @@ const PaymentPage = () => {
   const discount = (hasTumblerDiscount ? -500 : 0) * quantity;
   const finalPrice = totalPrice + discount;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const cartData = {
-      ...item,
       size,
-      temperature,
-      finalPrice,
-      personalOptions,
+      status: temperature,
+      prices: finalPrice,
+      options: personalOptions,
       quantity,
+      cafe_id: item.cafe_id || 1,
+      cafe_name: item.cafe_name,
+      name: item.name,
     };
 
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    storedCartItems.push(cartData);
-    localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+    console.log("장바구니 요청 데이터:", cartData); // 요청 데이터 로그
 
-    alert("장바구니에 성공적으로 담겼습니다!");
-    navigate(-1);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `https://15.165.139.216.nip.io/localtum/cafe_details/${encodeURIComponent(
+          item.cafe_name
+        )}/${encodeURIComponent(item.name)}`,
+        cartData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("장바구니 담기 성공:", response.data);
+      const storedCartItems =
+        JSON.parse(localStorage.getItem("cartItems")) || [];
+      storedCartItems.push({
+        ...item,
+        ...cartData,
+      });
+      localStorage.setItem("cartItems", JSON.stringify(storedCartItems));
+
+      alert("장바구니에 성공적으로 담겼습니다!");
+      navigate(-1);
+    } catch (error) {
+      console.error("장바구니 담기 요청 실패:", error.response ? error.response.data : error);
+      alert("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
+  // handleOrderNow 함수 정의
   const handleOrderNow = () => {
     const orderData = {
       item,
