@@ -41,7 +41,9 @@ const OrderCartSummaryPage = () => {
 
     const requestData = {
       coupon: couponDiscount,
-      couponName: appliedCoupon ? appliedCoupon.couponName : "쿠폰이름",
+      couponName: appliedCoupon
+        ? `'${appliedCoupon.cafeName}' 음료 ${appliedCoupon.couponDescription}원 할인 쿠폰`
+        : "",
     };
 
     console.log("Request Data:", JSON.stringify(requestData, null, 2));
@@ -171,7 +173,7 @@ const OrderCartSummaryPage = () => {
                 </CouponInput>
                 {appliedCoupon && (
                   <AppliedCoupon>
-                    적용된 쿠폰: '{appliedCoupon.cafeName}' 음료{""}
+                    적용된 쿠폰: '{appliedCoupon.cafeName}' 음료{" "}
                     {appliedCoupon.couponDescription}원 할인 쿠폰
                   </AppliedCoupon>
                 )}
