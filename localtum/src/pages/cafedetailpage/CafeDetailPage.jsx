@@ -111,7 +111,7 @@ const CafeDetailPage = () => {
           />
           <StampCard title={cafe.name} stamps={stamps} />
           <StyledHR />
-          <CategoryFilter />
+          {/* <CategoryFilter /> */}
           {menu ? (
             <ProductList
               menu={menu}
@@ -147,7 +147,7 @@ const Main = styled.main`
   width: 100%;
   flex: 1;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
   overflow-y: auto;
   box-sizing: border-box;
 `;
@@ -171,7 +171,10 @@ const StyledHR = styled.hr`
 `;
 
 const CouponButton = styled.button`
-  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #a9b782;
   color: white;
   border: none;
@@ -185,9 +188,10 @@ const CouponButton = styled.button`
   padding: 1rem 2rem;
   box-sizing: border-box;
   max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
   box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.1),
     3px 3px 10px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above other content */
 `;
 
 const ButtonText = styled.span`
