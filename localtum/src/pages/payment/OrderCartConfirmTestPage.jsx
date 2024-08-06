@@ -35,7 +35,7 @@ const OrderCartConfirmationTestPage = () => {
         <Main>
           <CafeInfo>
             <CafeNameIcon src={nameIcon} alt="*" />
-            <CafeName>{order.cafeName}</CafeName>
+            <CafeName>{order.cafename}</CafeName>
           </CafeInfo>
           <Divider />
           <OrderInfo>
